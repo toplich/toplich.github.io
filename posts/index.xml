@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>All Posts - IT Blog</title>
+        <link>https://blog.topli.ch/posts/</link>
+        <description>All Posts | IT Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 26 May 2025 08:00:00 &#43;0200</lastBuildDate><atom:link href="https://blog.topli.ch/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>OPNsense Setup: Basic Guide</title>
+    <link>https://blog.topli.ch/posts/opnsense/</link>
+    <pubDate>Mon, 26 May 2025 08:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/opnsense/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/opnsense-logo.png" referrerpolicy="no-referrer">
+            </div>Step-by-step guide to setting up OPNsense as VM.]]></description>
+</item>
+</channel>
+</rss>

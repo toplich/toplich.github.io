@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on IT Blog</title>
+    <link>https://blog.topli.ch/tags/</link>
+    <description>Recent content in Tags on IT Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 26 May 2025 08:00:00 +0200</lastBuildDate>
+    <atom:link href="https://blog.topli.ch/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Firewall</title>
+      <link>https://blog.topli.ch/tags/firewall/</link>
+      <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/firewall/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Network</title>
+      <link>https://blog.topli.ch/tags/network/</link>
+      <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/network/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Opnsense</title>
+      <link>https://blog.topli.ch/tags/opnsense/</link>
+      <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/opnsense/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
