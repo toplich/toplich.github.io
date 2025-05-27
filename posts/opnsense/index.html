@@ -14,8 +14,10 @@
     <meta property="article:published_time" content="2025-05-26T08:00:00+02:00">
     <meta property="article:modified_time" content="2025-05-26T08:00:00+02:00">
     <meta property="article:tag" content="Firewall">
-    <meta property="article:tag" content="Opnsense">
+    <meta property="article:tag" content="OPNsense">
     <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="VPN">
+    <meta property="article:tag" content="WireGuard">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="OPNsense Setup: Basic Guide">
@@ -34,7 +36,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/blog.topli.ch\/posts\/opnsense\/"
-        },"genre": "posts","keywords": "firewall, opnsense, network","wordcount":  278 ,
+        },"genre": "posts","keywords": "Firewall, OPNsense, Network, VPN, WireGuard","wordcount":  796 ,
         "url": "https:\/\/blog.topli.ch\/posts\/opnsense\/","datePublished": "2025-05-26T08:00:00+02:00","dateModified": "2025-05-26T08:00:00+02:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -108,8 +110,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">OPNsense Setup: Basic Guide</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Networking</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-05-26">2025-05-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;278 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-05-26">2025-05-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;796 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -124,19 +126,28 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#installing-as-vm">Installing as VM</a>
+    <li><a href="#11-installing-as-vm">1.1 Installing as VM</a>
       <ul>
-        <li><a href="#1-first-login-to-opnsense">1. First Login to OPNsense</a></li>
-        <li><a href="#2-configure-web-access-from-wan">2. Configure WEB access from WAN</a></li>
-        <li><a href="#3-system-updates-and-backup-configuration">3. System Updates and Backup Configuration</a></li>
+        <li><a href="#12-first-login-to-opnsense">1.2 First Login to OPNsense</a></li>
+        <li><a href="#13-configure-web-access-from-wan">1.3 Configure WEB access from WAN</a></li>
+        <li><a href="#14-system-updates-and-backup-configuration">1.4 System Updates and Backup Configuration</a></li>
       </ul>
     </li>
     <li><a href="#useful-resources">Useful Resources</a></li>
+    <li><a href="#21-wireguard-site-to-site-vpn-setup">2.1 WireGuard Site-to-Site VPN Setup</a>
+      <ul>
+        <li><a href="#22-create-wireguard-instance">2.2 Create WireGuard Instance</a></li>
+        <li><a href="#23-configure-peer">2.3 Configure Peer</a></li>
+        <li><a href="#24-create-interfaces">2.4 Create Interfaces</a></li>
+        <li><a href="#25-set-up-firewall-rules">2.5 Set Up Firewall Rules</a></li>
+      </ul>
+    </li>
+    <li><a href="#useful-resources-1">Useful Resources</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p><a href="https://opnsense.org/" target="_blank" rel="noopener noreffer ">OPNsense</a> is a powerful open-source firewall and routing platform based on FreeBSD.</p>
 <hr>
-<h2 id="installing-as-vm">Installing as VM</h2>
+<h2 id="11-installing-as-vm">1.1 Installing as VM</h2>
 <p>Download the <a href="https://opnsense.org/download/" target="_blank" rel="noopener noreffer ">ISO</a></p>
 <ul>
 <li>Architecture: <strong>amd64</strong></li>
@@ -191,7 +202,7 @@
 <li>Remove the ISO and reboot</li>
 </ol>
 <hr>
-<h3 id="1-first-login-to-opnsense">1. First Login to OPNsense</h3>
+<h3 id="12-first-login-to-opnsense">1.2 First Login to OPNsense</h3>
 <p>After reboot, you can log:</p>
 <ul>
 <li>From LAN network: <a href="https://opnsense.localdomain" target="_blank" rel="noopener noreffer ">https://opnsense.localdomain</a> or <a href="https://192.168.1.1" target="_blank" rel="noopener noreffer ">https://192.168.1.1</a></li>
@@ -216,7 +227,7 @@
 </li>
 </ul>
 <hr>
-<h3 id="2-configure-web-access-from-wan">2. Configure WEB access from WAN</h3>
+<h3 id="13-configure-web-access-from-wan">1.3 Configure WEB access from WAN</h3>
 <blockquote>
 <p>👉 Firewall &gt; Rules &gt; WAN</p></blockquote>
 <ul>
@@ -245,7 +256,7 @@
 <li>Install <strong>os-vmware</strong></li>
 </ul>
 <hr>
-<h3 id="3-system-updates-and-backup-configuration">3. System Updates and Backup Configuration</h3>
+<h3 id="14-system-updates-and-backup-configuration">1.4 System Updates and Backup Configuration</h3>
 <blockquote>
 <p>👉 System &gt; Firmware &gt; Status</p></blockquote>
 <p>Click <strong>Check for updates</strong> → then <strong>Apply updates</strong>.</p>
@@ -258,6 +269,181 @@ You can also enable automatic backups to cloud services like Google Drive, Nextc
 <ul>
 <li>📚 <a href="https://docs.opnsense.org/" target="_blank" rel="noopener noreffer ">Official OPNsense Documentation</a></li>
 <li>🎥 <a href="https://www.youtube.com/results?search_query=opnsense" target="_blank" rel="noopener noreffer ">YouTube: OPNsense Tutorials</a></li>
+</ul>
+<hr>
+<h2 id="21-wireguard-site-to-site-vpn-setup">2.1 WireGuard Site-to-Site VPN Setup</h2>
+<p>WireGuard is a fast and modern VPN solution known for its simplicity and performance.</p>
+<p>✅ What You’ll Need</p>
+<ul>
+<li>Two OPNsense firewalls with internet access (Site A and Site B)</li>
+<li>Static or dynamic public IPs (DDNS works)
+<ul>
+<li>Site A -&gt; WAN IP 203.0.113.1 and LAN IP 192.168.1.1/24</li>
+<li>Site B -&gt; WAN IP 203.0.113.2 and LAN IP 192.168.2.1/24</li>
+</ul>
+</li>
+<li>WireGuard plugin installed (os-wireguard)</li>
+</ul>
+<hr>
+<h3 id="22-create-wireguard-instance">2.2 Create WireGuard Instance</h3>
+<blockquote>
+<p>👉 VPN &gt; WireGuard &gt; Instances</p></blockquote>
+<ul>
+<li>Click <strong>+ Add</strong> to create a new instance.
+<ul>
+<li><i class="far fa-check-square fa-fw" aria-hidden="true"></i> Enabled</li>
+<li>Name: <strong>site-a</strong> on Site A / <strong>site-b</strong> on Site B</li>
+<li>Click ⚙️  <code>Generate new keypair</code></li>
+<li>Listen Port <strong>51820</strong></li>
+<li>Tunnel Address
+<ul>
+<li>Site A: <strong>10.2.2.1/24</strong></li>
+<li>Site B: <strong>10.2.2.2/24</strong></li>
+</ul>
+</li>
+<li>Peers: it will be needed after peer created</li>
+</ul>
+</li>
+</ul>
+<p>💾 Press Save and Apply</p>
+<p>⚠️  After saving, copy the Public Key. You&rsquo;ll need it on the remote site.</p>
+<h3 id="23-configure-peer">2.3 Configure Peer</h3>
+<blockquote>
+<p>👉 VPN &gt; WireGuard &gt; Peers</p></blockquote>
+<ul>
+<li>Click <strong>+ Add</strong> to create a new peer.
+<ul>
+<li><i class="far fa-check-square fa-fw" aria-hidden="true"></i> Enabled</li>
+<li>Name: <strong>site-b</strong> on Site A / <strong>site-a</strong> on Site B</li>
+<li><code>Public Key</code> of the remote site</li>
+<li>Allowed IPs: remote local subnet and Instance IP
+<ul>
+<li>On Site A: <strong>10.2.2.2/32</strong> <strong>192.168.2.0/24</strong></li>
+<li>On Site B: <strong>10.2.2.1/32</strong> <strong>192.168.1.0/24</strong></li>
+</ul>
+</li>
+<li>Endpoint Address: remote WAN IP (or DDNS)
+<ul>
+<li>On Site A: <strong>203.0.113.2</strong></li>
+<li>On Site B: <strong>203.0.113.1</strong></li>
+</ul>
+</li>
+<li>Endpoint Port: <strong>51820</strong></li>
+</ul>
+</li>
+</ul>
+<p>💾 Press Save and Apply</p>
+<p>⚠️  Now go back to Instances, edit your instance, and add this peer to Peers.</p>
+<p>💾 Press Save and Apply</p>
+<ul>
+<li><i class="far fa-check-square fa-fw" aria-hidden="true"></i> Enable WireGuard and 💾 Press Apply</li>
+</ul>
+<h3 id="24-create-interfaces">2.4 Create Interfaces</h3>
+<blockquote>
+<p>👉 Interfaces &gt; Assignments</p></blockquote>
+<ul>
+<li>Assign the new WireGuard interface (wg0)</li>
+<li>Enable it:
+<ul>
+<li>Set name: WG_SITEA / WG_SITEB</li>
+</ul>
+</li>
+</ul>
+<p>💾 Press Save and Apply</p>
+<h3 id="25-set-up-firewall-rules">2.5 Set Up Firewall Rules</h3>
+<blockquote>
+<p>👉 Firewall &gt; Settings &gt; Normalization</p></blockquote>
+<ul>
+<li>Interface: <strong>WireGuard (Group)</strong></li>
+<li>Direction: <strong>Any</strong></li>
+<li>Protocol: <strong>any</strong></li>
+<li>Source: <strong>any</strong></li>
+<li>Destination: <strong>any</strong></li>
+<li>Destination port: <strong>any</strong></li>
+<li>Description: <strong>Wireguard MSS Clamping</strong></li>
+<li>Max mss: <strong>1380</strong> or lower, subtract at least 40 bytes from the Wireguard MTU</li>
+</ul>
+<blockquote>
+<p>👉 Firewall &gt; Rules &gt; WAN</p></blockquote>
+<ul>
+<li>Action: <strong>Pass</strong></li>
+<li>Interface: <strong>WAN</strong></li>
+<li>Direction: <strong>In</strong></li>
+<li>TCP/IP Version: <strong>IPv4</strong></li>
+<li>Protocol: <strong>UDP</strong></li>
+<li>Source: Remote WAN IP
+<ul>
+<li>On Site A: <strong>203.0.113.1</strong></li>
+<li>On Site B: <strong>203.0.113.2</strong></li>
+</ul>
+</li>
+<li>Destination: <strong>WAN address</strong></li>
+<li>Destination port: <strong>51820</strong></li>
+<li>Description:
+<ul>
+<li>On Site A: <strong>Allow Wireguard from Site B to Site A</strong></li>
+<li>On Site B: <strong>Allow Wireguard from Site A to Site B</strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>👉 Firewall &gt; Rules &gt; LAN</p></blockquote>
+<ul>
+<li>Action: <strong>Pass</strong></li>
+<li>Interface: <strong>LAN</strong></li>
+<li>Direction: <strong>In</strong></li>
+<li>TCP/IP Version: <strong>IPv4</strong></li>
+<li>Protocol: <strong>Any</strong></li>
+<li>Source: Remote LAN IP
+<ul>
+<li>On Site A: <strong>192.168.2.0/24</strong></li>
+<li>On Site B: <strong>192.168.1.0/24</strong></li>
+</ul>
+</li>
+<li>Destination: <strong>LAN net</strong></li>
+<li>Destination port: <strong>51820</strong></li>
+<li>Description:
+<ul>
+<li>On Site A: <strong>Allow LAN Site B to LAN Site A</strong></li>
+<li>On Site B: <strong>Allow LAN Site A to LAN Site B</strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>👉 Firewall &gt; Rules &gt; Wireguard (Group)</p></blockquote>
+<ul>
+<li>Action: <strong>Pass</strong></li>
+<li>Interface: <strong>Wireguard (Group)</strong></li>
+<li>Direction: <strong>In</strong></li>
+<li>TCP/IP Version: <strong>IPv4</strong></li>
+<li>Protocol: <strong>Any</strong></li>
+<li>Source: Remote LAN IP
+<ul>
+<li>On Site A: <strong>192.168.2.0/24</strong></li>
+<li>On Site B: <strong>192.168.1.0/24</strong></li>
+</ul>
+</li>
+<li>Destination: <strong>LAN net</strong></li>
+<li>Destination port: <strong>51820</strong></li>
+<li>Description:
+<ul>
+<li>On Site A: <strong>Allow LAN Site B to LAN Site A</strong></li>
+<li>On Site B: <strong>Allow LAN Site A to LAN Site B</strong></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>👉 VPN &gt; WireGuard &gt; Status</p></blockquote>
+<p>✅ Check for handshake and endpoint status.</p>
+<blockquote>
+<p>👉 Interfaces &gt; Diagnostics &gt; Ping</p></blockquote>
+<ul>
+<li>Try pinging remote LAN IP (e.g., from 192.168.1.1 → 192.168.2.1)</li>
+</ul>
+<hr>
+<h2 id="useful-resources-1">Useful Resources</h2>
+<ul>
+<li>📚 <a href="https://docs.opnsense.org/manual/how-tos/wireguard-s2s.html" target="_blank" rel="noopener noreffer ">Official OPNsense Documentation</a></li>
 </ul>
 <hr>
 <p><em>📝 Published on <a href="https://blog.topli.ch/network/opnsense/" target="_blank" rel="noopener noreffer ">blog.topli.ch</a></em></p>
@@ -274,13 +460,13 @@ You can also enable automatic backups to cloud services like Google Drive, Nextc
                             <a class="link-to-markdown" href="/posts/opnsense/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-hashtags="firewall,opnsense,network"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/opnsense/" data-hashtag="firewall"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/opnsense/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-image="/images/opnsense-logo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-hashtags="Firewall,OPNsense,Network,VPN,WireGuard"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/opnsense/" data-hashtag="Firewall"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/opnsense/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-image="/images/opnsense-logo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/firewall/">Firewall</a>,&nbsp;<a href="/tags/opnsense/">Opnsense</a>,&nbsp;<a href="/tags/network/">Network</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/firewall/">Firewall</a>,&nbsp;<a href="/tags/opnsense/">OPNsense</a>,&nbsp;<a href="/tags/network/">Network</a>,&nbsp;<a href="/tags/vpn/">VPN</a>,&nbsp;<a href="/tags/wireguard/">WireGuard</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>

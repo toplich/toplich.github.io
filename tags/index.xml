@@ -23,10 +23,24 @@
       <description></description>
     </item>
     <item>
-      <title>Opnsense</title>
+      <title>OPNsense</title>
       <link>https://blog.topli.ch/tags/opnsense/</link>
       <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/tags/opnsense/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VPN</title>
+      <link>https://blog.topli.ch/tags/vpn/</link>
+      <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/vpn/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>WireGuard</title>
+      <link>https://blog.topli.ch/tags/wireguard/</link>
+      <pubDate>Mon, 26 May 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/wireguard/</guid>
       <description></description>
     </item>
   </channel>
