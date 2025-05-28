@@ -6,8 +6,15 @@
     <description>Recent content in Categories on IT Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 26 May 2025 08:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 28 May 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://blog.topli.ch/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Linux</title>
+      <link>https://blog.topli.ch/categories/linux/</link>
+      <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://blog.topli.ch/categories/linux/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Networking</title>
       <link>https://blog.topli.ch/categories/networking/</link>

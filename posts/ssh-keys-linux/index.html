@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>How to Set Up SSH Keys on Linux - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/ssh-keys-linux/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="How to Set Up SSH Keys on Linux">
+  <meta property="og:description" content="A step-by-step guide to generating and using SSH keys for secure Linux access.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-05-28T00:00:00+00:00">
+    <meta property="article:tag" content="SSH">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Security">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Set Up SSH Keys on Linux">
+  <meta name="twitter:description" content="A step-by-step guide to generating and using SSH keys for secure Linux access.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/ssh-keys-linux/" /><link rel="prev" href="https://blog.topli.ch/posts/opnsense/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "How to Set Up SSH Keys on Linux",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/ssh-keys-linux\/"
+        },"genre": "posts","keywords": "SSH, Linux, Security","wordcount":  393 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/ssh-keys-linux\/","datePublished": "2025-05-28T00:00:00+00:00","dateModified": "2025-05-28T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog">IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog">IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">How to Set Up SSH Keys on Linux</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/linux/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-05-28">2025-05-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;393 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-step-1-check-if-you-already-have-ssh-keys">✅ Step 1: Check If You Already Have SSH Keys</a></li>
+    <li><a href="#-step-2-create-a-new-ssh-key-pair">🛠 Step 2: Create a New SSH Key Pair</a></li>
+    <li><a href="#-step-3-add-your-public-key-to-the-remote-server">📤 Step 3: Add Your Public Key to the Remote Server</a>
+      <ul>
+        <li><a href="#option-1-use-ssh-copy-id-recommended">Option 1: Use <code>ssh-copy-id</code> (recommended)</a></li>
+        <li><a href="#option-2-manual-method">Option 2: Manual method</a></li>
+      </ul>
+    </li>
+    <li><a href="#-step-4-log-in-without-a-password">🚀 Step 4: Log In Without a Password</a></li>
+    <li><a href="#-step-5-optional-turn-off-password-login">🔒 Step 5 (Optional): Turn Off Password Login</a></li>
+    <li><a href="#-helpful-tips">💡 Helpful Tips</a></li>
+    <li><a href="#-summary">🧩 Summary</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="-setting-up-ssh-keys-on-linux-step-by-step-guide">🔐 Setting Up SSH Keys on Linux (Step-by-Step Guide)</h1>
+<p>Using SSH keys is a safer and easier way to connect to Linux servers — no more typing your password every time. This guide will help you set up SSH keys, copy them to a remote server, and log in securely.</p>
+<h2 id="-step-1-check-if-you-already-have-ssh-keys">✅ Step 1: Check If You Already Have SSH Keys</h2>
+<p>Open your terminal and run:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ls ~/.ssh/id_*.pub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>If you see a file like <code>id_ed25519.pub</code> or <code>id_rsa.pub</code>, it means you already have a key. You can use that one or create a new one.</p>
+<h2 id="-step-2-create-a-new-ssh-key-pair">🛠 Step 2: Create a New SSH Key Pair</h2>
+<p>To make a new SSH key, run:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t ed25519 -C <span class="s2">&#34;your_email@example.com&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>On older systems, use <code>ssh-keygen -t rsa -b 4096</code> instead.</p></blockquote>
+<ul>
+<li>Press <strong>Enter</strong> to accept the default location (<code>~/.ssh/id_ed25519</code>)</li>
+<li>You can choose to add a passphrase (or leave it empty)</li>
+</ul>
+<p>This creates two files:</p>
+<ul>
+<li><code>id_ed25519</code> → your <strong>private key</strong> (keep it secret!)</li>
+<li><code>id_ed25519.pub</code> → your <strong>public key</strong> (you’ll share this)</li>
+</ul>
+<h2 id="-step-3-add-your-public-key-to-the-remote-server">📤 Step 3: Add Your Public Key to the Remote Server</h2>
+<h3 id="option-1-use-ssh-copy-id-recommended">Option 1: Use <code>ssh-copy-id</code> (recommended)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-copy-id username@remote_server_ip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This command adds your key to the remote server so you can log in without a password.</p>
+<h3 id="option-2-manual-method">Option 2: Manual method</h3>
+<ol>
+<li>
+<p>Show your public key:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat ~/.ssh/id_ed25519.pub
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Copy the whole line</p>
+</li>
+<li>
+<p>Connect to your server and paste it into:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nano ~/.ssh/authorized_keys
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h2 id="-step-4-log-in-without-a-password">🚀 Step 4: Log In Without a Password</h2>
+<p>Now try logging in:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh username@remote_server_ip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>If everything is correct, you’ll connect <strong>without entering a password</strong> 🎉</p>
+<h2 id="-step-5-optional-turn-off-password-login">🔒 Step 5 (Optional): Turn Off Password Login</h2>
+<p>This step is for extra security. Only do it if SSH keys are working!</p>
+<ol>
+<li>
+<p>Open SSH settings on the server:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo nano /etc/ssh/sshd_config
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Find and change these lines:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">PasswordAuthentication no
+</span></span><span class="line"><span class="cl">ChallengeResponseAuthentication no
+</span></span><span class="line"><span class="cl">UsePAM no
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Save and restart SSH:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo systemctl restart sshd
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h2 id="-helpful-tips">💡 Helpful Tips</h2>
+<ul>
+<li>Your <strong>private key</strong> must stay private (<code>~/.ssh/id_ed25519</code>)</li>
+<li>A <strong>passphrase</strong> adds extra protection</li>
+<li>Use an SSH config file to manage many servers:</li>
+</ul>
+<p>Create or edit this file:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nano ~/.ssh/config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Add this block:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Host myserver
+</span></span><span class="line"><span class="cl">  HostName 192.168.1.10
+</span></span><span class="line"><span class="cl">  User vitalii
+</span></span><span class="line"><span class="cl">  IdentityFile ~/.ssh/id_ed25519
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then you can connect by simply running:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh myserver
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-summary">🧩 Summary</h2>
+<p>SSH keys help you:</p>
+<ul>
+<li>Log in faster</li>
+<li>Avoid typing passwords</li>
+<li>Stay secure</li>
+</ul>
+<p>Now you&rsquo;re ready to manage your servers like a pro — safely and efficiently!</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-05-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/ssh-keys-linux/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-title="How to Set Up SSH Keys on Linux" data-hashtags="SSH,Linux,Security"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-hashtag="SSH"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/ssh-keys-linux/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-title="How to Set Up SSH Keys on Linux" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-title="How to Set Up SSH Keys on Linux"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-title="How to Set Up SSH Keys on Linux"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/ssh-keys-linux/" data-title="How to Set Up SSH Keys on Linux"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/ssh/">SSH</a>,&nbsp;<a href="/tags/linux/">Linux</a>,&nbsp;<a href="/tags/security/">Security</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/opnsense/" class="prev" rel="prev" title="OPNsense Setup: Basic Guide"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>OPNsense Setup: Basic Guide</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

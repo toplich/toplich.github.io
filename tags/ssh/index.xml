@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SSH on IT Blog</title>
+    <link>https://blog.topli.ch/tags/ssh/</link>
+    <description>Recent content in SSH on IT Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 28 May 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://blog.topli.ch/tags/ssh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Set Up SSH Keys on Linux</title>
+      <link>https://blog.topli.ch/posts/ssh-keys-linux/</link>
+      <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://blog.topli.ch/posts/ssh-keys-linux/</guid>
+      <description>A step-by-step guide to generating and using SSH keys for secure Linux access.</description>
+    </item>
+  </channel>
+</rss>
