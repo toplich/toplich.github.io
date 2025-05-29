@@ -12,12 +12,13 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-05-26T08:00:00+02:00">
-    <meta property="article:modified_time" content="2025-05-26T08:00:00+02:00">
+    <meta property="article:modified_time" content="2025-05-29T07:42:52+02:00">
     <meta property="article:tag" content="Firewall">
     <meta property="article:tag" content="OPNsense">
     <meta property="article:tag" content="Network">
     <meta property="article:tag" content="VPN">
     <meta property="article:tag" content="WireGuard">
+    <meta property="article:tag" content="IPsec">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="OPNsense Setup: Basic Guide">
@@ -36,8 +37,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/blog.topli.ch\/posts\/opnsense\/"
-        },"genre": "posts","keywords": "Firewall, OPNsense, Network, VPN, WireGuard","wordcount":  796 ,
-        "url": "https:\/\/blog.topli.ch\/posts\/opnsense\/","datePublished": "2025-05-26T08:00:00+02:00","dateModified": "2025-05-26T08:00:00+02:00","publisher": {
+        },"genre": "posts","keywords": "Firewall, OPNsense, Network, VPN, WireGuard, IPsec, iOS, macOS","wordcount":  1301 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/opnsense\/","datePublished": "2025-05-26T08:00:00+02:00","dateModified": "2025-05-29T07:42:52+02:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -110,8 +111,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">OPNsense Setup: Basic Guide</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Networking</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-05-26">2025-05-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;796 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-05-26">2025-05-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1301 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -131,18 +132,36 @@
         <li><a href="#12-first-login-to-opnsense">1.2 First Login to OPNsense</a></li>
         <li><a href="#13-configure-web-access-from-wan">1.3 Configure WEB access from WAN</a></li>
         <li><a href="#14-system-updates-and-backup-configuration">1.4 System Updates and Backup Configuration</a></li>
+        <li><a href="#useful-resources">Useful Resources</a></li>
       </ul>
     </li>
-    <li><a href="#useful-resources">Useful Resources</a></li>
     <li><a href="#21-wireguard-site-to-site-vpn-setup">2.1 WireGuard Site-to-Site VPN Setup</a>
       <ul>
         <li><a href="#22-create-wireguard-instance">2.2 Create WireGuard Instance</a></li>
         <li><a href="#23-configure-peer">2.3 Configure Peer</a></li>
         <li><a href="#24-create-interfaces">2.4 Create Interfaces</a></li>
         <li><a href="#25-set-up-firewall-rules">2.5 Set Up Firewall Rules</a></li>
+        <li><a href="#useful-resources-1">Useful Resources</a></li>
       </ul>
     </li>
-    <li><a href="#useful-resources-1">Useful Resources</a></li>
+    <li><a href="#31-ipsec-vpn-for-ios-and-macos">3.1 IPsec VPN for iOS and macOS</a>
+      <ul>
+        <li><a href="#-31-optional-create-a-vpn-group">👥 3.1 (Optional) Create a VPN Group</a></li>
+        <li><a href="#-32-create-a-vpn-user">👤 3.2 Create a VPN User</a></li>
+        <li><a href="#-33-configure-ipsec-mobile-clients">🌐 3.3 Configure IPsec Mobile Clients</a></li>
+        <li><a href="#-34-create-phase-1">🔑 3.4 Create Phase 1</a></li>
+        <li><a href="#-35-create-phase-2">🔄 3.5 Create Phase 2</a></li>
+        <li><a href="#-36-enable-ipsec">✅ 3.6 Enable IPsec</a></li>
+        <li><a href="#-37-configure-firewall-wan-rules">🔥 3.7 Configure Firewall: WAN Rules</a></li>
+        <li><a href="#-38-configure-firewall-ipsec-rules">🔒 3.8 Configure Firewall: IPsec Rules</a></li>
+        <li><a href="#-39-outbound-nat">🌍 3.9 Outbound NAT</a></li>
+        <li><a href="#-310-allow-dns-from-vpn">📡 3.10 Allow DNS from VPN</a></li>
+        <li><a href="#-311-optional-allow-multi-device-connections">🔄 3.11 (Optional) Allow Multi-Device Connections</a></li>
+        <li><a href="#-312-iphone-vpn-configuration">📲 3.12 iPhone VPN Configuration</a></li>
+        <li><a href="#-313-macos-vpn-configuration">💻 3.13 macOS VPN Configuration</a></li>
+        <li><a href="#-troubleshooting">💡 Troubleshooting</a></li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p><a href="https://opnsense.org/" target="_blank" rel="noopener noreffer ">OPNsense</a> is a powerful open-source firewall and routing platform based on FreeBSD.</p>
@@ -265,7 +284,7 @@
 <p>Download a local <code>.xml</code> backup of your configuration.<br>
 You can also enable automatic backups to cloud services like Google Drive, Nextcloud, etc.</p>
 <hr>
-<h2 id="useful-resources">Useful Resources</h2>
+<h3 id="useful-resources">Useful Resources</h3>
 <ul>
 <li>📚 <a href="https://docs.opnsense.org/" target="_blank" rel="noopener noreffer ">Official OPNsense Documentation</a></li>
 <li>🎥 <a href="https://www.youtube.com/results?search_query=opnsense" target="_blank" rel="noopener noreffer ">YouTube: OPNsense Tutorials</a></li>
@@ -441,9 +460,178 @@ You can also enable automatic backups to cloud services like Google Drive, Nextc
 <li>Try pinging remote LAN IP (e.g., from 192.168.1.1 → 192.168.2.1)</li>
 </ul>
 <hr>
-<h2 id="useful-resources-1">Useful Resources</h2>
+<h3 id="useful-resources-1">Useful Resources</h3>
 <ul>
 <li>📚 <a href="https://docs.opnsense.org/manual/how-tos/wireguard-s2s.html" target="_blank" rel="noopener noreffer ">Official OPNsense Documentation</a></li>
+</ul>
+<hr>
+<h2 id="31-ipsec-vpn-for-ios-and-macos">3.1 IPsec VPN for iOS and macOS</h2>
+<p>This guide walks you through the setup of an IPsec VPN server on <strong>OPNsense</strong> that works with <strong>iOS</strong> and <strong>macOS</strong> devices.<br>
+Tested with:</p>
+<ul>
+<li><strong>OPNsense</strong> 23.1.7_3 – 24.7.5_3</li>
+<li><strong>iOS</strong> 16+</li>
+<li><strong>macOS</strong> Monterey+</li>
+</ul>
+<hr>
+<h3 id="-31-optional-create-a-vpn-group">👥 3.1 (Optional) Create a VPN Group</h3>
+<p><strong>System → Access → Groups → Add</strong></p>
+<ul>
+<li><strong>Group name:</strong> VPN</li>
+<li><strong>Description:</strong> VPN users</li>
+</ul>
+<hr>
+<h3 id="-32-create-a-vpn-user">👤 3.2 Create a VPN User</h3>
+<p><strong>System → Access → Users → Add</strong></p>
+<ul>
+<li><strong>Username:</strong> vpnuser</li>
+<li><strong>Password:</strong> [secure password]</li>
+<li><strong>Member Of:</strong> VPN (optional, if you created the group)</li>
+</ul>
+<hr>
+<h3 id="-33-configure-ipsec-mobile-clients">🌐 3.3 Configure IPsec Mobile Clients</h3>
+<p><strong>VPN → IPsec → Mobile Clients</strong></p>
+<ul>
+<li>✅ Enable IPsec Mobile Client Support</li>
+<li><strong>Backend for authentication:</strong> Local Database</li>
+<li><strong>Enforce local group:</strong> VPN (optional)</li>
+</ul>
+<p>IP Address Pool</p>
+<ul>
+<li>✅ Provide a virtual IPv4 address</li>
+<li><strong>Address Pool:</strong> 192.168.2.0/24</li>
+</ul>
+<p>DNS Servers</p>
+<ul>
+<li>
+<p>✅ Provide DNS server list</p>
+<ul>
+<li>Server 1: 192.168.1.1 (local router IP)</li>
+<li>Server 2: 8.8.8.8</li>
+<li>Server 3: 8.8.4.4</li>
+</ul>
+</li>
+<li>
+<p><strong>Phase 2 PFS Group:</strong> Off</p>
+</li>
+<li>
+<p>Save and Apply changes</p>
+</li>
+</ul>
+<hr>
+<h3 id="-34-create-phase-1">🔑 3.4 Create Phase 1</h3>
+<p>Click <strong>&ldquo;Create Phase1&rdquo;</strong> at the top blue bar.</p>
+<ul>
+<li><strong>Connection method:</strong> default</li>
+<li><strong>Key Exchange version:</strong> auto</li>
+<li><strong>Interface:</strong> WAN</li>
+<li><strong>Description:</strong> Mobile VPN</li>
+<li><strong>Authentication:</strong> Mutual PSK + Xauth</li>
+<li><strong>My identifier:</strong> My IP address</li>
+<li><strong>Pre-Shared Key:</strong> [store securely]</li>
+</ul>
+<p>Algorithms</p>
+<ul>
+<li>AES 256</li>
+<li>Hash: SHA256, SHA384, SHA512</li>
+<li>DH group: 2, 5, 14–18</li>
+<li>✅ Install policy</li>
+<li>NAT Traversal: Enable</li>
+<li>Lifetime: 28800</li>
+<li>Save and Apply changes</li>
+</ul>
+<hr>
+<h3 id="-35-create-phase-2">🔄 3.5 Create Phase 2</h3>
+<p><strong>VPN → IPsec → Tunnel Settings</strong><br>
+Click ➕ in <strong>Commands</strong> column of Phase 1 row.</p>
+<ul>
+<li><strong>Mode:</strong> Tunnel IPv4</li>
+<li><strong>Type:</strong> Network</li>
+<li><strong>Address:</strong> 0.0.0.0/0</li>
+<li><strong>Protocol:</strong> ESP</li>
+<li><strong>Encryption:</strong> AES128, AES192, AES256</li>
+<li><strong>Hash:</strong> SHA256, SHA384, SHA512</li>
+<li><strong>PFS:</strong> Off</li>
+<li>Lifetime: 3600</li>
+<li>Save and Apply</li>
+</ul>
+<hr>
+<h3 id="-36-enable-ipsec">✅ 3.6 Enable IPsec</h3>
+<p><strong>VPN → IPsec → Tunnel Settings</strong></p>
+<ul>
+<li>✅ Enable IPsec (bottom of page)</li>
+<li>Apply changes</li>
+</ul>
+<hr>
+<h3 id="-37-configure-firewall-wan-rules">🔥 3.7 Configure Firewall: WAN Rules</h3>
+<p><strong>Firewall → Rules → WAN → Add 3 rules:</strong></p>
+<ol>
+<li><strong>Protocol:</strong> ESP → Destination: WAN → Description: IPsec ESP</li>
+<li><strong>Protocol:</strong> TCP/UDP → Port: ISAKMP (500) → Description: IPsec ISAKMP</li>
+<li><strong>Protocol:</strong> UDP → Port: NAT-T (4500) → Description: IPsec NAT-T</li>
+</ol>
+<p>✅ Apply changes</p>
+<hr>
+<h3 id="-38-configure-firewall-ipsec-rules">🔒 3.8 Configure Firewall: IPsec Rules</h3>
+<p><strong>Firewall → Rules → IPsec</strong></p>
+<ul>
+<li>Protocol: Any</li>
+<li>Source: Any</li>
+<li>Destination: Any</li>
+</ul>
+<p>✅ Apply changes</p>
+<hr>
+<h3 id="-39-outbound-nat">🌍 3.9 Outbound NAT</h3>
+<p><strong>Firewall → NAT → Outbound</strong></p>
+<ul>
+<li>Mode: <strong>Automatic outbound NAT</strong></li>
+<li>Confirm <code>192.168.2.0/24</code> is listed</li>
+</ul>
+<hr>
+<h3 id="-310-allow-dns-from-vpn">📡 3.10 Allow DNS from VPN</h3>
+<p><strong>Services → Unbound DNS → Access Lists → Add</strong></p>
+<ul>
+<li><strong>Access List name:</strong> 192.168.2.0/24</li>
+<li><strong>Action:</strong> Allow</li>
+<li><strong>Network:</strong> 192.168.2.0/24</li>
+<li><strong>Description:</strong> VPN DNS access</li>
+<li>Save and Apply</li>
+</ul>
+<hr>
+<h3 id="-311-optional-allow-multi-device-connections">🔄 3.11 (Optional) Allow Multi-Device Connections</h3>
+<p>In <strong>Phase 1</strong>, set:</p>
+<ul>
+<li><strong>Unique ID:</strong> <code>no</code><br>
+This allows one user to connect from multiple devices.</li>
+</ul>
+<hr>
+<h3 id="-312-iphone-vpn-configuration">📲 3.12 iPhone VPN Configuration</h3>
+<p><strong>Settings → VPN → Add VPN Configuration…</strong></p>
+<ul>
+<li><strong>Type:</strong> IPsec</li>
+<li><strong>Server:</strong> [OPNsense public IP]</li>
+<li><strong>Account:</strong> vpnuser</li>
+<li><strong>Password:</strong> [user password]</li>
+<li><strong>Secret:</strong> [Pre-Shared Key]</li>
+<li>Leave &ldquo;Group Name&rdquo; empty</li>
+</ul>
+<hr>
+<h3 id="-313-macos-vpn-configuration">💻 3.13 macOS VPN Configuration</h3>
+<p><strong>System Preferences → Network → + → Interface: VPN</strong></p>
+<ul>
+<li><strong>VPN Type:</strong> Cisco IPSec</li>
+<li><strong>Server Address:</strong> [OPNsense public IP]</li>
+<li><strong>Account Name:</strong> vpnuser</li>
+<li><strong>Password:</strong> [user password]</li>
+<li><strong>Shared Secret:</strong> [Pre-Shared Key]</li>
+</ul>
+<p>✅ Save and Connect</p>
+<hr>
+<h3 id="-troubleshooting">💡 Troubleshooting</h3>
+<ul>
+<li>If DNS doesn’t work — try restarting the router</li>
+<li>Double-check firewall and mobile client settings</li>
+<li>Use strong, unique Pre-Shared Keys and passwords</li>
 </ul>
 <hr>
 <p><em>📝 Published on <a href="https://blog.topli.ch/network/opnsense/" target="_blank" rel="noopener noreffer ">blog.topli.ch</a></em></p>
@@ -451,20 +639,20 @@ You can also enable automatic backups to cloud services like Google Drive, Nextc
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2025-05-26</span>
+                <span>Updated on 2025-05-29</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
                             <a class="link-to-markdown" href="/posts/opnsense/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-hashtags="Firewall,OPNsense,Network,VPN,WireGuard"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/opnsense/" data-hashtag="Firewall"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/opnsense/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-image="/images/opnsense-logo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-hashtags="Firewall,OPNsense,Network,VPN,WireGuard,IPsec,iOS,macOS"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/opnsense/" data-hashtag="Firewall"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/opnsense/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/opnsense/" data-title="OPNsense Setup: Basic Guide" data-image="/images/opnsense-logo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/firewall/">Firewall</a>,&nbsp;<a href="/tags/opnsense/">OPNsense</a>,&nbsp;<a href="/tags/network/">Network</a>,&nbsp;<a href="/tags/vpn/">VPN</a>,&nbsp;<a href="/tags/wireguard/">WireGuard</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/firewall/">Firewall</a>,&nbsp;<a href="/tags/opnsense/">OPNsense</a>,&nbsp;<a href="/tags/network/">Network</a>,&nbsp;<a href="/tags/vpn/">VPN</a>,&nbsp;<a href="/tags/wireguard/">WireGuard</a>,&nbsp;<a href="/tags/ipsec/">IPsec</a>,&nbsp;<a href="/tags/ios/">IOS</a>,&nbsp;<a href="/tags/macos/">MacOS</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>

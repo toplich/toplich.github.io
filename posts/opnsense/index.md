@@ -90,7 +90,7 @@ You can also enable automatic backups to cloud services like Google Drive, Nextc
 
 ---
 
-## Useful Resources
+### Useful Resources
 
 - 📚 [Official OPNsense Documentation](https://docs.opnsense.org/)
 - 🎥 [YouTube: OPNsense Tutorials](https://www.youtube.com/results?search_query=opnsense)
@@ -235,9 +235,199 @@ WireGuard is a fast and modern VPN solution known for its simplicity and perform
 
 ---
 
-## Useful Resources
+### Useful Resources
 
 - 📚 [Official OPNsense Documentation](https://docs.opnsense.org/manual/how-tos/wireguard-s2s.html)
+
+---
+
+## 3.1 IPsec VPN for iOS and macOS
+
+This guide walks you through the setup of an IPsec VPN server on **OPNsense** that works with **iOS** and **macOS** devices.  
+Tested with:  
+- **OPNsense** 23.1.7_3 – 24.7.5_3  
+- **iOS** 16+  
+- **macOS** Monterey+
+
+---
+
+### 👥 3.1 (Optional) Create a VPN Group
+
+**System → Access → Groups → Add**
+
+- **Group name:** VPN  
+- **Description:** VPN users
+
+---
+
+### 👤 3.2 Create a VPN User
+
+**System → Access → Users → Add**
+
+- **Username:** vpnuser  
+- **Password:** [secure password]  
+- **Member Of:** VPN (optional, if you created the group)
+
+---
+
+### 🌐 3.3 Configure IPsec Mobile Clients
+
+**VPN → IPsec → Mobile Clients**
+
+- ✅ Enable IPsec Mobile Client Support  
+- **Backend for authentication:** Local Database  
+- **Enforce local group:** VPN (optional)  
+
+ IP Address Pool
+- ✅ Provide a virtual IPv4 address  
+- **Address Pool:** 192.168.2.0/24  
+
+ DNS Servers
+- ✅ Provide DNS server list  
+  - Server 1: 192.168.1.1 (local router IP)  
+  - Server 2: 8.8.8.8  
+  - Server 3: 8.8.4.4  
+
+- **Phase 2 PFS Group:** Off  
+- Save and Apply changes
+
+---
+
+### 🔑 3.4 Create Phase 1
+
+Click **"Create Phase1"** at the top blue bar.
+
+- **Connection method:** default  
+- **Key Exchange version:** auto  
+- **Interface:** WAN  
+- **Description:** Mobile VPN  
+- **Authentication:** Mutual PSK + Xauth  
+- **My identifier:** My IP address  
+- **Pre-Shared Key:** [store securely]
+
+Algorithms
+- AES 256  
+- Hash: SHA256, SHA384, SHA512  
+- DH group: 2, 5, 14–18  
+- ✅ Install policy  
+- NAT Traversal: Enable  
+- Lifetime: 28800  
+- Save and Apply changes
+
+---
+
+### 🔄 3.5 Create Phase 2
+
+**VPN → IPsec → Tunnel Settings**  
+Click ➕ in **Commands** column of Phase 1 row.
+
+- **Mode:** Tunnel IPv4  
+- **Type:** Network  
+- **Address:** 0.0.0.0/0  
+- **Protocol:** ESP  
+- **Encryption:** AES128, AES192, AES256  
+- **Hash:** SHA256, SHA384, SHA512  
+- **PFS:** Off  
+- Lifetime: 3600  
+- Save and Apply
+
+---
+
+### ✅ 3.6 Enable IPsec
+
+**VPN → IPsec → Tunnel Settings**
+
+- ✅ Enable IPsec (bottom of page)  
+- Apply changes
+
+---
+
+### 🔥 3.7 Configure Firewall: WAN Rules
+
+**Firewall → Rules → WAN → Add 3 rules:**
+
+1. **Protocol:** ESP → Destination: WAN → Description: IPsec ESP  
+2. **Protocol:** TCP/UDP → Port: ISAKMP (500) → Description: IPsec ISAKMP  
+3. **Protocol:** UDP → Port: NAT-T (4500) → Description: IPsec NAT-T  
+
+✅ Apply changes
+
+---
+
+### 🔒 3.8 Configure Firewall: IPsec Rules
+
+**Firewall → Rules → IPsec**
+
+- Protocol: Any  
+- Source: Any  
+- Destination: Any  
+
+✅ Apply changes
+
+---
+
+### 🌍 3.9 Outbound NAT
+
+**Firewall → NAT → Outbound**
+
+- Mode: **Automatic outbound NAT**  
+- Confirm `192.168.2.0/24` is listed
+
+---
+
+### 📡 3.10 Allow DNS from VPN
+
+**Services → Unbound DNS → Access Lists → Add**
+
+- **Access List name:** 192.168.2.0/24  
+- **Action:** Allow  
+- **Network:** 192.168.2.0/24  
+- **Description:** VPN DNS access  
+- Save and Apply
+
+---
+
+### 🔄 3.11 (Optional) Allow Multi-Device Connections
+
+In **Phase 1**, set:
+
+- **Unique ID:** `no`  
+This allows one user to connect from multiple devices.
+
+---
+
+### 📲 3.12 iPhone VPN Configuration
+
+**Settings → VPN → Add VPN Configuration…**
+
+- **Type:** IPsec  
+- **Server:** [OPNsense public IP]  
+- **Account:** vpnuser  
+- **Password:** [user password]  
+- **Secret:** [Pre-Shared Key]  
+- Leave "Group Name" empty
+
+---
+
+### 💻 3.13 macOS VPN Configuration
+
+**System Preferences → Network → + → Interface: VPN**
+
+- **VPN Type:** Cisco IPSec  
+- **Server Address:** [OPNsense public IP]  
+- **Account Name:** vpnuser  
+- **Password:** [user password]  
+- **Shared Secret:** [Pre-Shared Key]  
+
+✅ Save and Connect
+
+---
+
+### 💡 Troubleshooting
+
+- If DNS doesn’t work — try restarting the router  
+- Double-check firewall and mobile client settings  
+- Use strong, unique Pre-Shared Keys and passwords
 
 ---
 
