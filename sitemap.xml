@@ -5,10 +5,10 @@
             <loc>https://blog.topli.ch/</loc><lastmod>2025-06-02T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/posts/</loc><lastmod>2025-06-02T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/access/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://blog.topli.ch/categories/access-infrastructure/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/posts/teleport/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/cv/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/linux/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/categories/networking/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/rdp/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/self-hosted/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/teleport/</loc><lastmod>2025-05-29T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
@@ -22,7 +22,6 @@
             <loc>https://blog.topli.ch/tags/ipsec/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/macos/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/network/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>https://blog.topli.ch/categories/networking/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/opnsense/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/posts/opnsense/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/vpn/</loc><lastmod>2025-05-29T07:42:52&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
