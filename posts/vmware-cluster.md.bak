@@ -1,0 +1,83 @@
+
+1. Правою кнопкою на датацентр - створити кластер. Вибираємо DRS + HA + vSAN
+2. Якщо Гіпервізори нові без налаштувань добавляємо їх до кластеру. Якщо на хостах вже віртуальні машини та віртуальні світчі мігруємо в кластер
+3. Мережа
+Правою кнопкою на датацентр створюємо новий Distributet Switch DSwitch (вибираємо кількість аплінків (скільки провайдерів або зовнішніх мереж підключені до серверів). Далі Датацентр - Networks - Distributet Switches правою кнопкою 
+створюємо Port group (кожна група портів це окрема мережа) як мінімум vDS_WAN зовнішня мережа та vDS_LAN для внутрішньої мережі
+Добавляємо Хости де привязуємо аплінки до мережевих карт 
+Перевіряємо VMkernel на всіх хостах Хост - Configure - vMkernel adapter має бути в Port group - vDS_WAN та світч DSwitch кожен хост має окремий кернел з окремою іп адресою і шлюзом
+На vMkernel з Port group - vDS_WAN вмикаємо тільки Management (Provisioning - VMDK, шаблони, копії), створюємо ще по одному vMkernel adapter для кожного хоста в Port group - vDS_LAN звичайно з лан іп адресами без шлюза вмикаємо vMotion та vSAN
+
+vSAN
+Підготовка
+Для vSAN потрібно мінімум 3 хоста (або 2 хоста плюс Witness host)
+На хостах мають бути диски як мінімум один ССД як cash tier і диски JBOD (Just a Bunch Of Disks) або кожен диск окремо як RAID0
+Співвідношення ссд до хдд 1 до 7 в одній групі
+Всі хости в тому числі Witness мають мати однакову версію Hypervisor
+Бажано розділити трафік Management, vMotion, vSAN через VLAN, а також фізичними кабелями
+
+Скачуємо OVF файл VMware vSAN Witness Appliance і встановлюємо як віртуальну машину на хост який не входить в кластер (можна і на ті що в кластері але не рекомендується, тільки для тестування) 
+В датацентрі Deploy OVF Template
+
+Налаштовується як правило окремо vmkernel для підключення до vCenter і окремо для трафіку vSAN
+Після чого ця віртуальна машина добавляється як окремий хост в датацентр не у кластер
+
+Оновити хости 8 версії офлайн  можна через Lifecycle Manager 
+Спочатку скачуємо в неті Image Depot потім імпортуємо Action - Import Updates
+Після чого заходимо Inventory - Host - Updates - Image вибираємо той що імпортували (звертаємо увагу на Vendor Addon та Firmware and Drivers Addon якщо вони добавлені але в імпортованому іміджі їх немає система пробуватиме скачати їх онлайн)  натискаємо ок 
+Спочатку пройде Image Compliance потім натискаємо Remediate
+
+Створення vSAN
+Cluster - Configure - vSAN - Services
+вибираємо 
+vSAN HCI (vSAN Compute Cluster пул потужностей без дисків, vSAN Max пул дисків без потужностей)
+Далі Two node vSAN cluster (Single site vSAN cluster всі сервери в одному датацентрі, vSAN stretched cluster коли використовуються сервери в різних датацентрах)
+Якщо є можливість включаємо vSAN ESA- це...
+далі вмикаємо Allow reduced redundancy
+Space efficiency - ні (Compression only для стискання даних, Deduplication and compression)
+Encryption
+Data-At-Rest encryption - ні
+Data-In-Transit encryption - ні
+Disk format options
+Allow reduced redundancy - так
+RDMA support - ні
+Клеймимо диски 
+Capasity Tier - HDD
+Cash Tier - SSD, NVME
+Вибираємо Preferred domain і Secondary domain
+Вибираємо witness host вибираємо диски як Capasity Tier та Cash Tier
+Готово
+
+Якщо vSAN побудований на дисках тільки на одному сервері
+
+Create VM Storage Policy
+Datastore specific rules
+Enable rules for "vSAN" storage
+vSAN
+Availability 
+- Host mirroring 2 node cluster
+- No data redundancy
+
+Storage rules
+
+Encryption services
+- No preference
+Space efficiency 
+- No preference
+Storage tier 
+- No preference
+
+Advanced Policy Rules
+Number of disk stripes per object - 1
+IOPS limit for object - 0
+Object space reservation - Thin provisioning
+Flash read cache reservation (%) - 0
+Disable object checksum - no
+Force provisioning - yes
+
+Storage compatibility
+Має зявитись vSAN сторедж
+
+Для міграції віртуальної машини вибираєте vSAN сторедж плюс Policy Rules яку створили раніше
+
+

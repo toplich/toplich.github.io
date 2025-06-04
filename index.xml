@@ -3,9 +3,17 @@
         <title>IT Blog</title>
         <link>https://blog.topli.ch/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 29 May 2025 00:00:00 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 02 Jun 2025 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://blog.topli.ch/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>How to Deploy a Zero Trust Cluster</title>
+    <link>https://blog.topli.ch/posts/teleport/</link>
+    <pubDate>Thu, 29 May 2025 00:00:00 &#43;0000</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/teleport/</guid>
+    <description><![CDATA[A simple step-by-step guide on how to deploy a self-hosted Teleport cluster on Linux.]]></description>
+</item>
+<item>
     <title>How to Set Up SSH Keys on Linux</title>
     <link>https://blog.topli.ch/posts/ssh-keys-linux/</link>
     <pubDate>Wed, 28 May 2025 00:00:00 &#43;0000</pubDate>

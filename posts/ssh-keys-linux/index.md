@@ -40,6 +40,12 @@ This creates two files:
 ssh-copy-id username@remote_server_ip
 ```
 
+Add Your Public Key to the Remote ESXI Server
+
+```bash
+cat ~/.ssh/id_rsa.pub | ssh root@ESXI_IP 'cat >> /etc/ssh/keys-root/authorized_keys'
+```
+
 This command adds your key to the remote server so you can log in without a password.
 
 ### Option 2: Manual method

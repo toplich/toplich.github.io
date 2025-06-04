@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Налаштування кластера з vSAN у vCenter 8 - IT Blog</title><meta name="Description" content="Покроковий гайд зі створення кластеру VMware vSAN з DRS, HA, Distributed Switch, Witness Host та політикою зберігання."><meta property="og:url" content="http://localhost:1313/posts/vmware-cluster/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Налаштування кластера з vSAN у vCenter 8">
+  <meta property="og:description" content="Покроковий гайд зі створення кластеру VMware vSAN з DRS, HA, Distributed Switch, Witness Host та політикою зберігання.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-06-02T00:00:00+00:00">
+    <meta property="article:tag" content="VMware">
+    <meta property="article:tag" content="VSphere">
+    <meta property="article:tag" content="VCenter">
+    <meta property="article:tag" content="VSAN">
+    <meta property="article:tag" content="Інфраструктура">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Налаштування кластера з vSAN у vCenter 8">
+  <meta name="twitter:description" content="Покроковий гайд зі створення кластеру VMware vSAN з DRS, HA, Distributed Switch, Witness Host та політикою зберігання.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/vmware-cluster/" /><link rel="prev" href="http://localhost:1313/posts/teleport/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Налаштування кластера з vSAN у vCenter 8",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/vmware-cluster\/"
+        },"genre": "posts","keywords": "VMware, vSphere, vCenter, vSAN, інфраструктура","wordcount":  457 ,
+        "url": "http:\/\/localhost:1313\/posts\/vmware-cluster\/","datePublished": "2025-06-02T00:00:00+00:00","dateModified": "2025-06-02T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "xxxx"
+            },"description": "Покроковий гайд зі створення кластеру VMware vSAN з DRS, HA, Distributed Switch, Witness Host та політикою зберігання."
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Налаштування кластера з vSAN у vCenter 8</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>xxxx</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-02">2025-06-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;457 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-1-створення-кластера">🔹 1. Створення кластера</a></li>
+    <li><a href="#-2-додавання-гіпервізорів-esxi">🔹 2. Додавання гіпервізорів (ESXi)</a></li>
+    <li><a href="#-3-налаштування-мережі-distributed-switch">🔹 3. Налаштування мережі (Distributed Switch)</a>
+      <ul>
+        <li><a href="#-створення-vds">✅ Створення vDS</a></li>
+        <li><a href="#-port-groups">🌐 Port Groups</a></li>
+        <li><a href="#-призначення-хостів-до-vds">📥 Призначення хостів до vDS</a></li>
+        <li><a href="#-vmkernel-налаштування">🧠 VMkernel налаштування</a></li>
+      </ul>
+    </li>
+    <li><a href="#-4-підготовка-до-vsan">🔹 4. Підготовка до vSAN</a></li>
+    <li><a href="#-5-додавання-witness-host">🔹 5. Додавання Witness Host</a></li>
+    <li><a href="#-6-оновлення-хостів-через-lifecycle-manager-офлайн">🔹 6. Оновлення хостів через Lifecycle Manager (офлайн)</a></li>
+    <li><a href="#-7-створення-vsan-кластеру">🔹 7. Створення vSAN кластеру</a></li>
+    <li><a href="#-8-якщо-vsan-створено-на-1-хості">🔹 8. Якщо vSAN створено на 1 хості</a></li>
+    <li><a href="#-9-створення-vm-storage-policy">🔹 9. Створення VM Storage Policy</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>У цій статті я покажу, як створити повноцінний кластер у vCenter 8 з увімкненими функціями <strong>DRS</strong>, <strong>HA</strong>, <strong>vSAN</strong>, налаштувати <strong>мережу через Distributed Switch</strong>, додати <strong>Witness Host</strong>, оновити хости офлайн і створити <strong>VM Storage Policy</strong> для віртуальних машин.</p></blockquote>
+<hr>
+<h2 id="-1-створення-кластера">🔹 1. Створення кластера</h2>
+<ol>
+<li>У vCenter:
+<ul>
+<li>Правою кнопкою на <strong>Datacenter</strong> → <code>New Cluster</code>.</li>
+</ul>
+</li>
+<li>Назвіть кластер.</li>
+<li>Увімкніть:
+<ul>
+<li>✅ DRS (Distributed Resource Scheduler)</li>
+<li>✅ HA (High Availability)</li>
+<li>✅ vSAN (Virtual SAN)</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-2-додавання-гіпервізорів-esxi">🔹 2. Додавання гіпервізорів (ESXi)</h2>
+<ul>
+<li>Якщо хости нові — додаємо до кластеру.</li>
+<li>Якщо вже є віртуальні машини — переносимо у кластер через <code>Move to...</code>.</li>
+</ul>
+<hr>
+<h2 id="-3-налаштування-мережі-distributed-switch">🔹 3. Налаштування мережі (Distributed Switch)</h2>
+<h3 id="-створення-vds">✅ Створення vDS</h3>
+<ul>
+<li><code>Datacenter</code> → <code>Create Distributed Switch</code></li>
+<li>Вкажіть кількість uplinks (залежить від кількості зовнішніх підключень).</li>
+<li>Назва: <code>vDS_Main</code>.</li>
+</ul>
+<h3 id="-port-groups">🌐 Port Groups</h3>
+<p>Створити принаймні:</p>
+<ul>
+<li><code>vDS_WAN</code> – зовнішня мережа</li>
+<li><code>vDS_LAN</code> – внутрішня мережа</li>
+</ul>
+<h3 id="-призначення-хостів-до-vds">📥 Призначення хостів до vDS</h3>
+<ul>
+<li>Прив’язати NIC до uplinks на кожному хості.</li>
+</ul>
+<h3 id="-vmkernel-налаштування">🧠 VMkernel налаштування</h3>
+<p>Для кожного хоста:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Port Group</th>
+          <th>Призначення</th>
+          <th>IP</th>
+          <th>Gateway</th>
+          <th>Використання</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>vDS_WAN</code></td>
+          <td>Зовнішня</td>
+          <td>так</td>
+          <td>так</td>
+          <td>Management</td>
+      </tr>
+      <tr>
+          <td><code>vDS_LAN</code></td>
+          <td>Внутрішня</td>
+          <td>так</td>
+          <td>ні</td>
+          <td>vMotion, vSAN</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-4-підготовка-до-vsan">🔹 4. Підготовка до vSAN</h2>
+<ul>
+<li>Мінімум 3 хости (або 2 + Witness)</li>
+<li>Диски:
+<ul>
+<li>Cache Tier: SSD або NVMe</li>
+<li>Capacity Tier: HDD або RAID0</li>
+</ul>
+</li>
+<li>Співвідношення SSD до HDD: <strong>1:7</strong></li>
+<li>Хости мають бути на однаковій версії ESXi</li>
+<li>Розділіть трафік (vSAN, vMotion, Management) через VLAN або фізичні інтерфейси</li>
+</ul>
+<hr>
+<h2 id="-5-додавання-witness-host">🔹 5. Додавання Witness Host</h2>
+<ol>
+<li>Завантажити <strong>vSAN Witness Appliance OVF</strong></li>
+<li>Установити через <code>Deploy OVF Template</code></li>
+<li><strong>Не додавати в кластер</strong>, залишити в Datacenter</li>
+<li>Налаштувати VMkernel:
+<ul>
+<li>окремий для доступу до vCenter</li>
+<li>окремий для vSAN</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-6-оновлення-хостів-через-lifecycle-manager-офлайн">🔹 6. Оновлення хостів через Lifecycle Manager (офлайн)</h2>
+<ol>
+<li>Завантажити ZIP (Image Depot) з сайту VMware</li>
+<li>У <code>Lifecycle Manager</code>:
+<ul>
+<li><code>Action</code> → <code>Import Updates</code></li>
+</ul>
+</li>
+<li>У <code>Inventory</code> → <code>Host</code> → <code>Updates</code> → <code>Image</code>:
+<ul>
+<li>Вибрати імпортований образ</li>
+<li>Перевірити Vendor Addon, Firmware &amp; Drivers</li>
+</ul>
+</li>
+<li>Запустити:
+<ul>
+<li><code>Image Compliance</code></li>
+<li><code>Remediate</code></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="-7-створення-vsan-кластеру">🔹 7. Створення vSAN кластеру</h2>
+<ol>
+<li><code>Cluster</code> → <code>Configure</code> → <code>vSAN</code> → <code>Services</code></li>
+<li>Тип:
+<ul>
+<li><code>vSAN HCI</code> – Compute + Storage</li>
+<li><code>Two Node vSAN</code> або <code>Single site</code></li>
+<li>Увімкнути <code>vSAN ESA</code>, якщо доступно</li>
+</ul>
+</li>
+<li>Налаштування:
+<ul>
+<li>✅ Allow reduced redundancy</li>
+<li>❌ Compression/Deduplication</li>
+<li>❌ Encryption</li>
+</ul>
+</li>
+<li>Клеймити диски:
+<ul>
+<li>Cache Tier: SSD</li>
+<li>Capacity Tier: HDD</li>
+</ul>
+</li>
+<li>Вказати Preferred/Secondary домени</li>
+<li>Призначити Witness та його диски</li>
+</ol>
+<hr>
+<h2 id="-8-якщо-vsan-створено-на-1-хості">🔹 8. Якщо vSAN створено на 1 хості</h2>
+<blockquote>
+<p>Лише для тесту!</p></blockquote>
+<ul>
+<li>Availability → <code>No data redundancy</code></li>
+</ul>
+<hr>
+<h2 id="-9-створення-vm-storage-policy">🔹 9. Створення VM Storage Policy</h2>
+<ol>
+<li><code>Policies and Profiles</code> → <code>VM Storage Policies</code> → <code>New</code></li>
+<li>Назва: <code>vSAN-NoRedundancy</code></li>
+<li>Правила:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Availability: No data redundancy
+</span></span><span class="line"><span class="cl">Space efficiency: No preference
+</span></span><span class="line"><span class="cl">Encryption: No preference
+</span></span><span class="line"><span class="cl">Advanced:
+</span></span><span class="line"><span class="cl">- Disk stripes per object: 1
+</span></span><span class="line"><span class="cl">- IOPS limit: 0
+</span></span><span class="line"><span class="cl">- Object reservation: Thin provisioning
+</span></span><span class="line"><span class="cl">- Flash cache reservation: 0%
+</span></span><span class="line"><span class="cl">- Checksum: Enabled
+</span></span><span class="line"><span class="cl">- Force provisioning: Yes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>🔹 10. Міграція віртуальних машин</p>
+<p>Виберіть vSAN Datastore
+Встановіть створену політику зберігання</p>
+<p>✅ Результат</p>
+<p>Кластер з повним набором можливостей (DRS + HA + vSAN)
+Мережа організована через vDS з розділенням трафіку
+Готовність до масштабування та fault tolerance</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-06-02</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/vmware-cluster/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/vmware-cluster/" data-title="Налаштування кластера з vSAN у vCenter 8" data-hashtags="VMware,vSphere,vCenter,vSAN,інфраструктура"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/vmware-cluster/" data-hashtag="VMware"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://localhost:1313/posts/vmware-cluster/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/vmware-cluster/" data-title="Налаштування кластера з vSAN у vCenter 8" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/vmware-cluster/" data-title="Налаштування кластера з vSAN у vCenter 8"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/vmware-cluster/" data-title="Налаштування кластера з vSAN у vCenter 8"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/vmware-cluster/" data-title="Налаштування кластера з vSAN у vCenter 8"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/vmware/">VMware</a>,&nbsp;<a href="/tags/vsphere/">VSphere</a>,&nbsp;<a href="/tags/vcenter/">VCenter</a>,&nbsp;<a href="/tags/vsan/">VSAN</a>,&nbsp;<a href="/tags/%D1%96%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/">Інфраструктура</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/teleport/" class="prev" rel="prev" title="How to Deploy a Teleport Cluster"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>How to Deploy a Teleport Cluster</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

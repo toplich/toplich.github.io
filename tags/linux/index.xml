@@ -9,6 +9,13 @@
     <lastBuildDate>Thu, 29 May 2025 07:42:52 +0200</lastBuildDate>
     <atom:link href="https://blog.topli.ch/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>How to Deploy a Zero Trust Cluster</title>
+      <link>https://blog.topli.ch/posts/teleport/</link>
+      <pubDate>Thu, 29 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://blog.topli.ch/posts/teleport/</guid>
+      <description>A simple step-by-step guide on how to deploy a self-hosted Teleport cluster on Linux.</description>
+    </item>
+    <item>
       <title>How to Set Up SSH Keys on Linux</title>
       <link>https://blog.topli.ch/posts/ssh-keys-linux/</link>
       <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
