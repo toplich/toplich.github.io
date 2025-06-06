@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>VMware on IT Blog</title>
-    <link>http://localhost:1313/tags/vmware/</link>
+    <link>https://blog.topli.ch/tags/vmware/</link>
     <description>Recent content in VMware on IT Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 02 Jun 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Jun 2025 08:00:00 +0200</lastBuildDate>
+    <atom:link href="https://blog.topli.ch/tags/vmware/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Налаштування кластера з vSAN у vCenter 8</title>
-      <link>http://localhost:1313/posts/vmware-cluster/</link>
-      <pubDate>Mon, 02 Jun 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/vmware-cluster/</guid>
-      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;У цій статті я покажу, як створити повноцінний кластер у vCenter 8 з увімкненими функціями &lt;strong&gt;DRS&lt;/strong&gt;, &lt;strong&gt;HA&lt;/strong&gt;, &lt;strong&gt;vSAN&lt;/strong&gt;, налаштувати &lt;strong&gt;мережу через Distributed Switch&lt;/strong&gt;, додати &lt;strong&gt;Witness Host&lt;/strong&gt;, оновити хости офлайн і створити &lt;strong&gt;VM Storage Policy&lt;/strong&gt; для віртуальних машин.&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;-1-створення-кластера&#34;&gt;🔹 1. Створення кластера&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;У vCenter:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Правою кнопкою на &lt;strong&gt;Datacenter&lt;/strong&gt; → &lt;code&gt;New Cluster&lt;/code&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;Назвіть кластер.&lt;/li&gt;&#xA;&lt;li&gt;Увімкніть:&#xA;&lt;ul&gt;&#xA;&lt;li&gt;✅ DRS (Distributed Resource Scheduler)&lt;/li&gt;&#xA;&lt;li&gt;✅ HA (High Availability)&lt;/li&gt;&#xA;&lt;li&gt;✅ vSAN (Virtual SAN)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;-2-додавання-гіпервізорів-esxi&#34;&gt;🔹 2. Додавання гіпервізорів (ESXi)&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Якщо хости нові — додаємо до кластеру.&lt;/li&gt;&#xA;&lt;li&gt;Якщо вже є віртуальні машини — переносимо у кластер через &lt;code&gt;Move to...&lt;/code&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;-3-налаштування-мережі-distributed-switch&#34;&gt;🔹 3. Налаштування мережі (Distributed Switch)&lt;/h2&gt;&#xA;&lt;h3 id=&#34;-створення-vds&#34;&gt;✅ Створення vDS&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;Datacenter&lt;/code&gt; → &lt;code&gt;Create Distributed Switch&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;Вкажіть кількість uplinks (залежить від кількості зовнішніх підключень).&lt;/li&gt;&#xA;&lt;li&gt;Назва: &lt;code&gt;vDS_Main&lt;/code&gt;.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;-port-groups&#34;&gt;🌐 Port Groups&lt;/h3&gt;&#xA;&lt;p&gt;Створити принаймні:&lt;/p&gt;</description>
+      <title>Creating and Configuring a VMware Cluster</title>
+      <link>https://blog.topli.ch/posts/vmware-cluster/</link>
+      <pubDate>Fri, 06 Jun 2025 08:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/posts/vmware-cluster/</guid>
+      <description>Creating a cluster in VMware vCenter (vSAN + HA + DRS)</description>
     </item>
   </channel>
 </rss>

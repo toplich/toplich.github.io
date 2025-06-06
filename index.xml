@@ -3,9 +3,17 @@
         <title>IT Blog</title>
         <link>https://blog.topli.ch/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 02 Jun 2025 00:00:00 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 06 Jun 2025 08:00:00 &#43;0200</lastBuildDate>
             <atom:link href="https://blog.topli.ch/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Creating and Configuring a VMware Cluster</title>
+    <link>https://blog.topli.ch/posts/vmware-cluster/</link>
+    <pubDate>Fri, 06 Jun 2025 08:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/vmware-cluster/</guid>
+    <description><![CDATA[Creating a cluster in VMware vCenter (vSAN + HA + DRS)]]></description>
+</item>
+<item>
     <title>How to Deploy a Zero Trust Cluster</title>
     <link>https://blog.topli.ch/posts/teleport/</link>
     <pubDate>Thu, 29 May 2025 00:00:00 &#43;0000</pubDate>
