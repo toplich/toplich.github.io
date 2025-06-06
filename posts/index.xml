@@ -9,7 +9,9 @@
     <pubDate>Fri, 06 Jun 2025 08:00:00 &#43;0200</pubDate>
     <author>Vitalii Stepchuk</author>
     <guid>https://blog.topli.ch/posts/vmware-cluster/</guid>
-    <description><![CDATA[Creating a cluster in VMware vCenter (vSAN + HA + DRS)]]></description>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/vmware-cluster.png" referrerpolicy="no-referrer">
+            </div>Creating a cluster in VMware vCenter (vSAN + HA + DRS)]]></description>
 </item>
 <item>
     <title>How to Deploy a Zero Trust Cluster</title>
