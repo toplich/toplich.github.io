@@ -3,9 +3,19 @@
         <title>IT Blog</title>
         <link>https://blog.topli.ch/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 06 Jun 2025 08:00:00 &#43;0200</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 09 Jun 2025 08:00:00 &#43;0200</lastBuildDate>
             <atom:link href="https://blog.topli.ch/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</title>
+    <link>https://blog.topli.ch/posts/wireguard-docker/</link>
+    <pubDate>Mon, 09 Jun 2025 08:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/wireguard-docker/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/wireguard-docker.png" referrerpolicy="no-referrer">
+            </div>A practical guide to running WireGuard inside Docker on systems like Synology NAS that lack kernel support.]]></description>
+</item>
+<item>
     <title>Creating and Configuring a VMware Cluster</title>
     <link>https://blog.topli.ch/posts/vmware-cluster/</link>
     <pubDate>Fri, 06 Jun 2025 08:00:00 &#43;0200</pubDate>

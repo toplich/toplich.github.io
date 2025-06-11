@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/wireguard-docker/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support">
+  <meta property="og:description" content="A practical guide to running WireGuard inside Docker on systems like Synology NAS that lack kernel support.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-09T08:00:00+02:00">
+    <meta property="article:modified_time" content="2025-06-09T08:00:00+02:00">
+    <meta property="article:tag" content="WireGuard">
+    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="Networking">
+    <meta property="article:tag" content="Synology">
+    <meta property="article:tag" content="NAS">
+    <meta property="article:tag" content="VPN">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support">
+  <meta name="twitter:description" content="A practical guide to running WireGuard inside Docker on systems like Synology NAS that lack kernel support.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/wireguard-docker/" /><link rel="prev" href="https://blog.topli.ch/posts/vmware-cluster/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/wireguard-docker\/"
+        },"genre": "posts","keywords": "WireGuard, Docker, Networking, Synology, NAS, VPN, Userspace, DevOps","wordcount":  588 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/wireguard-docker\/","datePublished": "2025-06-09T08:00:00+02:00","dateModified": "2025-06-09T08:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/networking/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Networking</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-09">2025-06-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;588 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/wireguard-docker.png"
+        data-srcset="/images/wireguard-docker.png, /images/wireguard-docker.png 1.5x, /images/wireguard-docker.png 2x"
+        data-sizes="auto"
+        alt="/images/wireguard-docker.png"
+        title="/images/wireguard-docker.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-why-this-setup">🫠 Why This Setup?</a></li>
+    <li><a href="#-what-youll-achieve">🔧 What You&rsquo;ll Achieve</a></li>
+    <li><a href="#-requirements">📚 Requirements</a></li>
+    <li><a href="#-folder-structure">📁 Folder Structure</a></li>
+    <li><a href="#-quick-setup">🚀 Quick Setup</a>
+      <ul>
+        <li><a href="#-1-download-files">✅ 1. Download Files</a></li>
+        <li><a href="#-2-generate-wireguard-keys">🔐 2. Generate WireGuard Keys</a></li>
+        <li><a href="#-3-edit-wg0conf">✍️ 3. Edit <code>wg0.conf</code></a></li>
+        <li><a href="#-4-ensure-network-access">🌐 4. Ensure Network Access</a></li>
+        <li><a href="#-5-start-the-tunnel">▶️ 5. Start the Tunnel</a></li>
+      </ul>
+    </li>
+    <li><a href="#-example-wg0conf">🛀 Example wg0.conf</a></li>
+    <li><a href="#-launch-container-manually">🚚 Launch Container Manually</a></li>
+    <li><a href="#-view-logs-and-debug">🧾 View Logs and Debug</a></li>
+    <li><a href="#-clean-shutdown--restart">♻️ Clean Shutdown &amp; Restart</a></li>
+    <li><a href="#-watchdog-via-cron-optional">🛡 Watchdog via Cron (optional)</a></li>
+    <li><a href="#-manually-compile-wireguard-go-if-needed">🔧 Manually Compile wireguard-go (if needed)</a></li>
+    <li><a href="#-useful-links">🔗 Useful Links</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="how-to-run-a-wireguard-tunnel-inside-a-docker-container-without-kernel-support">How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</h1>
+<p>If your NAS or Linux host does not support the WireGuard kernel module — like the Synology DS220+ — you can still run a secure WireGuard tunnel using Docker and <code>wireguard-go</code>. This article walks you through the full setup with downloadable examples and scripts.</p>
+<hr>
+<h2 id="-why-this-setup">🫠 Why This Setup?</h2>
+<p>Many embedded Linux systems (e.g., Synology NAS, LXC, OpenVZ VPS) lack support for kernel modules like <code>wireguard.ko</code>. Fortunately, the Go-based <code>wireguard-go</code> project allows running WireGuard entirely in user space. When combined with Docker, it enables a portable and rootless VPN tunnel.</p>
+<hr>
+<h2 id="-what-youll-achieve">🔧 What You&rsquo;ll Achieve</h2>
+<ul>
+<li>A working WireGuard VPN tunnel inside a Docker container</li>
+<li>Fully functional without kernel support</li>
+<li>Persistent setup for backup, replication, or remote access</li>
+<li>Ready-to-use configuration and generation scripts</li>
+</ul>
+<hr>
+<h2 id="-requirements">📚 Requirements</h2>
+<ul>
+<li>Synology DS220+ (or similar Linux NAS)</li>
+<li>Docker and SSH/root access</li>
+<li><code>x86_64</code> architecture (for the provided binary)</li>
+</ul>
+<hr>
+<h2 id="-folder-structure">📁 Folder Structure</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">wg-peer/
+</span></span><span class="line"><span class="cl">├── Dockerfile
+</span></span><span class="line"><span class="cl">├── docker-compose.yml
+</span></span><span class="line"><span class="cl">├── entrypoint.sh
+</span></span><span class="line"><span class="cl">├── wireguard-go        # Precompiled user-space binary
+</span></span><span class="line"><span class="cl">├── wg0.conf            # WireGuard peer config
+</span></span><span class="line"><span class="cl">├── genkeys.sh          # Key + config generator
+</span></span><span class="line"><span class="cl">├── install.sh          # Curl-based installer
+</span></span><span class="line"><span class="cl">├── watchdog_wg.sh      # Optional cron watchdog
+</span></span><span class="line"><span class="cl">├── README.md
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-quick-setup">🚀 Quick Setup</h2>
+<p>Before starting the tunnel, follow these steps to prepare the environment.</p>
+<h3 id="-1-download-files">✅ 1. Download Files</h3>
+<p>Use the install script to download all necessary files:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -fsSL https://run.topli.ch/docker/wg-peer/install.sh <span class="p">|</span> bash
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> wg-peer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-2-generate-wireguard-keys">🔐 2. Generate WireGuard Keys</h3>
+<p>Run the key generation script:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./genkeys.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This will:</p>
+<ul>
+<li>Generate a <code>PrivateKey</code> and <code>PublicKey</code> using a temporary container</li>
+<li>Save a template <code>wg0.conf</code> file in the current directory</li>
+</ul>
+<hr>
+<h3 id="-3-edit-wg0conf">✍️ 3. Edit <code>wg0.conf</code></h3>
+<p>Open the generated file and <strong>update the following</strong>:</p>
+<ul>
+<li><code>PublicKey</code> of your WireGuard <strong>server</strong></li>
+<li><code>Endpoint</code> — IP or domain of the server (e.g. <code>vpn.example.com:51820</code>)</li>
+<li>Optional: update <code>Address</code> or <code>AllowedIPs</code> to match your network</li>
+</ul>
+<hr>
+<h3 id="-4-ensure-network-access">🌐 4. Ensure Network Access</h3>
+<p>Make sure:</p>
+<ul>
+<li>UDP port <code>51820</code> (or the one used) is <strong>open</strong> on your server</li>
+<li>The system supports <code>--privileged</code> Docker containers</li>
+<li>Host network mode is available (<code>network_mode: host</code>)</li>
+</ul>
+<hr>
+<h3 id="-5-start-the-tunnel">▶️ 5. Start the Tunnel</h3>
+<p>Now you can build and run the container:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose up -d --build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To check if the tunnel is working:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it wg-peer wg show
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-example-wg0conf">🛀 Example wg0.conf</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="k">[Interface]</span>
+</span></span><span class="line"><span class="cl"><span class="na">PrivateKey</span> <span class="o">=</span> <span class="s">&lt;your_private_key&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">Address</span> <span class="o">=</span> <span class="s">10.10.1.6/32</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[Peer]</span>
+</span></span><span class="line"><span class="cl"><span class="na">PublicKey</span> <span class="o">=</span> <span class="s">&lt;server_public_key&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="na">Endpoint</span> <span class="o">=</span> <span class="s">&lt;your-server-ip&gt;:51820</span>
+</span></span><span class="line"><span class="cl"><span class="na">AllowedIPs</span> <span class="o">=</span> <span class="s">0.0.0.0/0</span>
+</span></span><span class="line"><span class="cl"><span class="na">PersistentKeepalive</span> <span class="o">=</span> <span class="s">25</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-launch-container-manually">🚚 Launch Container Manually</h2>
+<p>If not using <code>docker-compose</code>, run manually:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker build -t wg-peer .
+</span></span><span class="line"><span class="cl">docker run -d --name wg-peer --privileged --network host wg-peer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Use <code>--privileged</code> and <code>--network host</code> to allow full tunnel capabilities.</p>
+<hr>
+<h2 id="-view-logs-and-debug">🧾 View Logs and Debug</h2>
+<p>To view logs from the running container:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker logs wg-peer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To enter the container&rsquo;s shell (for inspection or testing):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it wg-peer bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>From inside the container, you can also run:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wg show
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>to check tunnel status directly.</p>
+<hr>
+<h2 id="-clean-shutdown--restart">♻️ Clean Shutdown &amp; Restart</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker stop wg-peer
+</span></span><span class="line"><span class="cl">docker start wg-peer
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-watchdog-via-cron-optional">🛡 Watchdog via Cron (optional)</h2>
+<p>Monitor tunnel health and auto-restart if down:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">crontab -e
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Add:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">peer</span><span class="o">/</span><span class="n">watchdog_wg</span><span class="o">.</span><span class="n">sh</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">watchdog</span><span class="o">.</span><span class="n">log</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-manually-compile-wireguard-go-if-needed">🔧 Manually Compile wireguard-go (if needed)</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt install -y golang git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">git clone https://git.zx2c4.com/wireguard-go
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> wireguard-go
+</span></span><span class="line"><span class="cl">go build
+</span></span><span class="line"><span class="cl">cp wireguard /usr/bin/wireguard-go
+</span></span><span class="line"><span class="cl">chmod +x /usr/bin/wireguard-go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-useful-links">🔗 Useful Links</h2>
+<ul>
+<li>🔐 <a href="https://www.wireguard.com/" target="_blank" rel="noopener noreffer ">WireGuard Documentation</a></li>
+<li>📂 <a href="https://github.com/toplich/run/tree/main/docker/wg-peer" target="_blank" rel="noopener noreffer ">GitHub Source Files</a></li>
+<li>📅 <a href="https://run.topli.ch/docker/wg-peer/install.sh" target="_blank" rel="noopener noreffer ">Install Script</a></li>
+<li>🔐 <a href="https://run.topli.ch/docker/wg-peer/README.md" target="_blank" rel="noopener noreffer ">Full README</a></li>
+</ul>
+<hr>
+<p>️⃣ Need help with customization or scaling? Reach out via <a href="https://blog.topli.ch/" target="_blank" rel="noopener noreffer ">blog.topli.ch</a> or GitHub.</p>
+<p>© 2025 run.topli.ch</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-06-09</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/wireguard-docker/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support" data-hashtags="WireGuard,Docker,Networking,Synology,NAS,VPN,Userspace,DevOps"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-hashtag="WireGuard"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/wireguard-docker/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/wireguard-docker/" data-title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support" data-image="/images/wireguard-docker.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/wireguard/">WireGuard</a>,&nbsp;<a href="/tags/docker/">Docker</a>,&nbsp;<a href="/tags/networking/">Networking</a>,&nbsp;<a href="/tags/synology/">Synology</a>,&nbsp;<a href="/tags/nas/">NAS</a>,&nbsp;<a href="/tags/vpn/">VPN</a>,&nbsp;<a href="/tags/userspace/">Userspace</a>,&nbsp;<a href="/tags/devops/">DevOps</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/vmware-cluster/" class="prev" rel="prev" title="Creating and Configuring a VMware Cluster"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Creating and Configuring a VMware Cluster</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
