@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Veeam Backup: Best Practices and Configuration Guide - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/veeam/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Veeam Backup: Best Practices and Configuration Guide">
+  <meta property="og:description" content="Best practices and secure architecture patterns for deploying Veeam Backup &amp; Replication in local and remote environments.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-26T12:00:00+02:00">
+    <meta property="article:modified_time" content="2025-06-26T12:00:00+02:00">
+    <meta property="article:tag" content="Veeam">
+    <meta property="article:tag" content="Backup">
+    <meta property="article:tag" content="Immutability">
+    <meta property="article:tag" content="S3">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Security">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Veeam Backup: Best Practices and Configuration Guide">
+  <meta name="twitter:description" content="Best practices and secure architecture patterns for deploying Veeam Backup &amp; Replication in local and remote environments.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/veeam/" /><link rel="prev" href="https://blog.topli.ch/posts/wireguard-docker/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Veeam Backup: Best Practices and Configuration Guide",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/veeam\/"
+        },"genre": "posts","keywords": "Veeam, Backup, Immutability, S3, Linux, Security","wordcount":  2178 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/veeam\/","datePublished": "2025-06-26T12:00:00+02:00","dateModified": "2025-06-26T12:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Veeam Backup: Best Practices and Configuration Guide</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/backup/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Backup</a>&nbsp;<a href="/categories/infrastructure/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Infrastructure</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-26">2025-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2178 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;11 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-secure-backup-with-immutability">🔐 Secure Backup with Immutability</a>
+      <ul>
+        <li><a href="#11--use-immutable-storage">1.1 ✨ Use Immutable Storage</a></li>
+        <li><a href="#12--s3-object-lock--retention">1.2 🔒 S3 Object Lock &amp; Retention</a></li>
+        <li><a href="#13--apply-the-3-2-1-1-0-rule">1.3 🔄 Apply the 3-2-1-1-0 Rule</a></li>
+        <li><a href="#14--limit-access--isolate-backup-networks">1.4 🔐 Limit Access &amp; Isolate Backup Networks</a></li>
+        <li><a href="#15--monitoring--patching">1.5 📊 Monitoring &amp; Patching</a></li>
+      </ul>
+    </li>
+    <li><a href="#-initial-setup-of-veeam-br">⚙️ Initial Setup of Veeam B&amp;R</a>
+      <ul>
+        <li><a href="#21--install-veeam-backup--replication">2.1 🖥 Install Veeam Backup &amp; Replication</a></li>
+        <li><a href="#22--add-backup-infrastructure">2.2 🧱 Add Backup Infrastructure</a></li>
+        <li><a href="#23--create-backup-jobs">2.3 📦 Create Backup Jobs</a></li>
+        <li><a href="#24--enable-optional-jobs">2.4 ⚙️ Enable Optional Jobs</a></li>
+        <li><a href="#25--monitor-and-test">2.5 🔍 Monitor and Test</a></li>
+      </ul>
+    </li>
+    <li><a href="#-choosing-the-right-repository">💾 Choosing the Right Repository</a>
+      <ul>
+        <li><a href="#31--common-repository-types">3.1 🗃️ Common Repository Types</a></li>
+        <li><a href="#32--repository-comparison-table">3.2 📊 Repository Comparison Table</a></li>
+      </ul>
+    </li>
+    <li><a href="#-backup-copy-jobs-offsite-protection">🚀 Backup Copy Jobs (Offsite Protection)</a>
+      <ul>
+        <li><a href="#41--why-use-hardened-linux">4.1 🛡 Why Use Hardened Linux</a></li>
+        <li><a href="#42--configuration-steps">4.2 🔧 Configuration Steps</a></li>
+      </ul>
+    </li>
+    <li><a href="#-scale-out-backup-repository-sobr">📆 Scale-Out Backup Repository (SOBR)</a>
+      <ul>
+        <li><a href="#51--tiered-storage-strategy">5.1 🧱 Tiered Storage Strategy</a></li>
+        <li><a href="#52--sobr-configuration-steps">5.2 🔧 SOBR Configuration Steps</a></li>
+        <li><a href="#53--sobr-benefits">5.3 📊 SOBR Benefits</a></li>
+      </ul>
+    </li>
+    <li><a href="#-setting-up-efficient-backup-proxies">🧠 Setting Up Efficient Backup Proxies</a>
+      <ul>
+        <li><a href="#61--default-vs-additional-proxies">6.1 🧩 Default vs Additional Proxies</a></li>
+        <li><a href="#62--add-and-configure-proxies">6.2 ⚙️ Add and Configure Proxies</a></li>
+        <li><a href="#63--monitoring-and-scaling">6.3 🔍 Monitoring and Scaling</a></li>
+      </ul>
+    </li>
+    <li><a href="#-optimizing-wan-transfers-with-accelerators">🌐 Optimizing WAN Transfers with Accelerators</a>
+      <ul>
+        <li><a href="#71--what-wan-accelerators-do">7.1 🚀 What WAN Accelerators Do</a></li>
+        <li><a href="#72--how-to-configure-wan-acceleration">7.2 ⚙️ How to Configure WAN Acceleration</a></li>
+        <li><a href="#73--best-practices">7.3 💡 Best Practices</a></li>
+      </ul>
+    </li>
+    <li><a href="#-final-recommendations">📝 Final Recommendations</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="-veeam-backup-best-practices-and-configuration-guide">🔐 Veeam Backup: Best Practices and Configuration Guide</h1>
+<p>Veeam Backup &amp; Replication is a powerful tool for protecting your data across virtual, physical, and cloud environments. This article focuses on key architectural decisions, <strong>backup security best practices</strong>, and real-world <strong>deployment scenarios</strong>.</p>
+<hr>
+<h2 id="-secure-backup-with-immutability">🔐 Secure Backup with Immutability</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Why This Matters<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Immutability is the foundation of a secure backup strategy. It protects your backups from ransomware, human error, and malicious insiders by making data undeletable for a defined retention period.</div>
+        </div>
+    </div>
+<h3 id="11--use-immutable-storage">1.1 ✨ Use Immutable Storage</h3>
+<details>
+  <summary>▶ Recommended Linux Configuration</summary>
+  <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Format disk with reflink support</span>
+</span></span><span class="line"><span class="cl">sudo mkfs.xfs -m <span class="nv">reflink</span><span class="o">=</span><span class="m">1</span> /dev/sdb
+</span></span><span class="line"><span class="cl">sudo mkdir -p /mnt/veeam
+</span></span><span class="line"><span class="cl">sudo mount /dev/sdb /mnt/veeam
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create hardened backup user</span>
+</span></span><span class="line"><span class="cl">sudo useradd -m -s /sbin/nologin veeamrepo
+</span></span><span class="line"><span class="cl">sudo chown veeamrepo: /mnt/veeam
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Use <strong>XFS with reflink</strong> for Veeam immutability</li>
+<li>Mount target to <code>/mnt/veeam</code></li>
+<li>Configure in Veeam as &ldquo;Hardened Repository&rdquo;</li>
+</ul>
+</details>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Best Practice<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Never use root for backup repositories. Harden access with non-root accounts and disable SSH password login.</div>
+        </div>
+    </div>
+<h3 id="12--s3-object-lock--retention">1.2 🔒 S3 Object Lock &amp; Retention</h3>
+<details>
+  <summary>▶ Setup S3 Bucket with Object Lock (e.g., MinIO, AWS)</summary>
+  <ol>
+<li>Create a bucket with <code>Object Lock</code> enabled</li>
+<li>Enable <code>Versioning</code></li>
+<li>Set default <strong>retention policy</strong> (e.g., 30 days)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Example with MinIO Client</span>
+</span></span><span class="line"><span class="cl">mc <span class="nb">alias</span> <span class="nb">set</span> minio https://minio.example.com minioadmin minioadmin
+</span></span><span class="line"><span class="cl">mc retention <span class="nb">set</span> --default GOVERNANCE 30d minio/veeam --insecure
+</span></span></code></pre></td></tr></table>
+</div>
+</div></details>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Security Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Assign <strong>write-only access</strong> for Veeam user to prevent accidental or malicious deletions.</div>
+        </div>
+    </div>
+<h3 id="13--apply-the-3-2-1-1-0-rule">1.3 🔄 Apply the 3-2-1-1-0 Rule</h3>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Backup Strategy<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li><strong>3</strong> copies of data (1 production + 2 backups)</li>
+<li><strong>2</strong> different media types (e.g., disk + object storage)</li>
+<li><strong>1</strong> offsite backup</li>
+<li><strong>1</strong> immutable copy</li>
+<li><strong>0</strong> errors after recovery verification (e.g., SureBackup)</li>
+</ul>
+</div>
+        </div>
+    </div>
+<h3 id="14--limit-access--isolate-backup-networks">1.4 🔐 Limit Access &amp; Isolate Backup Networks</h3>
+<details>
+  <summary>▶ Network &amp; Identity Hardening</summary>
+  <ul>
+<li>
+<p>Use <strong>separate credentials</strong> for:</p>
+<ul>
+<li>Backup console</li>
+<li>Repositories</li>
+<li>Hypervisors</li>
+<li>S3 buckets</li>
+</ul>
+</li>
+<li>
+<p>Protect backup console with:</p>
+<ul>
+<li>Multi-Factor Authentication (2FA)</li>
+<li>Role-Based Access Control (RBAC)</li>
+</ul>
+</li>
+<li>
+<p>Isolate repository access with:</p>
+<ul>
+<li>VLAN segmentation</li>
+<li>Firewall rules</li>
+<li>SSH key-only access</li>
+</ul>
+</li>
+</ul>
+</details>
+<div class="details admonition danger open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-skull-crossbones fa-fw" aria-hidden="true"></i>Do Not<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Never expose repositories directly to the internet. Backup data should only be reachable via secured Veeam components.</div>
+        </div>
+    </div>
+<h3 id="15--monitoring--patching">1.5 📊 Monitoring &amp; Patching</h3>
+<details>
+  <summary>▶ Stay Ahead of Threats</summary>
+  <ul>
+<li>Enable <strong>email notifications</strong> for job results and warnings</li>
+<li>Regularly review <strong>backup logs</strong> and audit access</li>
+<li>Apply <strong>Veeam updates and patches</strong> promptly</li>
+<li>Integrate with monitoring platforms (e.g., Zabbix, Icinga)</li>
+</ul>
+</details>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Pro Tip<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Schedule periodic restore tests and SureBackup jobs to validate recovery integrity.</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-initial-setup-of-veeam-br">⚙️ Initial Setup of Veeam B&amp;R</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Overview<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Before configuring backup jobs, Veeam must be properly installed and its infrastructure components set up. This includes the main server, proxies, repositories, and connections to hypervisors.</div>
+        </div>
+    </div>
+<h3 id="21--install-veeam-backup--replication">2.1 🖥 Install Veeam Backup &amp; Replication</h3>
+<details>
+  <summary>▶ System Requirements</summary>
+  <ul>
+<li>
+<p><strong>Operating System</strong>: Windows Server 2016 or newer</p>
+</li>
+<li>
+<p><strong>SQL Server</strong>: Use built-in SQL Express or an external instance</p>
+</li>
+<li>
+<p><strong>Hardware</strong>:</p>
+<ul>
+<li>2+ vCPUs</li>
+<li>8+ GB RAM (16 GB recommended)</li>
+<li>SSD for configuration and database preferred</li>
+</ul>
+</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Installation Steps</summary>
+  <ol>
+<li>
+<p>Download Veeam B&amp;R ISO</p>
+</li>
+<li>
+<p>Mount ISO and run <code>Setup.exe</code></p>
+</li>
+<li>
+<p>Choose <strong>Backup &amp; Replication</strong></p>
+</li>
+<li>
+<p>Follow the wizard and install:</p>
+<ul>
+<li>Veeam Backup Service</li>
+<li>Console</li>
+<li>Explorers</li>
+<li>Transport &amp; Catalog Services</li>
+</ul>
+</li>
+</ol>
+</details>
+<h3 id="22--add-backup-infrastructure">2.2 🧱 Add Backup Infrastructure</h3>
+<details>
+  <summary>▶ Add Hypervisors</summary>
+  <ul>
+<li>
+<p>Go to <code>Backup Infrastructure &gt; Managed Servers</code></p>
+</li>
+<li>
+<p>Add:</p>
+<ul>
+<li><strong>VMware vCenter Server</strong></li>
+<li>or <strong>Microsoft Hyper-V hosts</strong></li>
+</ul>
+</li>
+</ul>
+<p>Use service accounts with minimal required permissions.</p>
+</details>
+<details>
+  <summary>▶ Add Backup Proxies</summary>
+  <ul>
+<li>
+<p>Navigate to <code>Backup Infrastructure &gt; Backup Proxies</code></p>
+</li>
+<li>
+<p>Add Windows Server (VM or physical)</p>
+</li>
+<li>
+<p>Assign transport mode:</p>
+<ul>
+<li>Direct SAN Access</li>
+<li>Hot-Add (for VMware)</li>
+<li>Network (NBD)</li>
+</ul>
+</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Add Repositories</summary>
+  <p>Supported types:</p>
+<ul>
+<li>✅ Linux repo (XFS + reflink for immutability)</li>
+<li>✅ Windows repo (ReFS for fast clone)</li>
+<li>✅ NAS (SMB/NFS, no immutability)</li>
+<li>✅ S3-compatible object storage</li>
+</ul>
+<p>Use the appropriate wizard to configure credentials and paths.</p>
+</details>
+<h3 id="23--create-backup-jobs">2.3 📦 Create Backup Jobs</h3>
+<details>
+  <summary>▶ Job Configuration Steps</summary>
+  <ol>
+<li>
+<p>Go to <code>Home &gt; Jobs &gt; Backup Job (VMs)</code></p>
+</li>
+<li>
+<p>Choose source: VMs, physical agents, or NAS</p>
+</li>
+<li>
+<p>Select a <strong>repository</strong> (e.g., Hardened Linux, S3, iSCSI)</p>
+</li>
+<li>
+<p>Set backup mode:</p>
+<ul>
+<li>Incremental</li>
+<li>Forever Forward Incremental</li>
+</ul>
+</li>
+<li>
+<p>Define retention policy (e.g., 14 restore points)</p>
+</li>
+<li>
+<p>(Optional) Enable:</p>
+<ul>
+<li>Synthetic Full backups</li>
+<li>Health Checks</li>
+<li>Backup Copy</li>
+</ul>
+</li>
+</ol>
+</details>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Best Practice<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Assign each job to a repository that matches its role: fast storage for daily, immutable for long-term.</div>
+        </div>
+    </div>
+<h3 id="24--enable-optional-jobs">2.4 ⚙️ Enable Optional Jobs</h3>
+<details>
+  <summary>▶ Optional Job Types</summary>
+  <ul>
+<li>
+<p><strong>Backup Copy Job</strong></p>
+<ul>
+<li>For offsite or secondary backup</li>
+</ul>
+</li>
+<li>
+<p><strong>SureBackup Job</strong></p>
+<ul>
+<li>Automatically boots and verifies backups</li>
+</ul>
+</li>
+<li>
+<p><strong>Replication Job</strong></p>
+<ul>
+<li>Creates hot standby VMs at DR location</li>
+</ul>
+</li>
+</ul>
+</details>
+<h3 id="25--monitor-and-test">2.5 🔍 Monitor and Test</h3>
+<details>
+  <summary>▶ Recommended Monitoring</summary>
+  <ul>
+<li>Enable <strong>email notifications</strong></li>
+<li>Check job logs and statistics regularly</li>
+<li>Integrate with external monitoring (Zabbix, Icinga)</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Restore Testing Options</summary>
+  <ul>
+<li>Full VM restore</li>
+<li>File-level restore</li>
+<li>Application-item restore (Exchange, SQL, etc.)</li>
+<li>Instant VM Recovery</li>
+</ul>
+<p>Schedule test restores at least <strong>once per month</strong>.</p>
+</details>
+<hr>
+<h2 id="-choosing-the-right-repository">💾 Choosing the Right Repository</h2>
+<p>Choosing the correct repository type is fundamental to achieving the right balance of performance, cost-efficiency, immutability, and remote readiness.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Repository Types Explained<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Veeam supports a variety of repository types that differ in performance, immutability, remote access, and compliance readiness.</div>
+        </div>
+    </div>
+<h3 id="31--common-repository-types">3.1 🗃️ Common Repository Types</h3>
+<ul>
+<li>
+<p><strong>ReFS (Windows)</strong><br>
+✅ Fast clone support<br>
+❌ No immutability<br>
+⚠️ Needs VPN for remote usage</p>
+</li>
+<li>
+<p><strong>XFS (Linux)</strong><br>
+✅ Reflink support<br>
+✅ Immutability (when used in hardened mode)<br>
+❌ No native remote access</p>
+</li>
+<li>
+<p><strong>Hardened Linux Repository</strong><br>
+🔐 Secure non-root access<br>
+✅ Immutability with XFS<br>
+❌ Requires SSH (not S3-compatible)</p>
+</li>
+<li>
+<p><strong>NAS (SMB/NFS)</strong><br>
+🟡 Easy to set up<br>
+❌ No immutability<br>
+✅ Can be remote (mountable)</p>
+</li>
+<li>
+<p><strong>S3-Compatible (MinIO, AWS, Wasabi)</strong><br>
+✅ Object Lock<br>
+✅ Versioning<br>
+✅ TLS support<br>
+✅ Ideal for long-term, remote, immutable storage</p>
+</li>
+<li>
+<p><strong>iSCSI over VPN (e.g., via WireGuard)</strong><br>
+✅ Block-level performance<br>
+✅ Remote access<br>
+⚠️ Needs manual configuration and secure tunneling</p>
+</li>
+</ul>
+<h3 id="32--repository-comparison-table">3.2 📊 Repository Comparison Table</h3>
+<table>
+  <thead>
+      <tr>
+          <th>Repository Type</th>
+          <th>Fast Clone</th>
+          <th>Immutability</th>
+          <th>Remote-Ready</th>
+          <th>TLS</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>R3FS (Windows)</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>⚠️ (VPN req.)</td>
+          <td>❌</td>
+      </tr>
+      <tr>
+          <td>XFS (Linux)</td>
+          <td>✅</td>
+          <td>✅ (hardened)</td>
+          <td>❌</td>
+          <td>❌</td>
+      </tr>
+      <tr>
+          <td>S3 (MinIO/AWS/Wasabi)</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>NAS (SMB/NFS)</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>❌</td>
+      </tr>
+  </tbody>
+</table>
+<p>🛡️   <strong>Immutability Options</strong></p>
+<ul>
+<li>Linux Hardened Repo: ✅ (XFS + reflink)</li>
+<li>S3 with Object Lock: ✅ (MinIO, AWS, Wasabi)</li>
+<li>Windows ReFS: ❌</li>
+<li>SMB/NFS: ❌</li>
+</ul>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Recommendations<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>Use <strong>Hardened Linux Repo</strong> for on-prem immutable storage</li>
+<li>Use <strong>S3 with Object Lock</strong> for offsite long-term protection</li>
+<li>Avoid NAS or standard Windows ReFS for critical or immutable backup chains</li>
+</ul>
+</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-backup-copy-jobs-offsite-protection">🚀 Backup Copy Jobs (Offsite Protection)</h2>
+<p>A <strong>Backup Copy Job</strong> is essential for offsite disaster recovery. It allows you to <strong>replicate your primary backups</strong> to a secondary location — protecting against ransomware, hardware failure, or site outages.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Use Case<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">You&rsquo;re backing up VMs to a local repository (e.g., Windows ReFS or NAS) and want to replicate them to an <strong>offsite, immutable Hardened Linux Repository</strong>.</div>
+        </div>
+    </div>
+<h3 id="41--why-use-hardened-linux">4.1 🛡 Why Use Hardened Linux</h3>
+<ul>
+<li>✅ <strong>Immutable</strong> storage with XFS + reflink</li>
+<li>👤 Non-root user, no interactive shell</li>
+<li>🔐 Resilient against ransomware — even if Veeam is compromised</li>
+</ul>
+<h3 id="42--configuration-steps">4.2 🔧 Configuration Steps</h3>
+<details>
+  <summary>▶ Step 1: Prepare the Hardened Linux Repository</summary>
+  <div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Format the disk</span>
+</span></span><span class="line"><span class="cl">sudo mkfs.xfs -m <span class="nv">reflink</span><span class="o">=</span><span class="m">1</span> /dev/sdb
+</span></span><span class="line"><span class="cl">sudo mount /dev/sdb /mnt/veeam
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create veeamrepo user</span>
+</span></span><span class="line"><span class="cl">sudo useradd -m -s /sbin/nologin veeamrepo
+</span></span><span class="line"><span class="cl">sudo chown veeamrepo: /mnt/veeam
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>✅ Enable SSH key login
+✅ Grant temporary sudo during setup
+🔒 Disable password auth after configuration</p>
+</details>
+<details>
+  <summary>▶ Step 2: Add Repository to Veeam</summary>
+  <ul>
+<li>Go to Backup Infrastructure &gt; Backup Repositories &gt; Add Repository</li>
+<li>Choose Linux Hardened Repository</li>
+<li>Enter:
+<ul>
+<li>IP address</li>
+<li>SSH credentials</li>
+<li>Public key path</li>
+<li>Set mount path (e.g. /mnt/veeam)</li>
+<li>Enable Immutability (e.g., 30 days)</li>
+</ul>
+</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Step 3: Create the Backup Copy Job</summary>
+  <ul>
+<li>Navigate to Home &gt; Backup Copy &gt; Backup Copy Job (VMs)</li>
+<li>Select the primary job as source</li>
+<li>Choose Hardened Linux Repository as target</li>
+<li>Set:
+<ul>
+<li>Immediate copy mode: ✅ (optional)</li>
+<li>Copy every 12 h, retain 7 restore points</li>
+</ul>
+</li>
+</ul>
+</details>
+<p>4.3 💡 Best Practices</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Best Practices<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">🧪 Enable Health Checks to validate copy integrity
+🔄 Use WAN Accelerators if bandwidth is limited
+⏳ Keep immutable retention longer than source (e.g., 30 days vs 14 days)
+📬 Enable email alerts on failure</div>
+        </div>
+    </div>
+<p>4.4 📌 Summary</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Summary<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">🔐 Backup Copy Jobs + Hardened Repo = Secure Offsite Copies
+🧱 Protects against ransomware &amp; data loss
+☑️ Meets the 3-2-1-1-0 backup rule
+🔁 Runs automatically, no scripting required</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-scale-out-backup-repository-sobr">📆 Scale-Out Backup Repository (SOBR)</h2>
+<p>A <strong>SOBR</strong> (Scale-Out Backup Repository) combines multiple backup repositories into a single logical unit. This allows flexible storage tiering, improved performance, and simplified management.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Use Case<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Daily backups go to a local NAS (iSCSI, ReFS 64 KB), while older backups are moved to a remote MinIO S3 bucket with Object Lock enabled.</div>
+        </div>
+    </div>
+<h3 id="51--tiered-storage-strategy">5.1 🧱 Tiered Storage Strategy</h3>
+<p><strong>Performance Tier</strong></p>
+<ul>
+<li>📍 Local NAS with iSCSI mount</li>
+<li>📁 ReFS formatted with 64 KB block size</li>
+<li>⚡ High-speed storage for daily restore operations</li>
+</ul>
+<p><strong>Capacity Tier</strong></p>
+<ul>
+<li>🌐 Remote MinIO S3 bucket</li>
+<li>🔐 Object Lock + versioning enabled</li>
+<li>🗄 Ideal for long-term archival and compliance with immutability</li>
+</ul>
+<h3 id="52--sobr-configuration-steps">5.2 🔧 SOBR Configuration Steps</h3>
+<details>
+  <summary>▶ Step 1: Create Individual Repositories</summary>
+  <ul>
+<li>Format the local NAS volume with <strong>ReFS 64 KB</strong></li>
+<li>Add it to Veeam as a <strong>Direct Attached Repository</strong></li>
+<li>Deploy MinIO:
+<ul>
+<li>Enable <strong>TLS</strong>, <strong>versioning</strong>, and <strong>Object Lock</strong></li>
+<li>Create the S3 bucket for backups</li>
+</ul>
+</li>
+<li>Add the bucket to Veeam as an <strong>S3-Compatible Object Repository</strong></li>
+<li>Enable <strong>immutability</strong> (e.g., 30 days Governance mode)</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Step 2: Create and Configure the SOBR</summary>
+  <ul>
+<li>Navigate to <code>Backup Infrastructure &gt; Scale-Out Repositories</code></li>
+<li>Click <strong>Add SOBR</strong></li>
+<li>Set a name (e.g., <code>SOBR-Primary-Remote</code>)</li>
+<li>Add:
+<ul>
+<li>Local ReFS repo as the <strong>Performance Tier</strong></li>
+<li>MinIO S3 repo as the <strong>Capacity Tier</strong></li>
+</ul>
+</li>
+<li>Enable the following options:
+<ul>
+<li>✅ Move backups older than 14 days to capacity</li>
+<li>✅ Copy backups as soon as they are created (optional)</li>
+<li>✅ Support immutability on capacity tier</li>
+</ul>
+</li>
+</ul>
+</details>
+<h3 id="53--sobr-benefits">5.3 📊 SOBR Benefits</h3>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Why Use SOBR?<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>🚀 Automatically tier backups based on age or policy</li>
+<li>🌐 Combines high-performance local storage with remote S3 storage</li>
+<li>🔐 Enables compliance with immutability and offsite protection</li>
+<li>⚙️ Simplifies management without scripting</li>
+</ul>
+</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-setting-up-efficient-backup-proxies">🧠 Setting Up Efficient Backup Proxies</h2>
+<p>Backup Proxies in Veeam act as data movers between the source (e.g., hypervisors) and the backup repositories. A well-configured proxy infrastructure is essential for performance, scalability, and job reliability.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>What Is a Proxy?<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">A backup proxy retrieves data from the source (e.g., VMware, Hyper-V), processes it (compression, deduplication, encryption), and sends it to the backup repository. Proxies reduce load on the main backup server.</div>
+        </div>
+    </div>
+<h3 id="61--default-vs-additional-proxies">6.1 🧩 Default vs Additional Proxies</h3>
+<ul>
+<li>By default, the Veeam Backup Server acts as a proxy</li>
+<li>In larger or distributed environments, <strong>additional proxies</strong> are highly recommended</li>
+<li>Multiple proxies allow <strong>parallel job processing</strong> and workload isolation</li>
+</ul>
+<h3 id="62--add-and-configure-proxies">6.2 ⚙️ Add and Configure Proxies</h3>
+<details>
+  <summary>▶ Step 1: Add a New Proxy</summary>
+  <ul>
+<li>Open Veeam Backup &amp; Replication Console</li>
+<li>Go to <code>Backup Infrastructure &gt; Backup Proxies</code></li>
+<li>Click <strong>Add Proxy</strong></li>
+<li>Choose:
+<ul>
+<li>Platform: VMware vSphere or Microsoft Hyper-V</li>
+<li>Server: Select existing Windows Server or deploy automatically</li>
+</ul>
+</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Step 2: Configure Transport Mode</summary>
+  <ul>
+<li>
+<p>Modes:</p>
+<ul>
+<li>🔄 <strong>Automatic</strong> – Veeam chooses the best mode</li>
+<li>📦 <strong>Direct SAN Access</strong> – best for fibre/iSCSI environments</li>
+<li>🔧 <strong>Virtual Appliance (Hot-Add)</strong> – efficient for virtual proxies</li>
+<li>🌐 <strong>Network (NBD/NFS)</strong> – fallback, least efficient</li>
+</ul>
+</li>
+<li>
+<p>Set maximum concurrent tasks based on CPU/RAM (e.g., 4–8)</p>
+</li>
+</ul>
+</details>
+<h3 id="63--monitoring-and-scaling">6.3 🔍 Monitoring and Scaling</h3>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Proxy Scaling Tips<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>Place proxies <strong>close to production storage</strong> for better performance</li>
+<li>Use <strong>dedicated proxies</strong> instead of sharing with repositories</li>
+<li>For distributed sites, deploy proxies <strong>locally</strong></li>
+<li>Monitor proxy usage in job stats and scale accordingly</li>
+<li>Use <strong>DRS affinity rules</strong> in clusters to optimize job placement</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Recommended Platforms<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>✅ Windows Server 2019+ is stable and performant</li>
+<li>🧪 Linux proxies are available in experimental mode (CLI only)</li>
+</ul>
+</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-optimizing-wan-transfers-with-accelerators">🌐 Optimizing WAN Transfers with Accelerators</h2>
+<p>Veeam WAN Accelerators optimize backup data transfer across slow or unreliable WAN links. They are especially useful for <strong>Backup Copy Jobs</strong> to remote sites or disaster recovery (DR) locations.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>When to Use WAN Acceleration<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Use WAN Accelerators when transferring backup data between sites with limited bandwidth, high latency, or inconsistent connectivity.</div>
+        </div>
+    </div>
+<h3 id="71--what-wan-accelerators-do">7.1 🚀 What WAN Accelerators Do</h3>
+<ul>
+<li>🔁 <strong>Global deduplication</strong>: Avoids re-sending already transferred blocks</li>
+<li>🗂 <strong>Global cache</strong>: Stores repeated data patterns</li>
+<li>📦 <strong>Compression &amp; optimization</strong>: Minimizes bandwidth usage</li>
+<li>📉 <strong>Traffic reduction</strong>: Up to 50x savings on repeated transfers</li>
+</ul>
+<h3 id="72--how-to-configure-wan-acceleration">7.2 ⚙️ How to Configure WAN Acceleration</h3>
+<details>
+  <summary>▶ Step 1: Prepare the Accelerator Server</summary>
+  <ul>
+<li>Use a dedicated Windows Server (physical or VM)</li>
+<li>Recommended resources:
+<ul>
+<li>2+ vCPU</li>
+<li>4+ GB RAM</li>
+<li>Fast disk (SSD/NVMe) for cache (e.g., 40–100 GB)</li>
+</ul>
+</li>
+</ul>
+</details>
+<details>
+  <summary>▶ Step 2: Add WAN Accelerators in Veeam</summary>
+  <ul>
+<li>Go to <code>Backup Infrastructure &gt; WAN Accelerators</code></li>
+<li>Click <strong>Add WAN Accelerator</strong></li>
+<li>Select your Windows server</li>
+<li>Define:
+<ul>
+<li><strong>Cache path</strong> (dedicated volume preferred)</li>
+<li><strong>Cache size</strong> (recommend 1–3% of protected data)</li>
+<li>Max concurrent tasks</li>
+</ul>
+</li>
+</ul>
+<p>Repeat this step for <strong>both</strong> source and target sites.</p>
+</details>
+<details>
+  <summary>▶ Step 3: Use in Backup Copy Job</summary>
+  <ul>
+<li>Edit or create a Backup Copy Job</li>
+<li>In the <strong>Data Transfer</strong> step:
+<ul>
+<li>Enable <strong>Use WAN Accelerators</strong></li>
+<li>Select:
+<ul>
+<li>Source WAN Accelerator (e.g., local site)</li>
+<li>Target WAN Accelerator (e.g., remote site)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Complete job configuration</li>
+</ul>
+</details>
+<h3 id="73--best-practices">7.3 💡 Best Practices</h3>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tips for Efficient WAN Transfers<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>🧠 Place WAN Accelerators <strong>close to the repository</strong></li>
+<li>💽 Use a <strong>separate disk</strong> for cache — not shared with OS or backups</li>
+<li>🛡 Enable <strong>TLS or VPN</strong> if WAN is untrusted</li>
+<li>📊 Monitor <strong>cache health and usage</strong> via Veeam UI</li>
+<li>🧪 Test throughput before and after to confirm benefit</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw" aria-hidden="true"></i>Edition Requirement<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">WAN acceleration is available <strong>only in Veeam Enterprise or Enterprise Plus</strong> editions.</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-final-recommendations">📝 Final Recommendations</h2>
+<ul>
+<li>✅ Plan for 3-2-1-1-0 strategy.</li>
+<li>✅ Always use immutability.</li>
+<li>✅ Test restores monthly.</li>
+<li>✅ Secure credentials and infrastructure.</li>
+<li>✅ Enable alerts, health checks, and patch regularly.</li>
+</ul>
+<p>A well-designed Veeam deployment delivers security, scalability, and disaster resilience — even for small environments.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-06-26</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/veeam/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/veeam/" data-title="Veeam Backup: Best Practices and Configuration Guide" data-hashtags="Veeam,Backup,Immutability,S3,Linux,Security"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/veeam/" data-hashtag="Veeam"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/veeam/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/veeam/" data-title="Veeam Backup: Best Practices and Configuration Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/veeam/" data-title="Veeam Backup: Best Practices and Configuration Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/veeam/" data-title="Veeam Backup: Best Practices and Configuration Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/veeam/" data-title="Veeam Backup: Best Practices and Configuration Guide"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/veeam/">Veeam</a>,&nbsp;<a href="/tags/backup/">Backup</a>,&nbsp;<a href="/tags/immutability/">Immutability</a>,&nbsp;<a href="/tags/s3/">S3</a>,&nbsp;<a href="/tags/linux/">Linux</a>,&nbsp;<a href="/tags/security/">Security</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/wireguard-docker/" class="prev" rel="prev" title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

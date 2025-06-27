@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Security on IT Blog</title>
-    <link>https://blog.topli.ch/tags/security/</link>
-    <description>Recent content in Security on IT Blog</description>
+    <title>S3 on IT Blog</title>
+    <link>https://blog.topli.ch/tags/s3/</link>
+    <description>Recent content in S3 on IT Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Thu, 26 Jun 2025 12:00:00 +0200</lastBuildDate>
-    <atom:link href="https://blog.topli.ch/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.topli.ch/tags/s3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Veeam Backup: Best Practices and Configuration Guide</title>
       <link>https://blog.topli.ch/posts/veeam/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/posts/veeam/</guid>
       <description>Best practices and secure architecture patterns for deploying Veeam Backup &amp;amp; Replication in local and remote environments.</description>
-    </item>
-    <item>
-      <title>How to Set Up SSH Keys on Linux</title>
-      <link>https://blog.topli.ch/posts/ssh-keys-linux/</link>
-      <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://blog.topli.ch/posts/ssh-keys-linux/</guid>
-      <description>A step-by-step guide to generating and using SSH keys for secure Linux access.</description>
     </item>
   </channel>
 </rss>

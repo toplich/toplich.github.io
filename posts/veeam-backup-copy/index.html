@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="http://localhost:1313/posts/veeam-backup-copy/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel">
+  <meta property="og:description" content="A step-by-step guide to configure Veeam Backup Copy to a Synology NAS over a secure WireGuard VPN tunnel using iSCSI and ReFS.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-11T10:00:00+02:00">
+    <meta property="article:modified_time" content="2025-06-11T10:00:00+02:00">
+    <meta property="article:tag" content="Veeam">
+    <meta property="article:tag" content="Synology">
+    <meta property="article:tag" content="ISCSI">
+    <meta property="article:tag" content="WireGuard">
+    <meta property="article:tag" content="VPN">
+    <meta property="article:tag" content="Backup">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel">
+  <meta name="twitter:description" content="A step-by-step guide to configure Veeam Backup Copy to a Synology NAS over a secure WireGuard VPN tunnel using iSCSI and ReFS.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/veeam-backup-copy/" /><link rel="prev" href="http://localhost:1313/posts/wireguard-docker/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/veeam-backup-copy\/"
+        },"genre": "posts","keywords": "Veeam, Synology, iSCSI, WireGuard, VPN, Backup, NAS, ReFS, Windows","wordcount":  1156 ,
+        "url": "http:\/\/localhost:1313\/posts\/veeam-backup-copy\/","datePublished": "2025-06-11T10:00:00+02:00","dateModified": "2025-06-11T10:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/backup/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Backup</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-11">2025-06-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1156 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-use-case">🔧 Use Case</a></li>
+    <li><a href="#-overview">🔎 Overview</a></li>
+    <li><a href="#-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</a></li>
+    <li><a href="#-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</a></li>
+    <li><a href="#-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</a></li>
+    <li><a href="#-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</a></li>
+    <li><a href="#-performance--reliability-tips">📊 Performance &amp; Reliability Tips</a></li>
+    <li><a href="#-summary">🔗 Summary</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="using-veeam-backup-copy-via-iscsi-target-on-synology-nas-over-wireguard-tunnel">Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel</h1>
+<p>In this guide, we&rsquo;ll show how to configure a secure and stable Backup Copy destination in Veeam by connecting to an iSCSI target hosted on a Synology NAS, with traffic routed through a WireGuard tunnel. This setup is ideal for inter-site backup replication, where the NAS is behind NAT or has a dynamic IP address.</p>
+<hr>
+<h2 id="-use-case">🔧 Use Case</h2>
+
+
+
+<div class="goat svg-container ">
+  
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      font-family="Menlo,Lucida Console,monospace"
+      
+        viewBox="0 0 656 185"
+      >
+      <g transform='translate(8,16)'>
+<text text-anchor='middle' x='0' y='4' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='0' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='100' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='0' y='148' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='8' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='8' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='8' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='8' y='164' fill='currentColor' style='font-size:1em'>(</text>
+<text text-anchor='middle' x='16' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='16' y='36' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='16' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='16' y='68' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='16' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='16' y='148' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='16' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='24' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='20' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='24' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='148' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='24' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='32' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='20' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='32' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='148' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='32' y='164' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='40' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='20' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='40' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='52' fill='currentColor' style='font-size:1em'>V</text>
+<text text-anchor='middle' x='40' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='148' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='40' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='48' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='20' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='48' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='52' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='48' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='84' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='48' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='48' y='164' fill='currentColor' style='font-size:1em'>k</text>
+<text text-anchor='middle' x='56' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='56' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='52' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='84' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='148' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='164' fill='currentColor' style='font-size:1em'>-</text>
+<text text-anchor='middle' x='64' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='20' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='64' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='52' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='64' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='84' fill='currentColor' style='font-size:1em'>F</text>
+<text text-anchor='middle' x='64' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='148' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='64' y='164' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='72' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='20' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='72' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='52' fill='currentColor' style='font-size:1em'>m</text>
+<text text-anchor='middle' x='72' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='84' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='72' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='148' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='72' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='80' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='100' fill='currentColor' style='font-size:1em'>┬</text>
+<text text-anchor='middle' x='80' y='116' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='80' y='132' fill='currentColor' style='font-size:1em'>▼</text>
+<text text-anchor='middle' x='80' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='88' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='88' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='52' fill='currentColor' style='font-size:1em'>B</text>
+<text text-anchor='middle' x='88' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='84' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='88' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='148' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='88' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='96' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='20' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='96' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='52' fill='currentColor' style='font-size:1em'>&amp;</text>
+<text text-anchor='middle' x='96' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='84' fill='currentColor' style='font-size:1em'>:</text>
+<text text-anchor='middle' x='96' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='148' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='96' y='164' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='104' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='20' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='104' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='52' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='104' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='84' fill='currentColor' style='font-size:1em'>\</text>
+<text text-anchor='middle' x='104' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='104' y='164' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='112' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='20' fill='currentColor' style='font-size:1em'>v</text>
+<text text-anchor='middle' x='112' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='112' y='164' fill='currentColor' style='font-size:1em'>p</text>
+<text text-anchor='middle' x='120' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='20' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='120' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='120' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='128' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='20' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='128' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='148' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='128' y='164' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='136' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='136' y='36' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='136' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='136' y='68' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='136' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='136' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='136' y='164' fill='currentColor' style='font-size:1em'>)</text>
+<text text-anchor='middle' x='144' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='144' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='144' y='148' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='152' y='4' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='152' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='100' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='176' y='20' fill='currentColor' style='font-size:1em'>◄</text>
+<text text-anchor='middle' x='184' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='192' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='200' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='208' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='216' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='224' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='232' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='240' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='248' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='256' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='264' y='4' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='264' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='272' y='4' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='272' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='280' y='4' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='280' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='288' y='4' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='288' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='296' y='4' fill='currentColor' style='font-size:1em'>G</text>
+<text text-anchor='middle' x='296' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='304' y='4' fill='currentColor' style='font-size:1em'>u</text>
+<text text-anchor='middle' x='304' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='312' y='4' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='312' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='320' y='4' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='320' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='328' y='4' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='328' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='336' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='344' y='4' fill='currentColor' style='font-size:1em'>T</text>
+<text text-anchor='middle' x='344' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='352' y='4' fill='currentColor' style='font-size:1em'>u</text>
+<text text-anchor='middle' x='352' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='360' y='4' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='360' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='368' y='4' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='368' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='376' y='4' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='376' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='384' y='4' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='384' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='392' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='400' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='408' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='416' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='424' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='432' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='440' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='448' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='456' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='464' y='20' fill='currentColor' style='font-size:1em'>►</text>
+<text text-anchor='middle' x='488' y='4' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='488' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='100' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='496' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='496' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='504' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='504' y='36' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='504' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='504' y='68' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='504' y='84' fill='currentColor' style='font-size:1em'>I</text>
+<text text-anchor='middle' x='504' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='84' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='512' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='148' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='512' y='164' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='520' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='520' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='84' fill='currentColor' style='font-size:1em'>:</text>
+<text text-anchor='middle' x='520' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='148' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='520' y='164' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='528' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='20' fill='currentColor' style='font-size:1em'>y</text>
+<text text-anchor='middle' x='528' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='52' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='528' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='528' y='164' fill='currentColor' style='font-size:1em'>-</text>
+<text text-anchor='middle' x='536' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='20' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='536' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='52' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='536' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='536' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='536' y='164' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='544' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='544' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='52' fill='currentColor' style='font-size:1em'>C</text>
+<text text-anchor='middle' x='544' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='84' fill='currentColor' style='font-size:1em'>9</text>
+<text text-anchor='middle' x='544' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='544' y='164' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='552' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='20' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='552' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='52' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='552' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='84' fill='currentColor' style='font-size:1em'>2</text>
+<text text-anchor='middle' x='552' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='148' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='552' y='164' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='560' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='560' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='52' fill='currentColor' style='font-size:1em'>I</text>
+<text text-anchor='middle' x='560' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='560' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='560' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='568' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='20' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='568' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='568' y='100' fill='currentColor' style='font-size:1em'>┬</text>
+<text text-anchor='middle' x='568' y='116' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='568' y='132' fill='currentColor' style='font-size:1em'>▼</text>
+<text text-anchor='middle' x='568' y='148' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='568' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='576' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='20' fill='currentColor' style='font-size:1em'>y</text>
+<text text-anchor='middle' x='576' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='52' fill='currentColor' style='font-size:1em'>L</text>
+<text text-anchor='middle' x='576' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='84' fill='currentColor' style='font-size:1em'>6</text>
+<text text-anchor='middle' x='576' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='164' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='584' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='52' fill='currentColor' style='font-size:1em'>U</text>
+<text text-anchor='middle' x='584' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='84' fill='currentColor' style='font-size:1em'>8</text>
+<text text-anchor='middle' x='584' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='148' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='584' y='164' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='592' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='20' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='592' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='52' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='592' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='592' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='592' y='164' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='600' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='20' fill='currentColor' style='font-size:1em'>A</text>
+<text text-anchor='middle' x='600' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='600' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='148' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='600' y='164' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='608' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='608' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='608' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='148' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='608' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='616' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='84' fill='currentColor' style='font-size:1em'>2</text>
+<text text-anchor='middle' x='616' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='148' fill='currentColor' style='font-size:1em'>p</text>
+<text text-anchor='middle' x='616' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='624' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='624' y='36' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='624' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='624' y='68' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='624' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='624' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='632' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='632' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='640' y='4' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='640' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='100' fill='currentColor' style='font-size:1em'>┘</text>
+</g>
+
+    </svg>
+  
+</div>
+<p>You want to use your Synology NAS located at a remote site as a <strong>Backup Copy repository</strong> for Veeam. However, due to dynamic WAN IP and security constraints, you need to connect via <strong>WireGuard VPN</strong>. iSCSI will be used as the transport protocol, and the target will be mounted on a Windows Server with Veeam installed.</p>
+<hr>
+<h2 id="-overview">🔎 Overview</h2>
+<ul>
+<li>📁 Synology NAS with iSCSI Target enabled (LUN created)</li>
+<li>🛠 Windows Server with Veeam Backup &amp; Replication</li>
+<li>🔺 WireGuard tunnel between the two sites</li>
+<li>🔗 iSCSI traffic routed securely via VPN tunnel</li>
+<li>🌐 ReFS-formatted volume used as repository</li>
+</ul>
+<hr>
+<h2 id="-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</h2>
+<ol>
+<li>Install <strong>SAN Manager</strong> (if not already installed)</li>
+<li>Create a <strong>LUN</strong> and <strong>iSCSI Target</strong></li>
+<li>Enable CHAP authentication (optional but recommended)</li>
+<li>Ensure LUN is <strong>mapped to the target</strong></li>
+<li>Note internal NAS IP (e.g. <code>192.168.1.2</code>)</li>
+</ol>
+<hr>
+<h2 id="-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</h2>
+<p>📘 For a detailed setup on WireGuard tunnel configuration:</p>
+<ul>
+<li>
+<p>🔧 <strong>NAS Side (Docker-based tunnel):</strong><br>
+👉 <a href="https://blog.topli.ch/posts/wireguard-docker/#-quick-setup" target="_blank" rel="noopener noreffer ">Quick Setup: WireGuard inside Docker on Synology NAS</a></p>
+</li>
+<li>
+<p>🔧 <strong>OPNsense Firewall Side (Site-to-Site VPN):</strong><br>
+👉 <a href="https://blog.topli.ch/posts/opnsense/#21-wireguard-site-to-site-vpn-setup" target="_blank" rel="noopener noreffer ">WireGuard Site-to-Site VPN with OPNsense</a></p>
+</li>
+</ul>
+<p>Ensure the following:</p>
+<ul>
+<li>The NAS IP (e.g. <code>192.168.1.2</code>) is reachable from the Windows Veeam server via the tunnel.</li>
+<li>Proper <strong>UDP port forwarding</strong> is in place (e.g., port <code>51820</code> forwarded to the container).</li>
+<li><code>AllowedIPs</code> include the NAS LAN (e.g., <code>192.168.1.0/24</code>).</li>
+<li>✅ You can run the tunnel inside a Docker container using <code>wireguard-go</code>, especially useful if your NAS does not support kernel modules.</li>
+</ul>
+<p>🔁 Tunnel &amp; Connection Monitoring (Watchdog)</p>
+<p>To ensure maximum reliability, especially across WAN links or dynamic networks, it&rsquo;s recommended to implement a watchdog mechanism on both ends of the tunnel:</p>
+<p>🔄 On the NAS (Container)
+A cron-based watchdog script periodically checks tunnel connectivity and restarts the container if necessary:</p>
+<ul>
+<li>
+<p>📜 Full guide:<br>
+👉 <a href="https://blog.topli.ch/posts/wireguard-docker/#-watchdog-via-cron-optional" target="_blank" rel="noopener noreffer ">WireGuard Docker Watchdog via Cron</a></p>
+</li>
+<li>
+<p>💡 Example cron job:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">watchdog</span><span class="o">.</span><span class="n">sh</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">watchdog</span><span class="o">.</span><span class="n">log</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>🧠 On the Windows Server (PowerShell Watchdog)
+Use a lightweight PowerShell script to monitor the iSCSI session and automatically reconnect in case of disconnection. This helps mitigate edge cases where the WireGuard tunnel is restored, but the iSCSI session remains dropped.</p>
+<p>📜 Script download:
+👉 PowerShell Watchdog: <a href="run.topli.ch/ps/check-iscsi.ps1" rel="">check-iscsi.ps1</a></p>
+<p>💡 You can schedule this script every 5 minutes via Task Scheduler or as a Windows Service:</p>
+<ul>
+<li><strong>Task Name:</strong> <code>Check-iSCSI-Session</code></li>
+<li><strong>Trigger:</strong> Every 5 minutes</li>
+<li><strong>Action (command):</strong>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="s2">&#34;C:\Scripts\check-iscsi.ps1&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<hr>
+<h2 id="-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</h2>
+<ol>
+<li>Open <strong>iSCSI Initiator</strong> on the Windows Server</li>
+<li>Enter the ** IP of Synology** (e.g. <code>192.168.1.2</code>)</li>
+<li>Connect and enter CHAP credentials if configured</li>
+<li>Once connected, open <strong>Disk Management</strong></li>
+<li>Initialize the disk and format with <strong>ReFS</strong></li>
+<li>Assign a static drive letter (e.g. <code>R:</code>)</li>
+</ol>
+<hr>
+<h2 id="-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</h2>
+<ol>
+<li>
+<p>Open Veeam B&amp;R Console</p>
+</li>
+<li>
+<p>Go to <strong>Backup Infrastructure &gt; Backup Repositories</strong></p>
+</li>
+<li>
+<p>Add New Repository:</p>
+<ul>
+<li>Type: <strong>Direct Attached Storage</strong></li>
+<li>Server: This Windows server</li>
+<li>Path: <code>R:\</code></li>
+<li>Format: <strong>ReFS</strong> (optimized for fast cloning)</li>
+</ul>
+</li>
+</ol>
+<p>Use the repository as a target for <strong>Backup Copy Jobs</strong>.</p>
+<hr>
+<h2 id="-performance--reliability-tips">📊 Performance &amp; Reliability Tips</h2>
+<ul>
+<li>Use <strong>WireGuard KeepAlive</strong>: <code>PersistentKeepalive = 25</code></li>
+<li>Enable <strong>iSCSI MPIO</strong> on Windows for redundancy (optional)</li>
+<li>Schedule cron to monitor the tunnel and reconnect if needed</li>
+<li>Use Veeam health checks and periodic validation</li>
+</ul>
+<hr>
+<p>🧩 Additional Best Practices</p>
+<p>✔️ Use hostnames instead of raw IPs
+In iSCSI Initiator, configure target connections with DNS names (e.g., nas.remote.lan) to allow future migrations or failover.</p>
+<p>✔️ Isolate iSCSI traffic inside VPN
+Ensure no fallback to public routes by explicitly binding iSCSI to the WireGuard interface.</p>
+<p>✔️ Avoid Backup Copy during maintenance
+Run jobs outside known maintenance windows (e.g., NAS updates, WAN restarts).</p>
+<p>✔️ Enable Veeam Job Retry
+In job settings, allow retries (e.g., 3 times every 15 min) to auto-heal short tunnel drops.</p>
+<p>✔️ Enable Veeam Integrity Checks
+Activate health checks to validate backups and detect silent errors.</p>
+<p>✔️ Secure CHAP credentials
+Avoid storing CHAP secrets in plaintext — use Windows Credential Manager or secure vaults.</p>
+<hr>
+<h2 id="-summary">🔗 Summary</h2>
+<p>This setup allows using a Synology NAS as a reliable Backup Copy target for Veeam over a secure WireGuard VPN.<br>
+It leverages iSCSI to expose a block-level device, giving better performance and integrity than SMB/NFS, especially over WAN.<br>
+The use of ReFS on the repository ensures fast cloning and enhanced integrity, while automated watchdog mechanisms help keep both the VPN tunnel and iSCSI session continuously available.<br>
+Together, these elements make this architecture a production-ready, fault-tolerant remote backup solution for hybrid environments.</p>
+<hr>
+<p>🔗 <a href="https://run.topli.ch/" target="_blank" rel="noopener noreffer ">Blog: run.topli.ch</a>  |  🔐 <a href="https://www.wireguard.com/" target="_blank" rel="noopener noreffer ">WireGuard</a>  |  📄 <a href="https://helpcenter.veeam.com/" target="_blank" rel="noopener noreffer ">Veeam Documentation</a></p>
+<p>© 2025 run.topli.ch</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-06-11</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/veeam-backup-copy/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-title="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel" data-hashtags="Veeam,Synology,iSCSI,WireGuard,VPN,Backup,NAS,ReFS,Windows"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-hashtag="Veeam"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://localhost:1313/posts/veeam-backup-copy/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-title="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-title="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-title="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/veeam-backup-copy/" data-title="Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/veeam/">Veeam</a>,&nbsp;<a href="/tags/synology/">Synology</a>,&nbsp;<a href="/tags/iscsi/">ISCSI</a>,&nbsp;<a href="/tags/wireguard/">WireGuard</a>,&nbsp;<a href="/tags/vpn/">VPN</a>,&nbsp;<a href="/tags/backup/">Backup</a>,&nbsp;<a href="/tags/nas/">NAS</a>,&nbsp;<a href="/tags/refs/">ReFS</a>,&nbsp;<a href="/tags/windows/">Windows</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/wireguard-docker/" class="prev" rel="prev" title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

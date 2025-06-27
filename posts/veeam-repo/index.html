@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="http://localhost:1313/posts/veeam-repo/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS">
+  <meta property="og:description" content="Step-by-step guide to manually deploy a hardened, S3-compatible backup repository for Veeam using MinIO with Object Lock and TLS on Synology NAS.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-06-26T12:00:00+02:00">
+    <meta property="article:modified_time" content="2025-06-26T12:00:00+02:00">
+    <meta property="article:tag" content="Veeam">
+    <meta property="article:tag" content="MinIO">
+    <meta property="article:tag" content="Synology">
+    <meta property="article:tag" content="Backup">
+    <meta property="article:tag" content="S3">
+    <meta property="article:tag" content="Docker">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS">
+  <meta name="twitter:description" content="Step-by-step guide to manually deploy a hardened, S3-compatible backup repository for Veeam using MinIO with Object Lock and TLS on Synology NAS.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/veeam-repo/" /><link rel="prev" href="http://localhost:1313/posts/veeam/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/posts\/veeam-repo\/"
+        },"genre": "posts","keywords": "Veeam, MinIO, Synology, Backup, S3, Docker","wordcount":  2342 ,
+        "url": "http:\/\/localhost:1313\/posts\/veeam-repo\/","datePublished": "2025-06-26T12:00:00+02:00","dateModified": "2025-06-26T12:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/backup/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Backup</a>&nbsp;<a href="/categories/infrastructure/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Infrastructure</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-26">2025-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2342 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;11 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-table-of-contents">📚 Table of Contents</a></li>
+    <li><a href="#1-direct-attached-storage-das">1. Direct-Attached Storage (DAS)</a>
+      <ul>
+        <li><a href="#description">Description:</a></li>
+        <li><a href="#use-case">Use case:</a></li>
+        <li><a href="#configuration-steps">Configuration Steps:</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-nas-smb-or-nfs-share">2. NAS (SMB or NFS Share)</a>
+      <ul>
+        <li><a href="#description-1">Description:</a></li>
+        <li><a href="#use-case-1">Use case:</a></li>
+        <li><a href="#configuration-steps-1">Configuration Steps:</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-windows-backup-repository">3. Windows Backup Repository</a>
+      <ul>
+        <li><a href="#description-2">Description:</a></li>
+        <li><a href="#use-case-2">Use case:</a></li>
+        <li><a href="#configuration-steps-2">Configuration Steps:</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-hardened-linux-repository-immutability-enabled">4. Hardened Linux Repository (Immutability Enabled)</a>
+      <ul>
+        <li><a href="#description-3">Description:</a></li>
+        <li><a href="#use-case-3">Use case:</a></li>
+        <li><a href="#configuration-steps-3">Configuration Steps:</a></li>
+        <li><a href="#manual-preparation-steps-summary">Manual Preparation Steps Summary</a></li>
+        <li><a href="#automated-script-hosted-at-runtoplich">Automated Script (hosted at <a href="https://run.topli.ch">run.topli.ch</a>)</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-s3-compatible-repository-with-minio-docker-on-synology-nas">5. S3-Compatible Repository with MinIO (Docker on Synology NAS)</a>
+      <ul>
+        <li><a href="#description-4">Description:</a></li>
+        <li><a href="#use-case-4">Use case:</a></li>
+        <li><a href="#configuration-summary">Configuration Summary:</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-iscsi-based-repository-over-wireguard-tunnel">6. iSCSI-Based Repository over WireGuard Tunnel</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#-use-case">🔧 Use Case</a></li>
+    <li><a href="#-overview">🔎 Overview</a></li>
+    <li><a href="#-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</a></li>
+    <li><a href="#-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</a></li>
+    <li><a href="#-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</a></li>
+    <li><a href="#-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</a></li>
+    <li><a href="#-performance--reliability-tips">📊 Performance &amp; Reliability Tips</a></li>
+    <li><a href="#-summary">🔗 Summary</a></li>
+    <li><a href="#7-immutability--compatibility-matrix">7. Immutability &amp; Compatibility Matrix</a></li>
+    <li><a href="#8-feature-comparison-table">8. Feature Comparison Table</a></li>
+    <li><a href="#9-references-and-links">9. References and Links</a></li>
+    <li><a href="#10-final-thoughts">10. Final Thoughts</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="local-backup-repositories-in-veeam-types-and-configuration-guide">Local Backup Repositories in Veeam: Types and Configuration Guide</h1>
+<h2 id="-table-of-contents">📚 Table of Contents</h2>
+<ol>
+<li><a href="#1-direct-attached-storage-das" rel="">Direct-Attached Storage (DAS)</a></li>
+<li><a href="#2-nas-smb-or-nfs-share" rel="">NAS (SMB or NFS Share)</a></li>
+<li><a href="#3-windows-backup-repository" rel="">Windows Backup Repository</a></li>
+<li><a href="#4-hardened-linux-repository-immutability-enabled" rel="">Hardened Linux Repository (Immutability Enabled)</a></li>
+<li><a href="#5-s3-compatible-repository-with-minio-docker-on-synology-nas" rel="">S3-Compatible Repository with MinIO (Docker on Synology NAS)</a></li>
+<li><a href="#6-iscsi-based-repository-over-wireguard-tunnel" rel="">iSCSI-Based Repository over WireGuard Tunnel</a></li>
+<li><a href="#7-immutability--compatibility-matrix" rel="">Immutability &amp; Compatibility Matrix</a></li>
+<li><a href="#8-feature-comparison-table" rel="">Feature Comparison Table</a></li>
+<li><a href="#9-references-and-links" rel="">References and Links</a></li>
+<li><a href="#10-final-thoughts" rel="">Final Thoughts</a></li>
+</ol>
+<hr>
+<h2 id="1-direct-attached-storage-das">1. Direct-Attached Storage (DAS)</h2>
+<h3 id="description">Description:</h3>
+<p>DAS refers to a storage device (e.g., internal HDDs, USB drives, or RAID arrays) that is physically connected to the Veeam Backup Server or Backup Proxy.</p>
+<h3 id="use-case">Use case:</h3>
+<p>Simple deployments or environments with limited infrastructure.</p>
+<h3 id="configuration-steps">Configuration Steps:</h3>
+<ol>
+<li>Connect the storage device to your Veeam server.</li>
+<li>Format the disk using <strong>ReFS</strong> (Windows) or <strong>XFS with reflink=1</strong> (Linux) for best performance.</li>
+<li>Open Veeam Console &gt; Backup Infrastructure &gt; Backup Repositories &gt; Add Repository.</li>
+<li>Choose &ldquo;Direct Attached Storage&rdquo; &gt; Microsoft Windows or Linux (depending on the OS).</li>
+<li>Specify the mount path (e.g., <code>D:\Backups</code> or <code>/mnt/veeam</code>).</li>
+<li>Finish the wizard and assign the repository to a job.</li>
+</ol>
+<hr>
+<h2 id="2-nas-smb-or-nfs-share">2. NAS (SMB or NFS Share)</h2>
+<h3 id="description-1">Description:</h3>
+<p>Network-attached storage accessed over the network via SMB or NFS protocol.</p>
+<h3 id="use-case-1">Use case:</h3>
+<p>Shared backup targets, easy scalability, centralized storage.</p>
+<h3 id="configuration-steps-1">Configuration Steps:</h3>
+<ol>
+<li>Ensure your NAS share is accessible (e.g., <code>\\nas01\veeam</code> or NFS path).</li>
+<li>In Veeam Console &gt; Add Backup Repository &gt; Shared Folder.</li>
+<li>Specify the network path and access credentials.</li>
+<li>Assign a folder name and complete the wizard.</li>
+</ol>
+<blockquote>
+<p>⚠️ Immutability and fast clone are <strong>not</strong> supported with SMB/NFS.</p></blockquote>
+<hr>
+<h2 id="3-windows-backup-repository">3. Windows Backup Repository</h2>
+<h3 id="description-2">Description:</h3>
+<p>A Windows Server or desktop system where Veeam stores backups. Best used with ReFS file system.</p>
+<h3 id="use-case-2">Use case:</h3>
+<p>Windows-only environments or when ReFS benefits (fast clone) are desired.</p>
+<h3 id="configuration-steps-2">Configuration Steps:</h3>
+<ol>
+<li>
+<p>Ensure the volume is formatted with ReFS (Windows Server 2016+):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Format-Volume</span> <span class="n">-DriveLetter</span> <span class="n">D</span> <span class="n">-FileSystem</span> <span class="n">ReFS</span> <span class="n">-NewFileSystemLabel</span> <span class="s2">&#34;VeeamRepo&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>In Veeam Console &gt; Add Backup Repository &gt; Microsoft Windows.</p>
+</li>
+<li>
+<p>Provide the hostname or IP and credentials.</p>
+</li>
+<li>
+<p>Select the path (e.g., <code>D:\Backups</code>).</p>
+</li>
+<li>
+<p>Finish the setup.</p>
+</li>
+</ol>
+<hr>
+<h2 id="4-hardened-linux-repository-immutability-enabled">4. Hardened Linux Repository (Immutability Enabled)</h2>
+<h3 id="description-3">Description:</h3>
+<p>A secure, immutable Linux-based repository using non-root access and XFS with reflink.</p>
+<h3 id="use-case-3">Use case:</h3>
+<p>Maximum protection against ransomware. Required for compliance-focused environments.</p>
+<h3 id="configuration-steps-3">Configuration Steps:</h3>
+<ol>
+<li>
+<p>Prepare a Linux server with XFS-formatted disk and create a non-root user (e.g., <code>veeamrepo</code>).</p>
+</li>
+<li>
+<p>Assign the public SSH key to the user (password login should remain enabled only temporarily for initial setup).</p>
+</li>
+<li>
+<p>Temporarily grant <code>sudo</code> access for Veeam to install its data mover.</p>
+</li>
+<li>
+<p>In Veeam Console, add the Linux server as a repository and enable immutability.</p>
+</li>
+<li>
+<p>Once the repository is added successfully, <strong>remove the user from the sudo group</strong> and optionally create <code>/etc/sudoers.d/99-veeamrepo</code> with:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">veeamrepo <span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span> !ALL
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Disable SSH password authentication:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sed -i <span class="s1">&#39;s/^#PasswordAuthentication yes/PasswordAuthentication no/&#39;</span> /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">systemctl restart ssh
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>Final security hardening (optional):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">usermod -s /usr/sbin/nologin veeamrepo
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h3 id="manual-preparation-steps-summary">Manual Preparation Steps Summary</h3>
+<p>If you&rsquo;d rather prepare the Hardened Linux Repository manually, follow these steps:</p>
+<ol>
+<li>
+<p><strong>Create a non-root user</strong> with no password:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">adduser --disabled-password --gecos <span class="s2">&#34;&#34;</span> veeamrepo
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Assign a public SSH key</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p /home/veeamrepo/.ssh
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;ssh-rsa AAAA...&#34;</span> &gt; /home/veeamrepo/.ssh/authorized_keys
+</span></span><span class="line"><span class="cl">chmod <span class="m">700</span> /home/veeamrepo/.ssh
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> /home/veeamrepo/.ssh/authorized_keys
+</span></span><span class="line"><span class="cl">chown -R veeamrepo:veeamrepo /home/veeamrepo/.ssh
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Install required packages</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt update <span class="o">&amp;&amp;</span> apt install -y xfsprogs openssh-server sudo
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Format and mount the XFS disk with reflink</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkfs.xfs -b <span class="nv">size</span><span class="o">=</span><span class="m">4096</span> -m <span class="nv">reflink</span><span class="o">=</span>1,crc<span class="o">=</span><span class="m">1</span> /dev/sdb
+</span></span><span class="line"><span class="cl">mkdir -p /mnt/veeam
+</span></span><span class="line"><span class="cl"><span class="nv">UUID</span><span class="o">=</span><span class="k">$(</span>blkid -s UUID -o value /dev/sdb<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;UUID=</span><span class="nv">$UUID</span><span class="s2"> /mnt/veeam xfs defaults 0 0&#34;</span> &gt;&gt; /etc/fstab
+</span></span><span class="line"><span class="cl">mount -a
+</span></span><span class="line"><span class="cl">chown veeamrepo:veeamrepo /mnt/veeam
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Add the repository to Veeam</strong> using SSH key and temporary sudo access.</p>
+</li>
+<li>
+<p><strong>After successful configuration</strong> (optional hardening):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">deluser veeamrepo sudo
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;veeamrepo ALL=(ALL) !ALL&#34;</span> &gt; /etc/sudoers.d/99-veeamrepo
+</span></span><span class="line"><span class="cl">sed -i <span class="s1">&#39;s/^#PasswordAuthentication yes/PasswordAuthentication no/&#39;</span> /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">systemctl restart ssh
+</span></span><span class="line"><span class="cl">usermod -s /usr/sbin/nologin veeamrepo
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h3 id="automated-script-hosted-at-runtoplich">Automated Script (hosted at <a href="https://run.topli.ch" target="_blank" rel="noopener noreffer ">run.topli.ch</a>)</h3>
+<p>If you&rsquo;d prefer an automated solution, you can use the following script:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -fsSL https://run.topli.ch/sh/hardened-linux-repo.sh <span class="p">|</span> bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>⚠️ Review the script before executing. It configures XFS, creates a non-root user, and prepares the system for Veeam Hardened Repository integration.</p></blockquote>
+<hr>
+<h2 id="5-s3-compatible-repository-with-minio-docker-on-synology-nas">5. S3-Compatible Repository with MinIO (Docker on Synology NAS)</h2>
+<h3 id="description-4">Description:</h3>
+<p>A local object storage solution using MinIO with S3-compatible API, TLS encryption, object versioning, and Object Lock for immutability. Ideal for on-prem, private cloud setups with full control.</p>
+<h3 id="use-case-4">Use case:</h3>
+<p>Secure backup target with immutability, suitable for use with Veeam&rsquo;s Object Storage Repository feature.</p>
+<h3 id="configuration-summary">Configuration Summary:</h3>
+<ol>
+<li>
+<p><strong>Prepare Synology NAS:</strong></p>
+<ul>
+<li>Ensure Docker (Container Manager) is installed</li>
+<li>Enable SSH access</li>
+</ul>
+</li>
+<li>
+<p><strong>Generate TLS Certificates:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir certs
+</span></span><span class="line"><span class="cl">openssl req -x509 -nodes -days <span class="m">730</span> -newkey rsa:2048 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -keyout certs/private.key <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -out certs/public.crt <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -subj <span class="s2">&#34;/CN=minio.local&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -addext <span class="s2">&#34;subjectAltName=DNS:minio.local,DNS:localhost,IP:192.168.1.2,IP:127.0.0.1&#34;</span>
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> certs/private.key
+</span></span><span class="line"><span class="cl">chmod <span class="m">644</span> certs/public.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Create MinIO data directory:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p /volume1/minio-data
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Deploy MinIO via Docker Compose:</strong>
+Create <code>docker-compose.yml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.8&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">minio</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">minio/minio:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">minio</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;9000:9000&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;9001:9001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/volume1/minio-data:/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./certs:/root/.minio/certs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MINIO_ROOT_USER</span><span class="p">:</span><span class="w"> </span><span class="l">minio</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MINIO_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l">yourSecretKey</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MINIO_SERVER_URL</span><span class="p">:</span><span class="w"> </span><span class="l">https://192.168.1.2:9000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MINIO_BROWSER_REDIRECT_URL</span><span class="p">:</span><span class="w"> </span><span class="l">https://minio.local:9001</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">server /data --console-address &#34;:9001&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then run:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose up -d
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Create S3 bucket with Object Lock:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --rm -it <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">AWS_ACCESS_KEY_ID</span><span class="o">=</span>minio <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">AWS_SECRET_ACCESS_KEY</span><span class="o">=</span>yourSecretKey <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --network host <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  amazon/aws-cli <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  s3api create-bucket <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --bucket veeam-locked <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --object-lock-enabled-for-bucket <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --endpoint-url https://192.168.1.2:9000 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --no-verify-ssl <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --no-cli-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Enable versioning and retention:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker <span class="nb">exec</span> minio mc <span class="nb">alias</span> <span class="nb">set</span> <span class="nb">local</span> https://192.168.1.2:9000 minio yourSecretKey --insecure
+</span></span><span class="line"><span class="cl">docker <span class="nb">exec</span> minio mc version <span class="nb">enable</span> local/veeam-locked --insecure
+</span></span><span class="line"><span class="cl">docker <span class="nb">exec</span> minio mc retention <span class="nb">set</span> --default GOVERNANCE 30d local/veeam-locked --insecure
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Add to Veeam:</strong></p>
+<ul>
+<li>
+<p>Go to <strong>Backup Infrastructure &gt; Object Storage Repository</strong></p>
+</li>
+<li>
+<p>Select <strong>S3-Compatible</strong></p>
+</li>
+<li>
+<p>Enter:</p>
+<ul>
+<li>Endpoint: <code>https://192.168.1.2:9000</code></li>
+<li>Bucket: <code>veeam-locked</code></li>
+<li>Access Key: <code>minio</code></li>
+<li>Secret Key: <code>yourSecretKey</code></li>
+</ul>
+</li>
+<li>
+<p>Enable <strong>Immutability</strong></p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>🔗 Optional: Use this MinIO S3 target as Capacity Tier in a Scale-Out Backup Repository (SOBR).</p></blockquote>
+<hr>
+<h2 id="6-iscsi-based-repository-over-wireguard-tunnel">6. iSCSI-Based Repository over WireGuard Tunnel</h2>
+<h1 id="using-veeam-backup-copy-via-iscsi-target-on-synology-nas-over-wireguard-tunnel">Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel</h1>
+<p>In this guide, we&rsquo;ll show how to configure a secure and stable Backup Copy destination in Veeam by connecting to an iSCSI target hosted on a Synology NAS, with traffic routed through a WireGuard tunnel. This setup is ideal for inter-site backup replication, where the NAS is behind NAT or has a dynamic IP address.</p>
+<hr>
+<h2 id="-use-case">🔧 Use Case</h2>
+
+
+
+<div class="goat svg-container ">
+  
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      font-family="Menlo,Lucida Console,monospace"
+      
+        viewBox="0 0 656 185"
+      >
+      <g transform='translate(8,16)'>
+<text text-anchor='middle' x='0' y='4' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='0' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='0' y='100' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='0' y='148' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='8' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='8' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='8' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='8' y='164' fill='currentColor' style='font-size:1em'>(</text>
+<text text-anchor='middle' x='16' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='16' y='36' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='16' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='16' y='68' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='16' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='16' y='148' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='16' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='24' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='20' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='24' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='24' y='148' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='24' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='32' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='20' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='32' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='32' y='148' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='32' y='164' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='40' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='20' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='40' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='52' fill='currentColor' style='font-size:1em'>V</text>
+<text text-anchor='middle' x='40' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='40' y='148' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='40' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='48' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='20' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='48' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='52' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='48' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='84' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='48' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='48' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='48' y='164' fill='currentColor' style='font-size:1em'>k</text>
+<text text-anchor='middle' x='56' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='56' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='52' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='84' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='56' y='148' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='56' y='164' fill='currentColor' style='font-size:1em'>-</text>
+<text text-anchor='middle' x='64' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='20' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='64' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='52' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='64' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='84' fill='currentColor' style='font-size:1em'>F</text>
+<text text-anchor='middle' x='64' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='64' y='148' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='64' y='164' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='72' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='20' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='72' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='52' fill='currentColor' style='font-size:1em'>m</text>
+<text text-anchor='middle' x='72' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='84' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='72' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='72' y='148' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='72' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='80' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='80' y='100' fill='currentColor' style='font-size:1em'>┬</text>
+<text text-anchor='middle' x='80' y='116' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='80' y='132' fill='currentColor' style='font-size:1em'>▼</text>
+<text text-anchor='middle' x='80' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='88' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='88' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='52' fill='currentColor' style='font-size:1em'>B</text>
+<text text-anchor='middle' x='88' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='84' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='88' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='88' y='148' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='88' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='96' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='20' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='96' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='52' fill='currentColor' style='font-size:1em'>&amp;</text>
+<text text-anchor='middle' x='96' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='84' fill='currentColor' style='font-size:1em'>:</text>
+<text text-anchor='middle' x='96' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='96' y='148' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='96' y='164' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='104' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='20' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='104' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='52' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='104' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='84' fill='currentColor' style='font-size:1em'>\</text>
+<text text-anchor='middle' x='104' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='104' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='104' y='164' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='112' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='20' fill='currentColor' style='font-size:1em'>v</text>
+<text text-anchor='middle' x='112' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='112' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='112' y='164' fill='currentColor' style='font-size:1em'>p</text>
+<text text-anchor='middle' x='120' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='20' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='120' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='120' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='120' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='128' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='20' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='128' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='128' y='148' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='128' y='164' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='136' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='136' y='36' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='136' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='136' y='68' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='136' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='136' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='136' y='164' fill='currentColor' style='font-size:1em'>)</text>
+<text text-anchor='middle' x='144' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='144' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='144' y='148' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='152' y='4' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='152' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='152' y='100' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='176' y='20' fill='currentColor' style='font-size:1em'>◄</text>
+<text text-anchor='middle' x='184' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='192' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='200' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='208' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='216' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='224' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='232' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='240' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='248' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='256' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='264' y='4' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='264' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='272' y='4' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='272' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='280' y='4' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='280' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='288' y='4' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='288' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='296' y='4' fill='currentColor' style='font-size:1em'>G</text>
+<text text-anchor='middle' x='296' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='304' y='4' fill='currentColor' style='font-size:1em'>u</text>
+<text text-anchor='middle' x='304' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='312' y='4' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='312' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='320' y='4' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='320' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='328' y='4' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='328' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='336' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='344' y='4' fill='currentColor' style='font-size:1em'>T</text>
+<text text-anchor='middle' x='344' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='352' y='4' fill='currentColor' style='font-size:1em'>u</text>
+<text text-anchor='middle' x='352' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='360' y='4' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='360' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='368' y='4' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='368' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='376' y='4' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='376' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='384' y='4' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='384' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='392' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='400' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='408' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='416' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='424' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='432' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='440' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='448' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='456' y='20' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='464' y='20' fill='currentColor' style='font-size:1em'>►</text>
+<text text-anchor='middle' x='488' y='4' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='488' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='488' y='100' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='496' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='496' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='504' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='504' y='36' fill='currentColor' style='font-size:1em'>┌</text>
+<text text-anchor='middle' x='504' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='504' y='68' fill='currentColor' style='font-size:1em'>└</text>
+<text text-anchor='middle' x='504' y='84' fill='currentColor' style='font-size:1em'>I</text>
+<text text-anchor='middle' x='504' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='84' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='512' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='512' y='148' fill='currentColor' style='font-size:1em'>W</text>
+<text text-anchor='middle' x='512' y='164' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='520' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='520' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='84' fill='currentColor' style='font-size:1em'>:</text>
+<text text-anchor='middle' x='520' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='520' y='148' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='520' y='164' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='528' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='20' fill='currentColor' style='font-size:1em'>y</text>
+<text text-anchor='middle' x='528' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='52' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='528' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='528' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='528' y='164' fill='currentColor' style='font-size:1em'>-</text>
+<text text-anchor='middle' x='536' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='20' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='536' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='52' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='536' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='536' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='536' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='536' y='164' fill='currentColor' style='font-size:1em'>w</text>
+<text text-anchor='middle' x='544' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='544' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='52' fill='currentColor' style='font-size:1em'>C</text>
+<text text-anchor='middle' x='544' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='84' fill='currentColor' style='font-size:1em'>9</text>
+<text text-anchor='middle' x='544' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='544' y='148' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='544' y='164' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='552' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='20' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='552' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='52' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='552' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='84' fill='currentColor' style='font-size:1em'>2</text>
+<text text-anchor='middle' x='552' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='552' y='148' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='552' y='164' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='560' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='20' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='560' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='52' fill='currentColor' style='font-size:1em'>I</text>
+<text text-anchor='middle' x='560' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='560' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='560' y='148' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='560' y='164' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='568' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='20' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='568' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='568' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='568' y='100' fill='currentColor' style='font-size:1em'>┬</text>
+<text text-anchor='middle' x='568' y='116' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='568' y='132' fill='currentColor' style='font-size:1em'>▼</text>
+<text text-anchor='middle' x='568' y='148' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='568' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='576' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='20' fill='currentColor' style='font-size:1em'>y</text>
+<text text-anchor='middle' x='576' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='52' fill='currentColor' style='font-size:1em'>L</text>
+<text text-anchor='middle' x='576' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='84' fill='currentColor' style='font-size:1em'>6</text>
+<text text-anchor='middle' x='576' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='576' y='164' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='584' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='52' fill='currentColor' style='font-size:1em'>U</text>
+<text text-anchor='middle' x='584' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='84' fill='currentColor' style='font-size:1em'>8</text>
+<text text-anchor='middle' x='584' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='584' y='148' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='584' y='164' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='592' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='20' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='592' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='52' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='592' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='592' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='592' y='148' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='592' y='164' fill='currentColor' style='font-size:1em'>g</text>
+<text text-anchor='middle' x='600' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='20' fill='currentColor' style='font-size:1em'>A</text>
+<text text-anchor='middle' x='600' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='84' fill='currentColor' style='font-size:1em'>1</text>
+<text text-anchor='middle' x='600' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='600' y='148' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='600' y='164' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='608' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='20' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='608' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='84' fill='currentColor' style='font-size:1em'>.</text>
+<text text-anchor='middle' x='608' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='608' y='148' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='608' y='164' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='616' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='36' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='68' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='84' fill='currentColor' style='font-size:1em'>2</text>
+<text text-anchor='middle' x='616' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='616' y='148' fill='currentColor' style='font-size:1em'>p</text>
+<text text-anchor='middle' x='616' y='164' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='624' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='624' y='36' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='624' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='624' y='68' fill='currentColor' style='font-size:1em'>┘</text>
+<text text-anchor='middle' x='624' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='624' y='148' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='632' y='4' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='632' y='100' fill='currentColor' style='font-size:1em'>─</text>
+<text text-anchor='middle' x='640' y='4' fill='currentColor' style='font-size:1em'>┐</text>
+<text text-anchor='middle' x='640' y='20' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='36' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='52' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='68' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='84' fill='currentColor' style='font-size:1em'>│</text>
+<text text-anchor='middle' x='640' y='100' fill='currentColor' style='font-size:1em'>┘</text>
+</g>
+
+    </svg>
+  
+</div>
+<p>You want to use your Synology NAS located at a remote site as a <strong>Backup Copy repository</strong> for Veeam. However, due to dynamic WAN IP and security constraints, you need to connect via <strong>WireGuard VPN</strong>. iSCSI will be used as the transport protocol, and the target will be mounted on a Windows Server with Veeam installed.</p>
+<hr>
+<h2 id="-overview">🔎 Overview</h2>
+<ul>
+<li>📁 Synology NAS with iSCSI Target enabled (LUN created)</li>
+<li>🛠 Windows Server with Veeam Backup &amp; Replication</li>
+<li>🔺 WireGuard tunnel between the two sites</li>
+<li>🔗 iSCSI traffic routed securely via VPN tunnel</li>
+<li>🌐 ReFS-formatted volume used as repository</li>
+</ul>
+<hr>
+<h2 id="-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</h2>
+<ol>
+<li>Install <strong>SAN Manager</strong> (if not already installed)</li>
+<li>Create a <strong>LUN</strong> and <strong>iSCSI Target</strong></li>
+<li>Enable CHAP authentication (optional but recommended)</li>
+<li>Ensure LUN is <strong>mapped to the target</strong></li>
+<li>Note internal NAS IP (e.g. <code>192.168.1.2</code>)</li>
+</ol>
+<hr>
+<h2 id="-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</h2>
+<p>📘 For a detailed setup on WireGuard tunnel configuration:</p>
+<ul>
+<li>
+<p>🔧 <strong>NAS Side (Docker-based tunnel):</strong><br>
+👉 <a href="https://blog.topli.ch/posts/wireguard-docker/#-quick-setup" target="_blank" rel="noopener noreffer ">Quick Setup: WireGuard inside Docker on Synology NAS</a></p>
+</li>
+<li>
+<p>🔧 <strong>OPNsense Firewall Side (Site-to-Site VPN):</strong><br>
+👉 <a href="https://blog.topli.ch/posts/opnsense/#21-wireguard-site-to-site-vpn-setup" target="_blank" rel="noopener noreffer ">WireGuard Site-to-Site VPN with OPNsense</a></p>
+</li>
+</ul>
+<p>Ensure the following:</p>
+<ul>
+<li>The NAS IP (e.g. <code>192.168.1.2</code>) is reachable from the Windows Veeam server via the tunnel.</li>
+<li>Proper <strong>UDP port forwarding</strong> is in place (e.g., port <code>51820</code> forwarded to the container).</li>
+<li><code>AllowedIPs</code> include the NAS LAN (e.g., <code>192.168.1.0/24</code>).</li>
+<li>✅ You can run the tunnel inside a Docker container using <code>wireguard-go</code>, especially useful if your NAS does not support kernel modules.</li>
+</ul>
+<p>🔁 Tunnel &amp; Connection Monitoring (Watchdog)</p>
+<p>To ensure maximum reliability, especially across WAN links or dynamic networks, it&rsquo;s recommended to implement a watchdog mechanism on both ends of the tunnel:</p>
+<p>🔄 On the NAS (Container)
+A cron-based watchdog script periodically checks tunnel connectivity and restarts the container if necessary:</p>
+<ul>
+<li>
+<p>📜 Full guide:<br>
+👉 <a href="https://blog.topli.ch/posts/wireguard-docker/#-watchdog-via-cron-optional" target="_blank" rel="noopener noreffer ">WireGuard Docker Watchdog via Cron</a></p>
+</li>
+<li>
+<p>💡 Example cron job:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">*/</span><span class="mi">5</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">watchdog</span><span class="o">.</span><span class="n">sh</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">wg</span><span class="o">-</span><span class="n">watchdog</span><span class="o">.</span><span class="n">log</span> <span class="mi">2</span><span class="o">&gt;&amp;</span><span class="mi">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>🧠 On the Windows Server (PowerShell Watchdog)
+Use a lightweight PowerShell script to monitor the iSCSI session and automatically reconnect in case of disconnection. This helps mitigate edge cases where the WireGuard tunnel is restored, but the iSCSI session remains dropped.</p>
+<p>📜 Script download:
+👉 PowerShell Watchdog: <a href="run.topli.ch/ps/check-iscsi.ps1" rel="">check-iscsi.ps1</a></p>
+<p>💡 You can schedule this script every 5 minutes via Task Scheduler or as a Windows Service:</p>
+<ul>
+<li><strong>Task Name:</strong> <code>Check-iSCSI-Session</code></li>
+<li><strong>Trigger:</strong> Every 5 minutes</li>
+<li><strong>Action (command):</strong>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="s2">&#34;C:\Scripts\check-iscsi.ps1&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<hr>
+<h2 id="-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</h2>
+<ol>
+<li>Open <strong>iSCSI Initiator</strong> on the Windows Server</li>
+<li>Enter the ** IP of Synology** (e.g. <code>192.168.1.2</code>)</li>
+<li>Connect and enter CHAP credentials if configured</li>
+<li>Once connected, open <strong>Disk Management</strong></li>
+<li>Initialize the disk and format with <strong>ReFS</strong></li>
+<li>Assign a static drive letter (e.g. <code>R:</code>)</li>
+</ol>
+<hr>
+<h2 id="-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</h2>
+<ol>
+<li>
+<p>Open Veeam B&amp;R Console</p>
+</li>
+<li>
+<p>Go to <strong>Backup Infrastructure &gt; Backup Repositories</strong></p>
+</li>
+<li>
+<p>Add New Repository:</p>
+<ul>
+<li>Type: <strong>Direct Attached Storage</strong></li>
+<li>Server: This Windows server</li>
+<li>Path: <code>R:\</code></li>
+<li>Format: <strong>ReFS</strong> (optimized for fast cloning)</li>
+</ul>
+</li>
+</ol>
+<p>Use the repository as a target for <strong>Backup Copy Jobs</strong>.</p>
+<hr>
+<h2 id="-performance--reliability-tips">📊 Performance &amp; Reliability Tips</h2>
+<ul>
+<li>Use <strong>WireGuard KeepAlive</strong>: <code>PersistentKeepalive = 25</code></li>
+<li>Enable <strong>iSCSI MPIO</strong> on Windows for redundancy (optional)</li>
+<li>Schedule cron to monitor the tunnel and reconnect if needed</li>
+<li>Use Veeam health checks and periodic validation</li>
+</ul>
+<hr>
+<p>🧩 Additional Best Practices</p>
+<p>✔️ Use hostnames instead of raw IPs
+In iSCSI Initiator, configure target connections with DNS names (e.g., nas.remote.lan) to allow future migrations or failover.</p>
+<p>✔️ Isolate iSCSI traffic inside VPN
+Ensure no fallback to public routes by explicitly binding iSCSI to the WireGuard interface.</p>
+<p>✔️ Avoid Backup Copy during maintenance
+Run jobs outside known maintenance windows (e.g., NAS updates, WAN restarts).</p>
+<p>✔️ Enable Veeam Job Retry
+In job settings, allow retries (e.g., 3 times every 15 min) to auto-heal short tunnel drops.</p>
+<p>✔️ Enable Veeam Integrity Checks
+Activate health checks to validate backups and detect silent errors.</p>
+<p>✔️ Secure CHAP credentials
+Avoid storing CHAP secrets in plaintext — use Windows Credential Manager or secure vaults.</p>
+<hr>
+<h2 id="-summary">🔗 Summary</h2>
+<p>This setup allows using a Synology NAS as a reliable Backup Copy target for Veeam over a secure WireGuard VPN.<br>
+It leverages iSCSI to expose a block-level device, giving better performance and integrity than SMB/NFS, especially over WAN.<br>
+The use of ReFS on the repository ensures fast cloning and enhanced integrity, while automated watchdog mechanisms help keep both the VPN tunnel and iSCSI session continuously available.<br>
+Together, these elements make this architecture a production-ready, fault-tolerant remote backup solution for hybrid environments.</p>
+<p>🔐 <a href="https://www.wireguard.com/" target="_blank" rel="noopener noreffer ">WireGuard</a>  |  📄 <a href="https://helpcenter.veeam.com/" target="_blank" rel="noopener noreffer ">Veeam Documentation</a></p>
+<hr>
+<h2 id="7-immutability--compatibility-matrix">7. Immutability &amp; Compatibility Matrix</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Repository Type</th>
+          <th>File System</th>
+          <th>Fast Clone</th>
+          <th>Immutability</th>
+          <th>TLS Support</th>
+          <th>Remote-Ready</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Direct-Attached (Windows)</td>
+          <td>ReFS</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+      </tr>
+      <tr>
+          <td>Direct-Attached (Linux)</td>
+          <td>XFS</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+      </tr>
+      <tr>
+          <td>Hardened Linux Repository</td>
+          <td>XFS</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>⚠️ (manual)</td>
+      </tr>
+      <tr>
+          <td>NAS (SMB/NFS)</td>
+          <td>ext4/btrfs</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>S3-Compatible with MinIO</td>
+          <td>ObjectStore</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>iSCSI Target via WireGuard (ReFS)</td>
+          <td>ReFS</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>✅ (via tunnel)</td>
+          <td>✅</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="8-feature-comparison-table">8. Feature Comparison Table</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Feature</th>
+          <th>Hardened Linux</th>
+          <th>SMB/NFS</th>
+          <th>Windows ReFS</th>
+          <th>MinIO S3</th>
+          <th>iSCSI via WG</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Fast Clone</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>Immutability</td>
+          <td>✅</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>❌</td>
+      </tr>
+      <tr>
+          <td>TLS Encryption</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>Requires VPN</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+      </tr>
+      <tr>
+          <td>Suitable for Backup Copy</td>
+          <td>⚠️</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="9-references-and-links">9. References and Links</h2>
+<ul>
+<li>🔐 <a href="https://www.wireguard.com/" target="_blank" rel="noopener noreffer ">WireGuard Official</a></li>
+<li>📄 <a href="https://helpcenter.veeam.com/" target="_blank" rel="noopener noreffer ">Veeam Help Center</a></li>
+<li>📦 <a href="https://min.io/docs/" target="_blank" rel="noopener noreffer ">MinIO Documentation</a></li>
+<li>💾 <a href="https://kb.synology.com/en-global/DSM/help/SANManager/target" target="_blank" rel="noopener noreffer ">Synology iSCSI Target Setup</a></li>
+<li>📜 <a href="https://learn.microsoft.com/en-us/windows-server/storage/refs/refs-overview" target="_blank" rel="noopener noreffer ">ReFS Overview – Microsoft</a></li>
+<li>🔧 <a href="https://www.veeam.com/kb4134" target="_blank" rel="noopener noreffer ">Hardened Repository by Veeam</a></li>
+</ul>
+<h2 id="10-final-thoughts">10. Final Thoughts</h2>
+<p>Choosing the right local repository depends on your needs:</p>
+<ul>
+<li>🛡️ <strong>For immutability &amp; security</strong>: Choose <strong>Hardened Linux</strong> or <strong>MinIO with Object Lock</strong>.</li>
+<li>🪟 <strong>For quick Windows setup</strong>: Use <strong>Windows ReFS repository</strong>.</li>
+<li>🌍 <strong>For hybrid or inter-site setups</strong>: Use <strong>WireGuard + iSCSI</strong> or <strong>MinIO via S3-compatible endpoint</strong>.</li>
+</ul>
+<p>✅ Always:</p>
+<ul>
+<li>Monitor repository health.</li>
+<li>Plan for enough storage.</li>
+<li>Regularly test backup restores.</li>
+<li>Secure credentials (CHAP, SSH keys).</li>
+<li>Use job retry and validation mechanisms in Veeam.</li>
+</ul>
+<p>With the right architecture, even small environments can achieve enterprise-grade backup resilience.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-06-26</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/veeam-repo/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS" data-hashtags="Veeam,MinIO,Synology,Backup,S3,Docker"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/veeam-repo/" data-hashtag="Veeam"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://localhost:1313/posts/veeam-repo/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/veeam/">Veeam</a>,&nbsp;<a href="/tags/minio/">MinIO</a>,&nbsp;<a href="/tags/synology/">Synology</a>,&nbsp;<a href="/tags/backup/">Backup</a>,&nbsp;<a href="/tags/s3/">S3</a>,&nbsp;<a href="/tags/docker/">Docker</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/veeam/" class="prev" rel="prev" title="Veeam Backup: Best Practices and Configuration Guide"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Veeam Backup: Best Practices and Configuration Guide</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

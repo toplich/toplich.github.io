@@ -8,6 +8,20 @@
     <language>en</language>
     <atom:link href="https://blog.topli.ch/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Backup</title>
+      <link>https://blog.topli.ch/categories/backup/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/backup/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Infrastructure</title>
+      <link>https://blog.topli.ch/categories/infrastructure/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/infrastructure/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Networking</title>
       <link>https://blog.topli.ch/categories/networking/</link>
       <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>

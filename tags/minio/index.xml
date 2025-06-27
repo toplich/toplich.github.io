@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MinIO on IT Blog</title>
+    <link>http://localhost:1313/tags/minio/</link>
+    <description>Recent content in MinIO on IT Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 26 Jun 2025 12:00:00 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/minio/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS</title>
+      <link>http://localhost:1313/posts/veeam-repo/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/posts/veeam-repo/</guid>
+      <description>Step-by-step guide to manually deploy a hardened, S3-compatible backup repository for Veeam using MinIO with Object Lock and TLS on Synology NAS.</description>
+    </item>
+  </channel>
+</rss>
