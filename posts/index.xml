@@ -9,7 +9,9 @@
     <pubDate>Thu, 26 Jun 2025 12:00:00 &#43;0200</pubDate>
     <author>Vitalii Stepchuk</author>
     <guid>https://blog.topli.ch/posts/veeam/</guid>
-    <description><![CDATA[Best practices and secure architecture patterns for deploying Veeam Backup &amp; Replication in local and remote environments.]]></description>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/veeam.png" referrerpolicy="no-referrer">
+            </div>Best practices and secure architecture patterns for deploying Veeam Backup &amp; Replication in local and remote environments.]]></description>
 </item>
 <item>
     <title>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</title>
