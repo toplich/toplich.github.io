@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="http://localhost:1313/posts/veeam-repo/">
+        <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/veeam-repo/">
   <meta property="og:site_name" content="IT Blog">
-  <meta property="og:title" content="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS">
-  <meta property="og:description" content="Step-by-step guide to manually deploy a hardened, S3-compatible backup repository for Veeam using MinIO with Object Lock and TLS on Synology NAS.">
+  <meta property="og:title" content="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS">
+  <meta property="og:description" content="Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -21,24 +21,24 @@
     <meta property="article:tag" content="Docker">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS">
-  <meta name="twitter:description" content="Step-by-step guide to manually deploy a hardened, S3-compatible backup repository for Veeam using MinIO with Object Lock and TLS on Synology NAS.">
+  <meta name="twitter:title" content="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS">
+  <meta name="twitter:description" content="Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.">
 <meta name="application-name" content="IT blog">
 <meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/posts/veeam-repo/" /><link rel="prev" href="http://localhost:1313/posts/veeam/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/veeam-repo/" /><link rel="prev" href="https://blog.topli.ch/posts/wireguard-docker/" /><link rel="next" href="https://blog.topli.ch/posts/veeam/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS",
+        "headline": "Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS",
         "inLanguage": "en",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http:\/\/localhost:1313\/posts\/veeam-repo\/"
-        },"genre": "posts","keywords": "Veeam, MinIO, Synology, Backup, S3, Docker","wordcount":  2342 ,
-        "url": "http:\/\/localhost:1313\/posts\/veeam-repo\/","datePublished": "2025-06-26T12:00:00+02:00","dateModified": "2025-06-26T12:00:00+02:00","publisher": {
+            "@id": "https:\/\/blog.topli.ch\/posts\/veeam-repo\/"
+        },"genre": "posts","keywords": "Veeam, MinIO, Synology, Backup, S3, Docker","wordcount":  2288 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/veeam-repo\/","datePublished": "2025-06-26T12:00:00+02:00","dateModified": "2025-06-26T12:00:00+02:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -123,18 +123,24 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/backup/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Backup</a>&nbsp;<a href="/categories/infrastructure/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Infrastructure</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-26">2025-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2342 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-06-26">2025-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2288 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;11 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/veeam-repo.png"
+        data-srcset="/images/veeam-repo.png, /images/veeam-repo.png 1.5x, /images/veeam-repo.png 2x"
+        data-sizes="auto"
+        alt="/images/veeam-repo.png"
+        title="/images/veeam-repo.png" /></div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#-table-of-contents">📚 Table of Contents</a></li>
     <li><a href="#1-direct-attached-storage-das">1. Direct-Attached Storage (DAS)</a>
       <ul>
         <li><a href="#description">Description:</a></li>
@@ -190,22 +196,7 @@
     <li><a href="#10-final-thoughts">10. Final Thoughts</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="local-backup-repositories-in-veeam-types-and-configuration-guide">Local Backup Repositories in Veeam: Types and Configuration Guide</h1>
-<h2 id="-table-of-contents">📚 Table of Contents</h2>
-<ol>
-<li><a href="#1-direct-attached-storage-das" rel="">Direct-Attached Storage (DAS)</a></li>
-<li><a href="#2-nas-smb-or-nfs-share" rel="">NAS (SMB or NFS Share)</a></li>
-<li><a href="#3-windows-backup-repository" rel="">Windows Backup Repository</a></li>
-<li><a href="#4-hardened-linux-repository-immutability-enabled" rel="">Hardened Linux Repository (Immutability Enabled)</a></li>
-<li><a href="#5-s3-compatible-repository-with-minio-docker-on-synology-nas" rel="">S3-Compatible Repository with MinIO (Docker on Synology NAS)</a></li>
-<li><a href="#6-iscsi-based-repository-over-wireguard-tunnel" rel="">iSCSI-Based Repository over WireGuard Tunnel</a></li>
-<li><a href="#7-immutability--compatibility-matrix" rel="">Immutability &amp; Compatibility Matrix</a></li>
-<li><a href="#8-feature-comparison-table" rel="">Feature Comparison Table</a></li>
-<li><a href="#9-references-and-links" rel="">References and Links</a></li>
-<li><a href="#10-final-thoughts" rel="">Final Thoughts</a></li>
-</ol>
-<hr>
-<h2 id="1-direct-attached-storage-das">1. Direct-Attached Storage (DAS)</h2>
+            </div><div class="content" id="content"><h2 id="1-direct-attached-storage-das">1. Direct-Attached Storage (DAS)</h2>
 <h3 id="description">Description:</h3>
 <p>DAS refers to a storage device (e.g., internal HDDs, USB drives, or RAID arrays) that is physically connected to the Veeam Backup Server or Backup Proxy.</p>
 <h3 id="use-case">Use case:</h3>
@@ -1264,7 +1255,7 @@ Together, these elements make this architecture a production-ready, fault-tolera
                             <a class="link-to-markdown" href="/posts/veeam-repo/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS" data-hashtags="Veeam,MinIO,Synology,Backup,S3,Docker"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/veeam-repo/" data-hashtag="Veeam"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="http://localhost:1313/posts/veeam-repo/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/veeam-repo/" data-title="How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/veeam-repo/" data-title="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS" data-hashtags="Veeam,MinIO,Synology,Backup,S3,Docker"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/veeam-repo/" data-hashtag="Veeam"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/veeam-repo/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/veeam-repo/" data-title="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/veeam-repo/" data-title="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/veeam-repo/" data-title="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/veeam-repo/" data-title="Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS" data-image="/images/veeam-repo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -1276,9 +1267,12 @@ Together, these elements make this architecture a production-ready, fault-tolera
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/veeam/" class="prev" rel="prev" title="Veeam Backup: Best Practices and Configuration Guide"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Veeam Backup: Best Practices and Configuration Guide</a></div>
+    <div class="post-nav"><a href="/posts/wireguard-docker/" class="prev" rel="prev" title="How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</a>
+            <a href="/posts/veeam/" class="next" rel="next" title="Veeam Backup: Best Practices and Configuration Guide">Veeam Backup: Best Practices and Configuration Guide<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-</article></div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.147.5">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
@@ -1290,5 +1284,5 @@ Together, these elements make this architecture a production-ready, fault-tolera
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
             </a>
-        </div><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

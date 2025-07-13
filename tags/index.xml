@@ -15,6 +15,13 @@
       <description></description>
     </item>
     <item>
+      <title>Docker</title>
+      <link>https://blog.topli.ch/tags/docker/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/docker/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Immutability</title>
       <link>https://blog.topli.ch/tags/immutability/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
@@ -26,6 +33,13 @@
       <link>https://blog.topli.ch/tags/linux/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MinIO</title>
+      <link>https://blog.topli.ch/tags/minio/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/minio/</guid>
       <description></description>
     </item>
     <item>
@@ -43,6 +57,13 @@
       <description></description>
     </item>
     <item>
+      <title>Synology</title>
+      <link>https://blog.topli.ch/tags/synology/</link>
+      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/synology/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Veeam</title>
       <link>https://blog.topli.ch/tags/veeam/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
@@ -57,13 +78,6 @@
       <description></description>
     </item>
     <item>
-      <title>Docker</title>
-      <link>https://blog.topli.ch/tags/docker/</link>
-      <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/tags/docker/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>NAS</title>
       <link>https://blog.topli.ch/tags/nas/</link>
       <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
@@ -75,13 +89,6 @@
       <link>https://blog.topli.ch/tags/networking/</link>
       <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/tags/networking/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Synology</title>
-      <link>https://blog.topli.ch/tags/synology/</link>
-      <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/tags/synology/</guid>
       <description></description>
     </item>
     <item>

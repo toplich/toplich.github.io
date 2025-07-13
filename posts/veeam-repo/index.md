@@ -1,22 +1,5 @@
-# How to Build a Secure S3 Repository for Veeam Using MinIO on Synology NAS
+# Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS
 
-
-# Local Backup Repositories in Veeam: Types and Configuration Guide
-
-## 📚 Table of Contents
-
-1. [Direct-Attached Storage (DAS)](#1-direct-attached-storage-das)
-2. [NAS (SMB or NFS Share)](#2-nas-smb-or-nfs-share)
-3. [Windows Backup Repository](#3-windows-backup-repository)
-4. [Hardened Linux Repository (Immutability Enabled)](#4-hardened-linux-repository-immutability-enabled)
-5. [S3-Compatible Repository with MinIO (Docker on Synology NAS)](#5-s3-compatible-repository-with-minio-docker-on-synology-nas)
-6. [iSCSI-Based Repository over WireGuard Tunnel](#6-iscsi-based-repository-over-wireguard-tunnel)
-7. [Immutability & Compatibility Matrix](#7-immutability--compatibility-matrix)
-8. [Feature Comparison Table](#8-feature-comparison-table)
-9. [References and Links](#9-references-and-links)
-10. [Final Thoughts](#10-final-thoughts)
-
----
 
 ## 1. Direct-Attached Storage (DAS)
 
