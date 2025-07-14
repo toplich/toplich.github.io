@@ -178,17 +178,17 @@
         <li><a href="#configuration-summary">Configuration Summary:</a></li>
       </ul>
     </li>
-    <li><a href="#6-iscsi-based-repository-over-wireguard-tunnel">6. iSCSI-Based Repository over WireGuard Tunnel</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#-use-case">🔧 Use Case</a></li>
-    <li><a href="#-overview">🔎 Overview</a></li>
-    <li><a href="#-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</a></li>
-    <li><a href="#-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</a></li>
-    <li><a href="#-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</a></li>
-    <li><a href="#-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</a></li>
-    <li><a href="#-performance--reliability-tips">📊 Performance &amp; Reliability Tips</a></li>
+    <li><a href="#6-iscsi-based-repository-over-wireguard-tunnel">6. iSCSI-Based Repository over WireGuard Tunnel</a>
+      <ul>
+        <li><a href="#-use-case">🔧 Use Case</a></li>
+        <li><a href="#-overview">🔎 Overview</a></li>
+        <li><a href="#-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</a></li>
+        <li><a href="#-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</a></li>
+        <li><a href="#-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</a></li>
+        <li><a href="#-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</a></li>
+        <li><a href="#-performance--reliability-tips">📊 Performance &amp; Reliability Tips</a></li>
+      </ul>
+    </li>
     <li><a href="#-summary">🔗 Summary</a></li>
     <li><a href="#7-immutability--compatibility-matrix">7. Immutability &amp; Compatibility Matrix</a></li>
     <li><a href="#8-feature-comparison-table">8. Feature Comparison Table</a></li>
@@ -593,10 +593,10 @@ Create <code>docker-compose.yml</code>:</p>
 <p>🔗 Optional: Use this MinIO S3 target as Capacity Tier in a Scale-Out Backup Repository (SOBR).</p></blockquote>
 <hr>
 <h2 id="6-iscsi-based-repository-over-wireguard-tunnel">6. iSCSI-Based Repository over WireGuard Tunnel</h2>
-<h1 id="using-veeam-backup-copy-via-iscsi-target-on-synology-nas-over-wireguard-tunnel">Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel</h1>
+<p>Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel</p>
 <p>In this guide, we&rsquo;ll show how to configure a secure and stable Backup Copy destination in Veeam by connecting to an iSCSI target hosted on a Synology NAS, with traffic routed through a WireGuard tunnel. This setup is ideal for inter-site backup replication, where the NAS is behind NAT or has a dynamic IP address.</p>
 <hr>
-<h2 id="-use-case">🔧 Use Case</h2>
+<h3 id="-use-case">🔧 Use Case</h3>
 
 
 
@@ -964,7 +964,7 @@ Create <code>docker-compose.yml</code>:</p>
 </div>
 <p>You want to use your Synology NAS located at a remote site as a <strong>Backup Copy repository</strong> for Veeam. However, due to dynamic WAN IP and security constraints, you need to connect via <strong>WireGuard VPN</strong>. iSCSI will be used as the transport protocol, and the target will be mounted on a Windows Server with Veeam installed.</p>
 <hr>
-<h2 id="-overview">🔎 Overview</h2>
+<h3 id="-overview">🔎 Overview</h3>
 <ul>
 <li>📁 Synology NAS with iSCSI Target enabled (LUN created)</li>
 <li>🛠 Windows Server with Veeam Backup &amp; Replication</li>
@@ -973,7 +973,7 @@ Create <code>docker-compose.yml</code>:</p>
 <li>🌐 ReFS-formatted volume used as repository</li>
 </ul>
 <hr>
-<h2 id="-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</h2>
+<h3 id="-step-1-prepare-synology-nas">📂 Step 1: Prepare Synology NAS</h3>
 <ol>
 <li>Install <strong>SAN Manager</strong> (if not already installed)</li>
 <li>Create a <strong>LUN</strong> and <strong>iSCSI Target</strong></li>
@@ -982,7 +982,7 @@ Create <code>docker-compose.yml</code>:</p>
 <li>Note internal NAS IP (e.g. <code>192.168.1.2</code>)</li>
 </ol>
 <hr>
-<h2 id="-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</h2>
+<h3 id="-step-2-set-up-wireguard-tunnel">🛂 Step 2: Set Up WireGuard Tunnel</h3>
 <p>📘 For a detailed setup on WireGuard tunnel configuration:</p>
 <ul>
 <li>
@@ -1042,7 +1042,7 @@ Use a lightweight PowerShell script to monitor the iSCSI session and automatical
 </div></li>
 </ul>
 <hr>
-<h2 id="-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</h2>
+<h3 id="-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</h3>
 <ol>
 <li>Open <strong>iSCSI Initiator</strong> on the Windows Server</li>
 <li>Enter the ** IP of Synology** (e.g. <code>192.168.1.2</code>)</li>
@@ -1052,7 +1052,7 @@ Use a lightweight PowerShell script to monitor the iSCSI session and automatical
 <li>Assign a static drive letter (e.g. <code>R:</code>)</li>
 </ol>
 <hr>
-<h2 id="-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</h2>
+<h3 id="-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</h3>
 <ol>
 <li>
 <p>Open Veeam B&amp;R Console</p>
@@ -1072,7 +1072,7 @@ Use a lightweight PowerShell script to monitor the iSCSI session and automatical
 </ol>
 <p>Use the repository as a target for <strong>Backup Copy Jobs</strong>.</p>
 <hr>
-<h2 id="-performance--reliability-tips">📊 Performance &amp; Reliability Tips</h2>
+<h3 id="-performance--reliability-tips">📊 Performance &amp; Reliability Tips</h3>
 <ul>
 <li>Use <strong>WireGuard KeepAlive</strong>: <code>PersistentKeepalive = 25</code></li>
 <li>Enable <strong>iSCSI MPIO</strong> on Windows for redundancy (optional)</li>

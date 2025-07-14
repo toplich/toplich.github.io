@@ -268,13 +268,13 @@ Secure backup target with immutability, suitable for use with Veeam's Object Sto
 ---
 
 ## 6. iSCSI-Based Repository over WireGuard Tunnel
-# Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel
+ Using Veeam Backup Copy via iSCSI Target on Synology NAS over WireGuard Tunnel
 
 In this guide, we'll show how to configure a secure and stable Backup Copy destination in Veeam by connecting to an iSCSI target hosted on a Synology NAS, with traffic routed through a WireGuard tunnel. This setup is ideal for inter-site backup replication, where the NAS is behind NAT or has a dynamic IP address.
 
 ---
 
-## 🔧 Use Case
+### 🔧 Use Case
 
 ```goat
 ┌──────────────────┐             WireGuard Tunnel            ┌──────────────────┐
@@ -294,7 +294,7 @@ You want to use your Synology NAS located at a remote site as a **Backup Copy re
 
 ---
 
-## 🔎 Overview
+### 🔎 Overview
 
 * 📁 Synology NAS with iSCSI Target enabled (LUN created)
 * 🛠 Windows Server with Veeam Backup & Replication
@@ -304,7 +304,7 @@ You want to use your Synology NAS located at a remote site as a **Backup Copy re
 
 ---
 
-## 📂 Step 1: Prepare Synology NAS
+### 📂 Step 1: Prepare Synology NAS
 
 1. Install **SAN Manager** (if not already installed)
 2. Create a **LUN** and **iSCSI Target**
@@ -314,7 +314,7 @@ You want to use your Synology NAS located at a remote site as a **Backup Copy re
 
 ---
 
-## 🛂 Step 2: Set Up WireGuard Tunnel
+### 🛂 Step 2: Set Up WireGuard Tunnel
 
 📘 For a detailed setup on WireGuard tunnel configuration:
 
@@ -362,7 +362,7 @@ Use a lightweight PowerShell script to monitor the iSCSI session and automatical
   ```
 ---
 
-## 🛠 Step 3: Connect Windows to iSCSI Target
+### 🛠 Step 3: Connect Windows to iSCSI Target
 
 1. Open **iSCSI Initiator** on the Windows Server
 2. Enter the \*\* IP of Synology\*\* (e.g. `192.168.1.2`)
@@ -373,7 +373,7 @@ Use a lightweight PowerShell script to monitor the iSCSI session and automatical
 
 ---
 
-## 📄 Step 4: Add Repository in Veeam
+### 📄 Step 4: Add Repository in Veeam
 
 1. Open Veeam B\&R Console
 2. Go to **Backup Infrastructure > Backup Repositories**
@@ -388,7 +388,7 @@ Use the repository as a target for **Backup Copy Jobs**.
 
 ---
 
-## 📊 Performance & Reliability Tips
+### 📊 Performance & Reliability Tips
 
 * Use **WireGuard KeepAlive**: `PersistentKeepalive = 25`
 * Enable **iSCSI MPIO** on Windows for redundancy (optional)
