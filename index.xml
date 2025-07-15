@@ -3,9 +3,19 @@
         <title>IT Blog</title>
         <link>https://blog.topli.ch/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 26 Jun 2025 12:00:00 &#43;0200</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 13 Jul 2025 12:00:00 &#43;0200</lastBuildDate>
             <atom:link href="https://blog.topli.ch/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</title>
+    <link>https://blog.topli.ch/posts/veeam-repo/</link>
+    <pubDate>Sun, 13 Jul 2025 12:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/veeam-repo/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/veeam-repo.png" referrerpolicy="no-referrer">
+            </div>Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.]]></description>
+</item>
+<item>
     <title>Veeam Backup: Best Practices and Configuration Guide</title>
     <link>https://blog.topli.ch/posts/veeam/</link>
     <pubDate>Thu, 26 Jun 2025 12:00:00 &#43;0200</pubDate>
@@ -14,16 +24,6 @@
     <description><![CDATA[<div class="featured-image">
                 <img src="/images/veeam.png" referrerpolicy="no-referrer">
             </div>Best practices and secure architecture patterns for deploying Veeam Backup &amp; Replication in local and remote environments.]]></description>
-</item>
-<item>
-    <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</title>
-    <link>https://blog.topli.ch/posts/veeam-repo/</link>
-    <pubDate>Thu, 26 Jun 2025 12:00:00 &#43;0200</pubDate>
-    <author>Vitalii Stepchuk</author>
-    <guid>https://blog.topli.ch/posts/veeam-repo/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/images/veeam-repo.png" referrerpolicy="no-referrer">
-            </div>Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.]]></description>
 </item>
 <item>
     <title>How to Run a WireGuard Tunnel Inside a Docker Container Without Kernel Support</title>

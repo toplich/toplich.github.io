@@ -6,21 +6,21 @@
     <description>Recent content in Veeam on IT Blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 26 Jun 2025 12:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 13 Jul 2025 12:00:00 +0200</lastBuildDate>
     <atom:link href="https://blog.topli.ch/tags/veeam/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</title>
+      <link>https://blog.topli.ch/posts/veeam-repo/</link>
+      <pubDate>Sun, 13 Jul 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/posts/veeam-repo/</guid>
+      <description>Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.</description>
+    </item>
     <item>
       <title>Veeam Backup: Best Practices and Configuration Guide</title>
       <link>https://blog.topli.ch/posts/veeam/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/posts/veeam/</guid>
       <description>Best practices and secure architecture patterns for deploying Veeam Backup &amp;amp; Replication in local and remote environments.</description>
-    </item>
-    <item>
-      <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</title>
-      <link>https://blog.topli.ch/posts/veeam-repo/</link>
-      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/posts/veeam-repo/</guid>
-      <description>Complete hands-on guide to configuring secure local backup repositories for Veeam, including Hardened Linux, MinIO S3 with Object Lock, and iSCSI over WireGuard on Synology NAS.</description>
     </item>
   </channel>
 </rss>

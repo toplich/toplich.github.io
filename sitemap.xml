@@ -2,21 +2,21 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://blog.topli.ch/categories/backup/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/backup/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/docker/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
+            <loc>https://blog.topli.ch/categories/backup/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/backup/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/docker/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/categories/infrastructure/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/minio/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/posts/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/s3/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/synology/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/tags/veeam/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>https://blog.topli.ch/posts/veeam-repo/</loc><lastmod>2025-07-13T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>https://blog.topli.ch/tags/immutability/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/categories/infrastructure/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
             <loc>https://blog.topli.ch/tags/linux/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/minio/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/posts/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/s3/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
             <loc>https://blog.topli.ch/tags/security/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/synology/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/tags/veeam/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
             <loc>https://blog.topli.ch/posts/veeam/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
-            <loc>https://blog.topli.ch/posts/veeam-repo/</loc><lastmod>2025-06-26T12:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url><url>
             <loc>https://blog.topli.ch/tags/devops/</loc><lastmod>2025-06-09T08:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://blog.topli.ch/posts/wireguard-docker/</loc><lastmod>2025-06-09T08:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
             <loc>https://blog.topli.ch/tags/nas/</loc><lastmod>2025-06-09T08:00:00&#43;02:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
