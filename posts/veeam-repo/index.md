@@ -419,7 +419,7 @@ Avoid storing CHAP secrets in plaintext — use Windows Credential Manager or se
 
 ---
 
-## 🔗 Summary
+### 🔗 Summary
 
 This setup allows using a Synology NAS as a reliable Backup Copy target for Veeam over a secure WireGuard VPN.  
 It leverages iSCSI to expose a block-level device, giving better performance and integrity than SMB/NFS, especially over WAN.  

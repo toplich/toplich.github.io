@@ -187,9 +187,9 @@
         <li><a href="#-step-3-connect-windows-to-iscsi-target">🛠 Step 3: Connect Windows to iSCSI Target</a></li>
         <li><a href="#-step-4-add-repository-in-veeam">📄 Step 4: Add Repository in Veeam</a></li>
         <li><a href="#-performance--reliability-tips">📊 Performance &amp; Reliability Tips</a></li>
+        <li><a href="#-summary">🔗 Summary</a></li>
       </ul>
     </li>
-    <li><a href="#-summary">🔗 Summary</a></li>
     <li><a href="#7-immutability--compatibility-matrix">7. Immutability &amp; Compatibility Matrix</a></li>
     <li><a href="#8-feature-comparison-table">8. Feature Comparison Table</a></li>
     <li><a href="#9-references-and-links">9. References and Links</a></li>
@@ -1094,7 +1094,7 @@ Activate health checks to validate backups and detect silent errors.</p>
 <p>✔️ Secure CHAP credentials
 Avoid storing CHAP secrets in plaintext — use Windows Credential Manager or secure vaults.</p>
 <hr>
-<h2 id="-summary">🔗 Summary</h2>
+<h3 id="-summary">🔗 Summary</h3>
 <p>This setup allows using a Synology NAS as a reliable Backup Copy target for Veeam over a secure WireGuard VPN.<br>
 It leverages iSCSI to expose a block-level device, giving better performance and integrity than SMB/NFS, especially over WAN.<br>
 The use of ReFS on the repository ensures fast cloning and enhanced integrity, while automated watchdog mechanisms help keep both the VPN tunnel and iSCSI session continuously available.<br>
