@@ -8,6 +8,111 @@
     <language>en</language>
     <atom:link href="https://blog.topli.ch/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Cloudflare</title>
+      <link>https://blog.topli.ch/tags/cloudflare/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/cloudflare/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Contact Form</title>
+      <link>https://blog.topli.ch/tags/contact-form/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/contact-form/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Email</title>
+      <link>https://blog.topli.ch/tags/email/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/email/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>GitHub Pages</title>
+      <link>https://blog.topli.ch/tags/github-pages/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/github-pages/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hugo</title>
+      <link>https://blog.topli.ch/tags/hugo/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/hugo/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Resend</title>
+      <link>https://blog.topli.ch/tags/resend/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/resend/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Static Site</title>
+      <link>https://blog.topli.ch/tags/static-site/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/static-site/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>CLI</title>
+      <link>https://blog.topli.ch/tags/cli/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/cli/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://blog.topli.ch/tags/linux/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/linux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Productivity</title>
+      <link>https://blog.topli.ch/tags/productivity/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/productivity/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Terminal</title>
+      <link>https://blog.topli.ch/tags/terminal/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/terminal/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Text Editor</title>
+      <link>https://blog.topli.ch/tags/text-editor/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/text-editor/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Vim</title>
+      <link>https://blog.topli.ch/tags/vim/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/vim/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DevOps</title>
+      <link>https://blog.topli.ch/tags/devops/</link>
+      <pubDate>Tue, 15 Jul 2025 23:30:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/devops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tmux</title>
+      <link>https://blog.topli.ch/tags/tmux/</link>
+      <pubDate>Tue, 15 Jul 2025 23:30:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/tmux/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Backup</title>
       <link>https://blog.topli.ch/tags/backup/</link>
       <pubDate>Sun, 13 Jul 2025 12:00:00 +0200</pubDate>
@@ -57,24 +162,10 @@
       <description></description>
     </item>
     <item>
-      <title>Linux</title>
-      <link>https://blog.topli.ch/tags/linux/</link>
-      <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/tags/linux/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Security</title>
       <link>https://blog.topli.ch/tags/security/</link>
       <pubDate>Thu, 26 Jun 2025 12:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/tags/security/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>DevOps</title>
-      <link>https://blog.topli.ch/tags/devops/</link>
-      <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/tags/devops/</guid>
       <description></description>
     </item>
     <item>

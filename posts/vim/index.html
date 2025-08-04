@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Vim Quick Start Guide - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/vim/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Vim Quick Start Guide">
+  <meta property="og:description" content="A minimal guide to help you start using Vim effectively — modes, commands, and keybindings.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-07-15T23:45:00+02:00">
+    <meta property="article:modified_time" content="2025-07-15T23:45:00+02:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Terminal">
+    <meta property="article:tag" content="Vim">
+    <meta property="article:tag" content="CLI">
+    <meta property="article:tag" content="Text Editor">
+    <meta property="article:tag" content="Productivity">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Vim Quick Start Guide">
+  <meta name="twitter:description" content="A minimal guide to help you start using Vim effectively — modes, commands, and keybindings.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/vim/" /><link rel="prev" href="https://blog.topli.ch/posts/tmux/" /><link rel="next" href="https://blog.topli.ch/posts/website/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Vim Quick Start Guide",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/vim\/"
+        },"genre": "posts","keywords": "Linux, Terminal, Vim, CLI, Text Editor, Productivity","wordcount":  308 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/vim\/","datePublished": "2025-07-15T23:45:00+02:00","dateModified": "2025-07-15T23:45:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Vim Quick Start Guide</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/linux/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-07-15">2025-07-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;308 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/vim-logo.png"
+        data-srcset="/images/vim-logo.png, /images/vim-logo.png 1.5x, /images/vim-logo.png 2x"
+        data-sizes="auto"
+        alt="/images/vim-logo.png"
+        title="/images/vim-logo.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#-understanding-vim-modes">🧭 Understanding Vim Modes</a></li>
+    <li><a href="#-opening-a-file">📂 Opening a File</a></li>
+    <li><a href="#-entering-insert-mode">✍️ Entering Insert Mode</a></li>
+    <li><a href="#-returning-to-normal-mode">⎋ Returning to Normal Mode</a></li>
+    <li><a href="#-saving-and-quitting">💾 Saving and Quitting</a></li>
+    <li><a href="#-navigation-shortcuts-normal-mode">🔁 Navigation Shortcuts (Normal Mode)</a></li>
+    <li><a href="#-editing-text-normal-mode">📌 Editing Text (Normal Mode)</a></li>
+    <li><a href="#-useful-vim-settings-vimrc">🔧 Useful Vim Settings (<code>.vimrc</code>)</a></li>
+    <li><a href="#-resources">📚 Resources</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="-quick-guide-to-vim">✍️ Quick Guide to <code>vim</code></h1>
+<p><code>vim</code> is a powerful, keyboard-driven text editor found on almost every Unix-like system. It&rsquo;s fast, lightweight, and essential for sysadmins and developers.</p>
+<hr>
+<h2 id="-understanding-vim-modes">🧭 Understanding Vim Modes</h2>
+<p>Vim has <strong>3 primary modes</strong>:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Mode</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Normal</strong></td>
+          <td>Navigation and commands</td>
+      </tr>
+      <tr>
+          <td><strong>Insert</strong></td>
+          <td>Typing/editing text</td>
+      </tr>
+      <tr>
+          <td><strong>Visual</strong></td>
+          <td>Selecting text</td>
+      </tr>
+  </tbody>
+</table>
+<p>You start in <strong>Normal mode</strong> by default.</p>
+<hr>
+<h2 id="-opening-a-file">📂 Opening a File</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">vim myfile.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This opens the file in <strong>Normal mode</strong>.</p>
+<hr>
+<h2 id="-entering-insert-mode">✍️ Entering Insert Mode</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Key</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>i</code></td>
+          <td>Insert before cursor</td>
+      </tr>
+      <tr>
+          <td><code>a</code></td>
+          <td>Append after cursor</td>
+      </tr>
+      <tr>
+          <td><code>o</code></td>
+          <td>Open new line below</td>
+      </tr>
+  </tbody>
+</table>
+<p>💡 Tip: You’ll see <code>-- INSERT --</code> at the bottom of the screen when in Insert mode.</p>
+<hr>
+<h2 id="-returning-to-normal-mode">⎋ Returning to Normal Mode</h2>
+<ul>
+<li>Press <code>Esc</code> to exit Insert or Visual mode and return to Normal mode.</li>
+</ul>
+<hr>
+<h2 id="-saving-and-quitting">💾 Saving and Quitting</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Command</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>:w</code></td>
+          <td>Save (write)</td>
+      </tr>
+      <tr>
+          <td><code>:q</code></td>
+          <td>Quit</td>
+      </tr>
+      <tr>
+          <td><code>:wq</code> / <code>ZZ</code></td>
+          <td>Save and quit</td>
+      </tr>
+      <tr>
+          <td><code>:q!</code></td>
+          <td>Quit without saving</td>
+      </tr>
+  </tbody>
+</table>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw" aria-hidden="true"></i>Tip for Beginners<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">To exit Vim quickly, press <code>Esc</code>, then type <code>:q!</code> and hit <code>Enter</code>.</div>
+        </div>
+    </div>
+<hr>
+<h2 id="-navigation-shortcuts-normal-mode">🔁 Navigation Shortcuts (Normal Mode)</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Key</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>h</code>, <code>j</code>, <code>k</code>, <code>l</code></td>
+          <td>Move left, down, up, right</td>
+      </tr>
+      <tr>
+          <td><code>gg</code></td>
+          <td>Go to top of file</td>
+      </tr>
+      <tr>
+          <td><code>G</code></td>
+          <td>Go to end of file</td>
+      </tr>
+      <tr>
+          <td><code>0</code> / <code>^</code> / <code>$</code></td>
+          <td>Start / first char / end of line</td>
+      </tr>
+      <tr>
+          <td><code>w</code>, <code>b</code></td>
+          <td>Next / previous word</td>
+      </tr>
+      <tr>
+          <td><code>Ctrl+d/u</code></td>
+          <td>Scroll half page down/up</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-editing-text-normal-mode">📌 Editing Text (Normal Mode)</h2>
+<table>
+  <thead>
+      <tr>
+          <th>Key</th>
+          <th>Action</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>dd</code></td>
+          <td>Delete (cut) current line</td>
+      </tr>
+      <tr>
+          <td><code>yy</code></td>
+          <td>Copy current line</td>
+      </tr>
+      <tr>
+          <td><code>p</code></td>
+          <td>Paste after cursor</td>
+      </tr>
+      <tr>
+          <td><code>u</code> / <code>Ctrl+r</code></td>
+          <td>Undo / redo</td>
+      </tr>
+      <tr>
+          <td><code>x</code></td>
+          <td>Delete character under cursor</td>
+      </tr>
+      <tr>
+          <td><code>r&lt;char&gt;</code></td>
+          <td>Replace character</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="-useful-vim-settings-vimrc">🔧 Useful Vim Settings (<code>.vimrc</code>)</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vim" data-lang="vim"><span class="line"><span class="cl"><span class="k">set</span> <span class="nx">number</span>           <span class="c">&#34; show line numbers</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nx">tabstop</span><span class="p">=</span><span class="m">4</span>        <span class="c">&#34; 4 spaces per tab</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nx">expandtab</span>        <span class="c">&#34; convert tabs to spaces</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nx">autoindent</span>       <span class="c">&#34; smart indentation</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nx">mouse</span><span class="p">=</span><span class="nx">a</span>          <span class="c">&#34; enable mouse support</span>
+</span></span><span class="line"><span class="cl"><span class="k">syntax</span> <span class="nx">on</span>            <span class="c">&#34; enable syntax highlighting</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="-resources">📚 Resources</h2>
+<ul>
+<li>Run <code>vimtutor</code> in terminal for an interactive tutorial.</li>
+<li>Official site: <a href="https://www.vim.org" target="_blank" rel="noopener noreffer ">https://www.vim.org</a></li>
+<li>Cheatsheet: <a href="https://vim.rtorr.com" target="_blank" rel="noopener noreffer ">https://vim.rtorr.com</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-07-15</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/vim/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/vim/" data-title="Vim Quick Start Guide" data-hashtags="Linux,Terminal,Vim,CLI,Text Editor,Productivity"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/vim/" data-hashtag="Linux"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/vim/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/vim/" data-title="Vim Quick Start Guide" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/vim/" data-title="Vim Quick Start Guide"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/vim/" data-title="Vim Quick Start Guide"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/vim/" data-title="Vim Quick Start Guide" data-image="/images/vim-logo.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/linux/">Linux</a>,&nbsp;<a href="/tags/terminal/">Terminal</a>,&nbsp;<a href="/tags/vim/">Vim</a>,&nbsp;<a href="/tags/cli/">CLI</a>,&nbsp;<a href="/tags/text-editor/">Text Editor</a>,&nbsp;<a href="/tags/productivity/">Productivity</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/tmux/" class="prev" rel="prev" title="tmux Quick Start Guide"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>tmux Quick Start Guide</a>
+            <a href="/posts/website/" class="next" rel="next" title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend">Build a Modern Hugo Website with GitHub, Cloudflare, and Resend<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.148.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -8,6 +8,34 @@
     <language>en</language>
     <atom:link href="https://blog.topli.ch/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Infrastructure</title>
+      <link>https://blog.topli.ch/categories/infrastructure/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/infrastructure/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Open Source</title>
+      <link>https://blog.topli.ch/categories/open-source/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/open-source/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Web Development</title>
+      <link>https://blog.topli.ch/categories/web-development/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/web-development/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://blog.topli.ch/categories/linux/</link>
+      <pubDate>Tue, 15 Jul 2025 23:45:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/linux/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Backup</title>
       <link>https://blog.topli.ch/categories/backup/</link>
       <pubDate>Sun, 13 Jul 2025 12:00:00 +0200</pubDate>
@@ -15,24 +43,10 @@
       <description></description>
     </item>
     <item>
-      <title>Infrastructure</title>
-      <link>https://blog.topli.ch/categories/infrastructure/</link>
-      <pubDate>Sun, 13 Jul 2025 12:00:00 +0200</pubDate>
-      <guid>https://blog.topli.ch/categories/infrastructure/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Networking</title>
       <link>https://blog.topli.ch/categories/networking/</link>
       <pubDate>Mon, 09 Jun 2025 08:00:00 +0200</pubDate>
       <guid>https://blog.topli.ch/categories/networking/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Linux</title>
-      <link>https://blog.topli.ch/categories/linux/</link>
-      <pubDate>Wed, 28 May 2025 00:00:00 +0000</pubDate>
-      <guid>https://blog.topli.ch/categories/linux/</guid>
       <description></description>
     </item>
   </channel>

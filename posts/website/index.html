@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Build a Modern Hugo Website with GitHub, Cloudflare, and Resend - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/website/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend">
+  <meta property="og:description" content="Step-by-step guide to building and deploying a multilingual Hugo site with GitHub Pages, Cloudflare CDN, and Resend for email integration.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-04T16:00:00+02:00">
+    <meta property="article:modified_time" content="2025-08-04T16:00:00+02:00">
+    <meta property="article:tag" content="Hugo">
+    <meta property="article:tag" content="GitHub Pages">
+    <meta property="article:tag" content="Cloudflare">
+    <meta property="article:tag" content="Resend">
+    <meta property="article:tag" content="Static Site">
+    <meta property="article:tag" content="Email">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend">
+  <meta name="twitter:description" content="Step-by-step guide to building and deploying a multilingual Hugo site with GitHub Pages, Cloudflare CDN, and Resend for email integration.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/website/" /><link rel="prev" href="https://blog.topli.ch/posts/vim/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Build a Modern Hugo Website with GitHub, Cloudflare, and Resend",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/website\/"
+        },"genre": "posts","keywords": "Hugo, GitHub Pages, Cloudflare, Resend, Static Site, Email, Contact Form","wordcount":  1959 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/website\/","datePublished": "2025-08-04T16:00:00+02:00","dateModified": "2025-08-04T16:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Build a Modern Hugo Website with GitHub, Cloudflare, and Resend</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/web-development/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Web Development</a>&nbsp;<a href="/categories/open-source/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Open Source</a>&nbsp;<a href="/categories/infrastructure/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Infrastructure</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-08-04">2025-08-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1959 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;10 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/hugo-cloudflare-resend.png"
+        data-srcset="/images/hugo-cloudflare-resend.png, /images/hugo-cloudflare-resend.png 1.5x, /images/hugo-cloudflare-resend.png 2x"
+        data-sizes="auto"
+        alt="/images/hugo-cloudflare-resend.png"
+        title="/images/hugo-cloudflare-resend.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-introduction">1. Introduction</a>
+      <ul>
+        <li><a href="#-who-is-this-for">✅ Who is this for?</a></li>
+        <li><a href="#-why-this-stack">💡 Why this stack?</a></li>
+        <li><a href="#-what-will-you-learn">📦 What will you learn?</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-setup">2. Setup</a>
+      <ul>
+        <li><a href="#-requirements">🛠️ Requirements</a></li>
+        <li><a href="#-create-a-new-hugo-site">🧱 Create a new Hugo site</a></li>
+        <li><a href="#-install-hugo-blox-theme">🎨 Install Hugo Blox theme</a></li>
+        <li><a href="#-basic-configuration">⚙️ Basic configuration</a></li>
+        <li><a href="#-run-local-server">🚀 Run local server</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-content-management">3. Content Management</a>
+      <ul>
+        <li><a href="#-content-structure">🗂️ Content structure</a></li>
+        <li><a href="#-creating-a-new-page">✍️ Creating a new page</a></li>
+        <li><a href="#-page-types">📄 Page types</a></li>
+        <li><a href="#-navigation-menu">🧭 Navigation menu</a></li>
+        <li><a href="#-multilingual-setup">🌍 Multilingual setup</a></li>
+        <li><a href="#-preview-your-content">👁️ Preview your content</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-github-deployment">4. GitHub Deployment</a>
+      <ul>
+        <li><a href="#-1-create-a-github-repository">🧑‍💻 1. Create a GitHub repository</a></li>
+        <li><a href="#-2-add-github-actions-workflow">⚙️ 2. Add GitHub Actions workflow</a></li>
+        <li><a href="#-3-configure-configyaml-for-deployment">🗂️ 3. Configure <code>config.yaml</code> for deployment</a></li>
+        <li><a href="#-4-enable-github-pages">🛡️ 4. Enable GitHub Pages</a></li>
+        <li><a href="#-5-test-the-deployment">🧪 5. Test the deployment</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-cloudflare-setup">5. Cloudflare Setup</a>
+      <ul>
+        <li><a href="#-1-add-your-domain-to-cloudflare">🌐 1. Add your domain to Cloudflare</a></li>
+        <li><a href="#-2-update-your-domains-nameservers">🧾 2. Update your domain’s nameservers</a></li>
+        <li><a href="#-3-set-dns-records">📁 3. Set DNS records</a></li>
+        <li><a href="#-4-configure-ssltls">🔒 4. Configure SSL/TLS</a></li>
+        <li><a href="#-5-set-custom-domain-in-hugo">📄 5. Set custom domain in Hugo</a></li>
+        <li><a href="#-6-optional-configure-additional-features">⚙️ 6. Optional: Configure additional features</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-resend-contact-form-integration">6. Resend Contact Form Integration</a>
+      <ul>
+        <li><a href="#-1-create-a-resend-account-and-api-key">📬 1. Create a Resend account and API key</a></li>
+        <li><a href="#-2-create-a-cloudflare-worker">🧰 2. Create a Cloudflare Worker</a></li>
+        <li><a href="#-3-set-your-resend-key-as-a-secret">🔐 3. Set your Resend key as a secret</a></li>
+        <li><a href="#-4-deploy-the-worker">🚀 4. Deploy the Worker</a></li>
+        <li><a href="#-5-add-the-contact-form-to-your-hugo-site">🖊 5. Add the contact form to your Hugo site</a></li>
+        <li><a href="#-6-test-your-form">🧪 6. Test your form</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-security--spam-protection">7. Security &amp; Spam Protection</a>
+      <ul>
+        <li><a href="#-1-enforce-request-method-and-content-type">🔒 1. Enforce request method and content type</a></li>
+        <li><a href="#-2-validate-user-input">🧪 2. Validate user input</a></li>
+        <li><a href="#-3-honeypot-field-invisible-trap">🧱 3. Honeypot field (invisible trap)</a></li>
+        <li><a href="#-4-rate-limiting-basic">⏱ 4. Rate limiting (basic)</a></li>
+        <li><a href="#-5-recaptcha-optional">🧩 5. reCAPTCHA (optional)</a></li>
+        <li><a href="#-6-email-protections-via-resend">✉️ 6. Email protections via Resend</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-conclusion--resources">8. Conclusion &amp; Resources</a>
+      <ul>
+        <li><a href="#-summary-of-key-benefits">✅ Summary of key benefits</a></li>
+        <li><a href="#-useful-resources">📚 Useful resources</a></li>
+        <li><a href="#-final-note">🙌 Final note</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="1-introduction">1. Introduction</h2>
+<p>:::info
+This guide shows how to build and deploy a modern static website using a fully open-source and serverless stack.
+:::</p>
+<p>We will use the following tools:</p>
+<ul>
+<li><strong>Hugo</strong> – fast and flexible static site generator</li>
+<li><strong>GitHub Pages</strong> – free web hosting with Git-based deployment</li>
+<li><strong>Cloudflare</strong> – DNS management, CDN, and HTTPS</li>
+<li><strong>Resend</strong> – transactional email API for contact forms</li>
+</ul>
+<h3 id="-who-is-this-for">✅ Who is this for?</h3>
+<p>This setup is ideal for:</p>
+<ul>
+<li>Community and non-profit projects</li>
+<li>Personal websites and portfolios</li>
+<li>Lightweight, multilingual static sites</li>
+</ul>
+<h3 id="-why-this-stack">💡 Why this stack?</h3>
+<ul>
+<li>Free and easy to maintain</li>
+<li>Fast performance with global CDN</li>
+<li>No backend or database needed</li>
+<li>Clean separation between content and infrastructure</li>
+</ul>
+<h3 id="-what-will-you-learn">📦 What will you learn?</h3>
+<p>This guide covers:</p>
+<ol>
+<li>Setting up a Hugo site</li>
+<li>Hosting it on GitHub Pages</li>
+<li>Securing it with Cloudflare (DNS + HTTPS)</li>
+<li>Adding a contact form with Resend via Cloudflare Worker</li>
+</ol>
+<p>Let’s get started.</p>
+<hr>
+<h2 id="2-setup">2. Setup</h2>
+<h3 id="-requirements">🛠️ Requirements</h3>
+<p>Make sure the following tools are installed:</p>
+<ul>
+<li><a href="https://golang.org/dl/" target="_blank" rel="noopener noreffer ">Go</a> (v1.20 or later)</li>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener noreffer ">Git</a></li>
+<li><a href="https://gohugo.io/getting-started/installing/" target="_blank" rel="noopener noreffer ">Hugo Extended</a> (v0.111 or later)</li>
+<li><a href="https://nodejs.org/" target="_blank" rel="noopener noreffer ">Node.js</a> (optional, for advanced features)</li>
+</ul>
+<hr>
+<h3 id="-create-a-new-hugo-site">🧱 Create a new Hugo site</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo new site mysite
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> mysite
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-install-hugo-blox-theme">🎨 Install Hugo Blox theme</h3>
+<p>Add the Hugo Blox theme as a Git submodule:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git init
+</span></span><span class="line"><span class="cl">git submodule add https://github.com/HugoBlox/hugo-blox-builder.git themes/hugo-blox-builder
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Copy the example site content:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cp -r themes/hugo-blox-builder/exampleSite/* .
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Install dependencies (optional):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">npm install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-basic-configuration">⚙️ Basic configuration</h3>
+<p>Edit the following files:</p>
+<ul>
+<li><code>config/_default/config.yaml</code> – site language, base URL</li>
+<li><code>config/_default/params.yaml</code> – branding, theme settings</li>
+<li><code>config/_default/menus.yaml</code> – navigation menu</li>
+<li><code>assets/media/</code> – upload your logo and favicon</li>
+</ul>
+<p>Example <code>baseURL</code> (for GitHub Pages):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">baseURL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;https://yourusername.github.io/mysite/&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-run-local-server">🚀 Run local server</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo server
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Visit <a href="http://localhost:1313" target="_blank" rel="noopener noreffer ">http://localhost:1313</a> to preview your site.</p>
+<hr>
+<p>:::tip
+Use GitHub Desktop or CLI to version control all changes.
+:::</p>
+<hr>
+<h2 id="3-content-management">3. Content Management</h2>
+<p>Managing content in Hugo is simple and efficient. All pages and posts are written in <strong>Markdown</strong> and organized in folders under the <code>content/</code> directory.</p>
+<hr>
+<h3 id="-content-structure">🗂️ Content structure</h3>
+<p>Each language has its own folder:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">content/
+</span></span><span class="line"><span class="cl">├── en/
+</span></span><span class="line"><span class="cl">│   ├── _index.md
+</span></span><span class="line"><span class="cl">│   └── about.md
+</span></span><span class="line"><span class="cl">├── de/
+</span></span><span class="line"><span class="cl">│   └── about.md
+</span></span><span class="line"><span class="cl">└── fr/
+</span></span><span class="line"><span class="cl">    └── about.md
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Each Markdown file represents a page and includes a <strong>front matter</strong> block at the top.</p>
+<p>Example <code>about.md</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown"><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">title: &#34;About Us&#34;
+</span></span><span class="line"><span class="cl">date: 2025-08-01
+</span></span><span class="line"><span class="cl">type: page
+</span></span><span class="line"><span class="cl">layout: page
+</span></span><span class="line"><span class="cl">---
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-creating-a-new-page">✍️ Creating a new page</h3>
+<p>Use the <code>hugo new</code> command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo new en/about.md
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>This will create a file in <code>content/en/about.md</code> with a pre-filled front matter.</p>
+<hr>
+<h3 id="-page-types">📄 Page types</h3>
+<p>There are two common types of content:</p>
+<ul>
+<li><strong>Page</strong> (<code>type: page</code>) – standalone pages like “About” or “Contact”</li>
+<li><strong>Post</strong> (<code>type: post</code>) – blog/news entries shown in lists</li>
+</ul>
+<p>Use different layouts if needed: <code>page</code>, <code>post</code>, or custom layouts.</p>
+<hr>
+<h3 id="-navigation-menu">🧭 Navigation menu</h3>
+<p>Define menus in <code>config/_default/menus.yaml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">main</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">About</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">/about/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>To add multilingual labels, use Hugo’s built-in <code>i18n</code> system:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">i18n/
+</span></span><span class="line"><span class="cl">├── en.yaml
+</span></span><span class="line"><span class="cl">├── de.yaml
+</span></span><span class="line"><span class="cl">└── fr.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Example <code>en.yaml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l">about</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">translation</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;About Us&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-multilingual-setup">🌍 Multilingual setup</h3>
+<p>In <code>config/_default/config.yaml</code>, define the site languages:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">defaultContentLanguage</span><span class="p">:</span><span class="w"> </span><span class="l">en</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">languages</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">en</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">languageName</span><span class="p">:</span><span class="w"> </span><span class="l">English</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">de</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">languageName</span><span class="p">:</span><span class="w"> </span><span class="l">Deutsch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Use <code>relLangURL</code> in templates to link between languages.</p>
+<hr>
+<h3 id="-preview-your-content">👁️ Preview your content</h3>
+<p>Run the local server:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hugo server
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Check the site in your browser at <a href="http://localhost:1313" target="_blank" rel="noopener noreffer ">http://localhost:1313</a>.</p>
+<p>Use <code>hugo server --navigateToChanged</code> to auto-scroll to the last edited page.</p>
+<hr>
+<p>:::tip
+Use clear folder structure and consistent naming. Avoid spaces and uppercase letters in filenames.
+:::</p>
+<hr>
+<h2 id="4-github-deployment">4. GitHub Deployment</h2>
+<p>You can deploy your Hugo site automatically to <strong>GitHub Pages</strong> using GitHub Actions. This approach works for both personal and project sites.</p>
+<hr>
+<h3 id="-1-create-a-github-repository">🧑‍💻 1. Create a GitHub repository</h3>
+<p>Create a new repository on <a href="https://github.com/new" target="_blank" rel="noopener noreffer ">GitHub</a>.<br>
+Do <strong>not</strong> initialize it with a README or <code>.gitignore</code>.</p>
+<p>Connect your local project:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git remote add origin https://github.com/yourusername/yourrepo.git
+</span></span><span class="line"><span class="cl">git branch -M main
+</span></span><span class="line"><span class="cl">git push -u origin main
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-2-add-github-actions-workflow">⚙️ 2. Add GitHub Actions workflow</h3>
+<p>Create the file <code>.github/workflows/deploy.yml</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Deploy Hugo site to GitHub Pages</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">push</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">main</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">jobs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">deploy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu-latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Checkout source</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">actions/checkout@v3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Setup Hugo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">peaceiris/actions-hugo@v2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hugo-version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;latest&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">extended</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Build site</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l">hugo --minify</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">Deploy to GitHub Pages</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l">peaceiris/actions-gh-pages@v3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">with</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">github_token</span><span class="p">:</span><span class="w"> </span><span class="l">${{ secrets.GITHUB_TOKEN }}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">publish_dir</span><span class="p">:</span><span class="w"> </span><span class="l">./public</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-3-configure-configyaml-for-deployment">🗂️ 3. Configure <code>config.yaml</code> for deployment</h3>
+<p>In <code>config/_default/config.yaml</code>, set the correct <code>baseURL</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">baseURL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;https://yourusername.github.io/yourrepo/&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Make sure this path matches your actual repository name.</p>
+<hr>
+<h3 id="-4-enable-github-pages">🛡️ 4. Enable GitHub Pages</h3>
+<p>Go to your repository → <strong>Settings → Pages</strong><br>
+Set <strong>Source</strong> to <code>Deploy from a branch</code> → choose <code>gh-pages</code> branch and <code>/ (root)</code> directory.</p>
+<p>GitHub will host your site at:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://yourusername.github.io/yourrepo/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-5-test-the-deployment">🧪 5. Test the deployment</h3>
+<p>Every time you push to <code>main</code>, GitHub will:</p>
+<ul>
+<li>Build your site</li>
+<li>Deploy it to the <code>gh-pages</code> branch</li>
+<li>Make it available via GitHub Pages</li>
+</ul>
+<p>Check the <strong>Actions</strong> tab for logs and status.</p>
+<hr>
+<p>:::tip
+If you&rsquo;re using a custom domain, configure it later via Cloudflare and set it in <code>config.yaml</code> under <code>baseURL</code>.
+:::</p>
+<hr>
+<h2 id="5-cloudflare-setup">5. Cloudflare Setup</h2>
+<p>Cloudflare acts as a global CDN, DNS provider, and HTTPS enabler for your static website. It improves performance, reliability, and security.</p>
+<hr>
+<h3 id="-1-add-your-domain-to-cloudflare">🌐 1. Add your domain to Cloudflare</h3>
+<ol>
+<li>Go to <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreffer ">https://dash.cloudflare.com</a></li>
+<li>Click <strong>“Add a Site”</strong></li>
+<li>Enter your custom domain (e.g. <code>example.com</code>)</li>
+<li>Select the <strong>Free Plan</strong></li>
+</ol>
+<hr>
+<h3 id="-2-update-your-domains-nameservers">🧾 2. Update your domain’s nameservers</h3>
+<p>Cloudflare will show two nameservers (e.g. <code>sue.ns.cloudflare.com</code>, <code>tim.ns.cloudflare.com</code>).<br>
+Update your domain registrar (e.g. Swizzonic, GoDaddy) to use these nameservers.</p>
+<p>⚠️ DNS changes may take a few hours to propagate.</p>
+<hr>
+<h3 id="-3-set-dns-records">📁 3. Set DNS records</h3>
+<p>Go to <strong>DNS → Records</strong> and add:</p>
+<ul>
+<li><strong>Type:</strong> <code>CNAME</code></li>
+<li><strong>Name:</strong> <code>www</code></li>
+<li><strong>Target:</strong> <code>yourusername.github.io.</code></li>
+<li><strong>Proxy status:</strong> <code>Proxied</code></li>
+</ul>
+<p>Optional: add a redirect from root domain to <code>www</code> using <strong>Page Rules</strong>.</p>
+<hr>
+<h3 id="-4-configure-ssltls">🔒 4. Configure SSL/TLS</h3>
+<p>Go to <strong>SSL/TLS → Overview</strong> and set:</p>
+<ul>
+<li><strong>SSL Mode:</strong> <code>Full</code> or <code>Full (Strict)</code></li>
+<li>Auto HTTPS rewrites: ✅ enabled</li>
+<li>Always Use HTTPS: ✅ enabled</li>
+</ul>
+<blockquote>
+<p>Use <code>Full (Strict)</code> only if GitHub Pages presents a valid certificate for your domain.</p></blockquote>
+<hr>
+<h3 id="-5-set-custom-domain-in-hugo">📄 5. Set custom domain in Hugo</h3>
+<p>In <code>config/_default/config.yaml</code>, update:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">baseURL</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;https://www.example.com/&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>If using multilingual setup, set <code>baseURL</code> under each language.</p>
+<hr>
+<h3 id="-6-optional-configure-additional-features">⚙️ 6. Optional: Configure additional features</h3>
+<p>Cloudflare offers many extras:</p>
+<ul>
+<li><strong>Caching rules</strong></li>
+<li><strong>WAF and security level</strong></li>
+<li><strong>Custom error pages</strong></li>
+<li><strong>Analytics and bot protection</strong></li>
+</ul>
+<p>You can manage these via the Cloudflare dashboard as needed.</p>
+<hr>
+<p>:::tip
+If you&rsquo;re using <code>www.example.com</code>, GitHub Pages should serve from <code>gh-pages</code> branch, and Cloudflare will handle HTTPS and DNS.
+:::</p>
+<hr>
+<h2 id="6-resend-contact-form-integration">6. Resend Contact Form Integration</h2>
+<p>You can send emails from a static site by using a contact form that submits to a Cloudflare Worker, which then forwards the data via the <strong>Resend API</strong>.</p>
+<hr>
+<h3 id="-1-create-a-resend-account-and-api-key">📬 1. Create a Resend account and API key</h3>
+<ol>
+<li>Go to <a href="https://resend.com" target="_blank" rel="noopener noreffer ">https://resend.com</a></li>
+<li>Sign up and verify your email</li>
+<li>Add your domain (e.g. <code>allegra-march.ch</code>)</li>
+<li>Set up DNS records (SPF, DKIM, DMARC)</li>
+<li>Create an API key under <strong>API → Create API Key</strong></li>
+</ol>
+<hr>
+<h3 id="-2-create-a-cloudflare-worker">🧰 2. Create a Cloudflare Worker</h3>
+<p>Install Wrangler (CLI for Cloudflare Workers):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">npm install -g wrangler
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Login to your Cloudflare account:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wrangler login
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Generate a new Worker:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wrangler init contact-worker --no-git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> contact-worker
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Edit <code>src/index.ts</code> (or <code>index.js</code> if using JS) with the following:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="kr">export</span> <span class="k">default</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">async</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">request</span>: <span class="kt">Request</span><span class="p">)</span><span class="o">:</span> <span class="nx">Promise</span><span class="p">&lt;</span><span class="nt">Response</span><span class="p">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">!==</span> <span class="s2">&#34;POST&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Only POST allowed&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">405</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">request</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">&#34;https://api.resend.com/emails&#34;</span><span class="p">,</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">method</span><span class="o">:</span> <span class="s2">&#34;POST&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Authorization&#34;</span><span class="o">:</span> <span class="s2">&#34;Bearer YOUR_RESEND_API_KEY&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;Content-Type&#34;</span><span class="o">:</span> <span class="s2">&#34;application/json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">body</span>: <span class="kt">JSON.stringify</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">        <span class="kr">from</span><span class="o">:</span> <span class="s2">&#34;Form &lt;form@yourdomain.com&gt;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">to</span><span class="o">:</span> <span class="s2">&#34;your@email.com&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">subject</span><span class="o">:</span> <span class="s2">&#34;New Contact Form Submission&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">text</span><span class="o">:</span> <span class="sb">`Name: </span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="err">\</span><span class="sb">nEmail: </span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">email</span><span class="si">}</span><span class="err">\</span><span class="sb">nMessage: </span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}),</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Email sent&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">200</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">  <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Replace <code>YOUR_RESEND_API_KEY</code> and email addresses.</p>
+<hr>
+<h3 id="-3-set-your-resend-key-as-a-secret">🔐 3. Set your Resend key as a secret</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wrangler secret put RESEND_API_KEY
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>In your code, replace the key with:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="s2">&#34;Authorization&#34;</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">RESEND_API_KEY</span><span class="si">}</span><span class="sb">`</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-4-deploy-the-worker">🚀 4. Deploy the Worker</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wrangler publish
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Note the deployed URL (e.g. <code>https://contact-worker.yourname.workers.dev</code>)</p>
+<hr>
+<h3 id="-5-add-the-contact-form-to-your-hugo-site">🖊 5. Add the contact form to your Hugo site</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;POST&#34;</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;https://contact-worker.yourname.workers.dev&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;name&#34;</span> <span class="na">required</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Your Name&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;email&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;email&#34;</span> <span class="na">required</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Your Email&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">textarea</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;message&#34;</span> <span class="na">required</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&#34;Your Message&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">textarea</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span><span class="p">&gt;</span>Send<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Style with CSS as needed.</p>
+<hr>
+<h3 id="-6-test-your-form">🧪 6. Test your form</h3>
+<ul>
+<li>Fill out the form on your site</li>
+<li>Check your inbox</li>
+<li>Monitor delivery in the Resend dashboard</li>
+</ul>
+<hr>
+<p>:::tip
+To prevent abuse, consider adding a simple honeypot field or reCAPTCHA. You can also validate requests in the Worker.
+:::</p>
+<hr>
+<h2 id="7-security--spam-protection">7. Security &amp; Spam Protection</h2>
+<p>To prevent abuse of your contact form, it&rsquo;s important to implement basic security and anti-spam measures. Static sites have no backend, so the protection must happen inside the <strong>Cloudflare Worker</strong>.</p>
+<hr>
+<h3 id="-1-enforce-request-method-and-content-type">🔒 1. Enforce request method and content type</h3>
+<p>Make sure your Worker only accepts <code>POST</code> requests with JSON payload:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">method</span> <span class="o">!==</span> <span class="s2">&#34;POST&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Method Not Allowed&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">405</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">request</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="kr">get</span><span class="p">(</span><span class="s2">&#34;Content-Type&#34;</span><span class="p">)</span><span class="o">?</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s2">&#34;application/json&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Invalid content type&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">400</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-2-validate-user-input">🧪 2. Validate user input</h3>
+<p>Always sanitize and validate user input in the Worker:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="kr">const</span> <span class="p">{</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">message</span> <span class="p">}</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">request</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">name</span> <span class="o">||</span> <span class="o">!</span><span class="nx">email</span> <span class="o">||</span> <span class="o">!</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Missing fields&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">400</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">email</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s2">&#34;@&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Invalid email&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">400</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h3 id="-3-honeypot-field-invisible-trap">🧱 3. Honeypot field (invisible trap)</h3>
+<p>Add a hidden field in your HTML form:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;nickname&#34;</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;display:none&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>In the Worker, check if it&rsquo;s filled:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">nickname</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="k">new</span> <span class="nx">Response</span><span class="p">(</span><span class="s2">&#34;Spam detected&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">status</span>: <span class="kt">403</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Bots will likely fill hidden fields; real users won’t.</p>
+<hr>
+<h3 id="-4-rate-limiting-basic">⏱ 4. Rate limiting (basic)</h3>
+<p>Cloudflare Workers don’t provide built-in rate limiting, but you can add logic using IP address + KV:</p>
+<ul>
+<li>Track timestamp of last submission per IP</li>
+<li>Block repeated requests within N seconds</li>
+<li>Example: use Cloudflare KV or durable objects (advanced)</li>
+</ul>
+<hr>
+<h3 id="-5-recaptcha-optional">🧩 5. reCAPTCHA (optional)</h3>
+<p>You can integrate Google reCAPTCHA v2/v3:</p>
+<ol>
+<li>Add a reCAPTCHA widget to the form</li>
+<li>Get the token on submit</li>
+<li>Send the token to the Worker</li>
+<li>Verify token via Google API inside the Worker</li>
+</ol>
+<p>Requires server-side verification and is more complex to implement.</p>
+<hr>
+<h3 id="-6-email-protections-via-resend">✉️ 6. Email protections via Resend</h3>
+<p>In your Resend dashboard:</p>
+<ul>
+<li>Enable SPF, DKIM, and DMARC on your domain</li>
+<li>Monitor bounce/spam reports</li>
+<li>Use a verified <code>from:</code> address to avoid spam filters</li>
+</ul>
+<hr>
+<p>:::tip
+Start simple with a honeypot and basic validation. Add rate-limiting or CAPTCHA only if spam becomes a problem.
+:::</p>
+<hr>
+<h2 id="8-conclusion--resources">8. Conclusion &amp; Resources</h2>
+<p>By following this guide, you’ve built a modern, fast, and secure static website using:</p>
+<ul>
+<li><strong>Hugo</strong> for content generation</li>
+<li><strong>GitHub Pages</strong> for hosting</li>
+<li><strong>Cloudflare</strong> for DNS, CDN, and HTTPS</li>
+<li><strong>Resend</strong> for handling contact form emails via API</li>
+</ul>
+<p>This stack is fully serverless, free to use, and easy to maintain. It’s suitable for personal projects, non-profits, and multilingual community websites.</p>
+<hr>
+<h3 id="-summary-of-key-benefits">✅ Summary of key benefits</h3>
+<ul>
+<li>Fast and optimized delivery via CDN</li>
+<li>No backend or database required</li>
+<li>Secure contact form with spam protection</li>
+<li>Easy to version, update, and collaborate via Git</li>
+<li>Zero hosting cost (if using free tiers)</li>
+</ul>
+<hr>
+<h3 id="-useful-resources">📚 Useful resources</h3>
+<ul>
+<li>Hugo Documentation: <a href="https://gohugo.io/documentation/" target="_blank" rel="noopener noreffer ">https://gohugo.io/documentation/</a></li>
+<li>Hugo Blox Theme: <a href="https://docs.hugoblox.com/" target="_blank" rel="noopener noreffer ">https://docs.hugoblox.com/</a></li>
+<li>GitHub Pages: <a href="https://pages.github.com/" target="_blank" rel="noopener noreffer ">https://pages.github.com/</a></li>
+<li>Cloudflare Docs: <a href="https://developers.cloudflare.com/" target="_blank" rel="noopener noreffer ">https://developers.cloudflare.com/</a></li>
+<li>Resend API: <a href="https://resend.com/docs" target="_blank" rel="noopener noreffer ">https://resend.com/docs</a></li>
+<li>Wrangler CLI: <a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener noreffer ">https://developers.cloudflare.com/workers/wrangler/</a></li>
+</ul>
+<hr>
+<h3 id="-final-note">🙌 Final note</h3>
+<p>You now have a powerful foundation for your website — one that is fast, scalable, and privacy-respecting.</p>
+<p>Extend it further with:</p>
+<ul>
+<li>Hugo shortcodes, partials, and custom layouts</li>
+<li>Cloudflare KV for storing form submissions</li>
+<li>Resend Webhooks for tracking delivery status</li>
+<li>GitHub Actions for content automation</li>
+</ul>
+<hr>
+<p>:::info
+This guide is maintained by [Your Name] and used in real-world non-profit and volunteer projects.
+:::</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-08-04</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/website/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/website/" data-title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend" data-hashtags="Hugo,GitHub Pages,Cloudflare,Resend,Static Site,Email,Contact Form"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/website/" data-hashtag="Hugo"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/website/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/website/" data-title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/website/" data-title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/website/" data-title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/website/" data-title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend" data-image="/images/hugo-cloudflare-resend.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/hugo/">Hugo</a>,&nbsp;<a href="/tags/github-pages/">GitHub Pages</a>,&nbsp;<a href="/tags/cloudflare/">Cloudflare</a>,&nbsp;<a href="/tags/resend/">Resend</a>,&nbsp;<a href="/tags/static-site/">Static Site</a>,&nbsp;<a href="/tags/email/">Email</a>,&nbsp;<a href="/tags/contact-form/">Contact Form</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/vim/" class="prev" rel="prev" title="Vim Quick Start Guide"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Vim Quick Start Guide</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.148.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

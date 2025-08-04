@@ -3,7 +3,37 @@
         <title>All Posts - IT Blog</title>
         <link>https://blog.topli.ch/posts/</link>
         <description>All Posts | IT Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 13 Jul 2025 12:00:00 &#43;0200</lastBuildDate><atom:link href="https://blog.topli.ch/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 04 Aug 2025 16:00:00 &#43;0200</lastBuildDate><atom:link href="https://blog.topli.ch/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Build a Modern Hugo Website with GitHub, Cloudflare, and Resend</title>
+    <link>https://blog.topli.ch/posts/website/</link>
+    <pubDate>Mon, 04 Aug 2025 16:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/website/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/hugo-cloudflare-resend.png" referrerpolicy="no-referrer">
+            </div>Step-by-step guide to building and deploying a multilingual Hugo site with GitHub Pages, Cloudflare CDN, and Resend for email integration.]]></description>
+</item>
+<item>
+    <title>Vim Quick Start Guide</title>
+    <link>https://blog.topli.ch/posts/vim/</link>
+    <pubDate>Tue, 15 Jul 2025 23:45:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/vim/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/vim-logo.png" referrerpolicy="no-referrer">
+            </div>A minimal guide to help you start using Vim effectively — modes, commands, and keybindings.]]></description>
+</item>
+<item>
+    <title>tmux Quick Start Guide</title>
+    <link>https://blog.topli.ch/posts/tmux/</link>
+    <pubDate>Tue, 15 Jul 2025 23:30:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/tmux/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/tmux-logo.png" referrerpolicy="no-referrer">
+            </div>A practical guide to get started with tmux: create, attach, split panes, and manage sessions.]]></description>
+</item>
+<item>
     <title>Veeam Local Repositories in Practice: Hardened Linux, MinIO S3, iSCSI over WireGuard on Synology NAS</title>
     <link>https://blog.topli.ch/posts/veeam-repo/</link>
     <pubDate>Sun, 13 Jul 2025 12:00:00 &#43;0200</pubDate>

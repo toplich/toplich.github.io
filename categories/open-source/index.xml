@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Open Source on IT Blog</title>
+    <link>https://blog.topli.ch/categories/open-source/</link>
+    <description>Recent content in Open Source on IT Blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 04 Aug 2025 16:00:00 +0200</lastBuildDate>
+    <atom:link href="https://blog.topli.ch/categories/open-source/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Build a Modern Hugo Website with GitHub, Cloudflare, and Resend</title>
+      <link>https://blog.topli.ch/posts/website/</link>
+      <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/posts/website/</guid>
+      <description>Step-by-step guide to building and deploying a multilingual Hugo site with GitHub Pages, Cloudflare CDN, and Resend for email integration.</description>
+    </item>
+  </channel>
+</rss>
