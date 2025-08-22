@@ -8,6 +8,48 @@
     <language>en</language>
     <atom:link href="https://blog.topli.ch/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Automation</title>
+      <link>https://blog.topli.ch/tags/automation/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/automation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Autounattend</title>
+      <link>https://blog.topli.ch/tags/autounattend/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/autounattend/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Deployment</title>
+      <link>https://blog.topli.ch/tags/deployment/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/deployment/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>UUP Dump</title>
+      <link>https://blog.topli.ch/tags/uup-dump/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/uup-dump/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>https://blog.topli.ch/tags/windows/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/windows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows Unattended Install</title>
+      <link>https://blog.topli.ch/tags/windows-unattended-install/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/tags/windows-unattended-install/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Cloudflare</title>
       <link>https://blog.topli.ch/tags/cloudflare/</link>
       <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>

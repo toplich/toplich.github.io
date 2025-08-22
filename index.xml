@@ -3,9 +3,19 @@
         <title>IT Blog</title>
         <link>https://blog.topli.ch/</link>
         <description>This is my cool site</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 04 Aug 2025 16:00:00 &#43;0200</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 22 Aug 2025 12:00:00 &#43;0200</lastBuildDate>
             <atom:link href="https://blog.topli.ch/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Automating Windows Installation with Autounattend.xml and UUP dump</title>
+    <link>https://blog.topli.ch/posts/win-autoinstall/</link>
+    <pubDate>Fri, 15 Aug 2025 12:00:00 &#43;0200</pubDate>
+    <author>Vitalii Stepchuk</author>
+    <guid>https://blog.topli.ch/posts/win-autoinstall/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/windows-automation.png" referrerpolicy="no-referrer">
+            </div>A complete, practical guide to creating automated Windows installations using Autounattend.xml and UUP dump for custom ISO builds.]]></description>
+</item>
+<item>
     <title>Build a Modern Hugo Website with GitHub, Cloudflare, and Resend</title>
     <link>https://blog.topli.ch/posts/website/</link>
     <pubDate>Mon, 04 Aug 2025 16:00:00 &#43;0200</pubDate>

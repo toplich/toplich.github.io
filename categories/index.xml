@@ -8,6 +8,20 @@
     <language>en</language>
     <atom:link href="https://blog.topli.ch/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Automation</title>
+      <link>https://blog.topli.ch/categories/automation/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/automation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>https://blog.topli.ch/categories/windows/</link>
+      <pubDate>Fri, 15 Aug 2025 12:00:00 +0200</pubDate>
+      <guid>https://blog.topli.ch/categories/windows/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Infrastructure</title>
       <link>https://blog.topli.ch/categories/infrastructure/</link>
       <pubDate>Mon, 04 Aug 2025 16:00:00 +0200</pubDate>

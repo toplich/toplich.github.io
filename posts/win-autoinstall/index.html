@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Automating Windows Installation with Autounattend.xml and UUP dump - IT Blog</title><meta name="Description" content="This is my cool site"><meta property="og:url" content="https://blog.topli.ch/posts/win-autoinstall/">
+  <meta property="og:site_name" content="IT Blog">
+  <meta property="og:title" content="Automating Windows Installation with Autounattend.xml and UUP dump">
+  <meta property="og:description" content="A complete, practical guide to creating automated Windows installations using Autounattend.xml and UUP dump for custom ISO builds.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-08-15T12:00:00+02:00">
+    <meta property="article:modified_time" content="2025-08-15T12:00:00+02:00">
+    <meta property="article:tag" content="Windows">
+    <meta property="article:tag" content="Automation">
+    <meta property="article:tag" content="Deployment">
+    <meta property="article:tag" content="UUP Dump">
+    <meta property="article:tag" content="Autounattend">
+    <meta property="article:tag" content="Windows Unattended Install">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Automating Windows Installation with Autounattend.xml and UUP dump">
+  <meta name="twitter:description" content="A complete, practical guide to creating automated Windows installations using Autounattend.xml and UUP dump for custom ISO builds.">
+<meta name="application-name" content="IT blog">
+<meta name="apple-mobile-web-app-title" content="IT blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.topli.ch/posts/win-autoinstall/" /><link rel="prev" href="https://blog.topli.ch/posts/website/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css"></noscript><link rel="preload" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Automating Windows Installation with Autounattend.xml and UUP dump",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.topli.ch\/posts\/win-autoinstall\/"
+        },"genre": "posts","keywords": "Windows, Automation, Deployment, UUP dump, Autounattend, Windows unattended install","wordcount":  651 ,
+        "url": "https:\/\/blog.topli.ch\/posts\/win-autoinstall\/","datePublished": "2025-08-15T12:00:00+02:00","dateModified": "2025-08-15T12:00:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Vitalii Stepchuk"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="IT Blog"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/logo2.png"
+        data-srcset="/images/logo2.png, /images/logo2.png 1.5x, /images/logo2.png 2x"
+        data-sizes="auto"
+        alt="/images/logo2.png"
+        title="/images/logo2.png" />IT Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Automating Windows Installation with Autounattend.xml and UUP dump</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>Vitalii Stepchuk</a></span>&nbsp;<span class="post-category">included in <a href="/categories/automation/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Automation</a>&nbsp;<a href="/categories/windows/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>Windows</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2025-08-15">2025-08-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;651 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/windows-automation.png"
+        data-srcset="/images/windows-automation.png, /images/windows-automation.png 1.5x, /images/windows-automation.png 2x"
+        data-sizes="auto"
+        alt="/images/windows-automation.png"
+        title="/images/windows-automation.png" /></div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-understanding-autounattendxml">1. Understanding Autounattend.xml</a></li>
+    <li><a href="#2-creating-autounattendxml">2. Creating Autounattend.xml</a>
+      <ul>
+        <li><a href="#option-1-windows-sim-system-image-manager"><strong>Option 1: Windows SIM (System Image Manager)</strong></a></li>
+        <li><a href="#option-2-online-generators"><strong>Option 2: Online Generators</strong></a></li>
+        <li><a href="#option-3-manual-editing"><strong>Option 3: Manual Editing</strong></a></li>
+      </ul>
+    </li>
+    <li><a href="#3-placing-autounattendxml">3. Placing Autounattend.xml</a>
+      <ul>
+        <li><a href="#a-root-of-usb"><strong>A. Root of USB</strong></a></li>
+        <li><a href="#b-integrated-into-iso"><strong>B. Integrated into ISO</strong></a></li>
+        <li><a href="#c-second-virtual-cddvd"><strong>C. Second Virtual CD/DVD</strong></a></li>
+        <li><a href="#d-oem-structure"><strong>D. $OEM$ Structure</strong></a></li>
+      </ul>
+    </li>
+    <li><a href="#4-integrating-language-packs">4. Integrating Language Packs</a></li>
+    <li><a href="#5-using-uup-dump">5. Using UUP dump</a>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#converter-scripts">Converter Scripts</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-automated-workflow-example">6. Automated Workflow Example</a></li>
+    <li><a href="#7-troubleshooting-common-errors">7. Troubleshooting Common Errors</a>
+      <ul>
+        <li><a href="#xml-parse-error">XML Parse Error</a></li>
+        <li><a href="#file-not-found">File Not Found</a></li>
+        <li><a href="#driver-missing">Driver Missing</a></li>
+        <li><a href="#language-not-applied">Language Not Applied</a></li>
+        <li><a href="#tpmsecure-boot-block">TPM/Secure Boot Block</a></li>
+        <li><a href="#endless-reboot">Endless Reboot</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-why-use-this">8. Why Use This</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="automating-windows-installation-with-autounattendxml-and-uup-dump">Automating Windows Installation with Autounattend.xml and UUP dump</h1>
+<p>Automating a Windows unattended installation can save hours of repetitive work — whether for lab testing, VM deployment, or mass corporate rollout. By using an <code>Autounattend.xml</code> file, you predefine installation steps such as language, partitioning, product key, and even post-install configuration, all without user input.</p>
+<p>In this guide, you&rsquo;ll learn:</p>
+<ol>
+<li>What <code>Autounattend.xml</code> is and how it works</li>
+<li>How to create it</li>
+<li>How and where to place it</li>
+<li>How to integrate language packs</li>
+<li>How to use <strong>UUP dump</strong> for building custom ISOs</li>
+<li>Example: fully automated workflow</li>
+<li>Troubleshooting common issues</li>
+</ol>
+<hr>
+<h2 id="1-understanding-autounattendxml">1. Understanding Autounattend.xml</h2>
+<p><code>Autounattend.xml</code> is a Windows <strong>answer file</strong> that automates setup by supplying preconfigured values.</p>
+<p><strong>Phases (passes) it controls:</strong></p>
+<ul>
+<li><strong>windowsPE</strong> — disk partitioning, language, TPM/Secure Boot bypass</li>
+<li><strong>specialize</strong> — drivers, hostname, networking</li>
+<li><strong>oobeSystem</strong> — accounts, privacy, first-run experience</li>
+</ul>
+<p><strong>Common settings include:</strong></p>
+<ul>
+<li>Language and locale</li>
+<li>Disk layout and formatting</li>
+<li>Edition selection (from <code>install.wim</code>/<code>install.esd</code>)</li>
+<li>Product keys</li>
+<li>Driver injection</li>
+<li>Registry tweaks and PowerShell scripts</li>
+</ul>
+<p>When Windows Setup detects <code>Autounattend.xml</code>, it follows the specified configuration automatically.</p>
+<hr>
+<h2 id="2-creating-autounattendxml">2. Creating Autounattend.xml</h2>
+<h3 id="option-1-windows-sim-system-image-manager"><strong>Option 1: Windows SIM (System Image Manager)</strong></h3>
+<ul>
+<li>Part of <strong>Windows ADK</strong></li>
+<li>Loads an <code>install.wim</code> and provides a GUI for configuring settings</li>
+<li>Validates before saving</li>
+<li><strong>Download:</strong> <a href="https://learn.microsoft.com/windows-hardware/get-started/adk-install" target="_blank" rel="noopener noreffer ">Windows ADK</a></li>
+</ul>
+<h3 id="option-2-online-generators"><strong>Option 2: Online Generators</strong></h3>
+<ul>
+<li>Example: <a href="https://schneegans.de/windows/unattend-generator/" target="_blank" rel="noopener noreffer ">Schneegans Generator</a></li>
+<li>Offers quick form-based setup for:
+<ul>
+<li>Language</li>
+<li>Disk layout</li>
+<li>User accounts</li>
+<li>TPM/Secure Boot bypass</li>
+</ul>
+</li>
+<li>Produces ready-to-use XML</li>
+</ul>
+<h3 id="option-3-manual-editing"><strong>Option 3: Manual Editing</strong></h3>
+<ul>
+<li>Edit with VS Code, Notepad++, etc.</li>
+<li>Follow the <a href="https://learn.microsoft.com/windows-hardware/customize/desktop/unattend/" target="_blank" rel="noopener noreffer ">Unattended Setup Reference</a></li>
+<li>Always validate with Windows SIM</li>
+</ul>
+<hr>
+<h2 id="3-placing-autounattendxml">3. Placing Autounattend.xml</h2>
+<p>Windows Setup searches multiple locations:</p>
+<h3 id="a-root-of-usb"><strong>A. Root of USB</strong></h3>
+<ul>
+<li>Plug in a USB with only <code>Autounattend.xml</code></li>
+<li>Works with official ISOs</li>
+<li>Requires 2 devices</li>
+</ul>
+<h3 id="b-integrated-into-iso"><strong>B. Integrated into ISO</strong></h3>
+<ul>
+<li>Mount ISO → Copy contents → Place XML in root → Rebuild ISO</li>
+<li><strong>Windows (ADK):</strong>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">oscdimg</span> <span class="n">-m</span> <span class="n">-o</span> <span class="n">-u2</span> <span class="n">-udfver102</span> <span class="n">C:</span><span class="p">\</span><span class="n">WinISO</span> <span class="n">C:</span><span class="p">\</span><span class="nb">Win11-Auto</span><span class="p">.</span><span class="py">iso</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li><strong>Linux:</strong>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkisofs -b boot/etfsboot.com -no-emul-boot -boot-load-size <span class="m">8</span> -o Win11-Auto.iso WinISO/
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p><em>Tip:</em> use <code>oscdimg</code> on Windows, <code>mkisofs</code> on Linux.</p>
+<h3 id="c-second-virtual-cddvd"><strong>C. Second Virtual CD/DVD</strong></h3>
+<ul>
+<li>Attach small ISO with <code>Autounattend.xml</code> as secondary media in VM</li>
+<li>Avoids editing original ISO</li>
+</ul>
+<h3 id="d-oem-structure"><strong>D. $OEM$ Structure</strong></h3>
+<ul>
+<li>Place in <code>sources\$OEM$\$1</code></li>
+<li>Common in OEM factory setups</li>
+</ul>
+<p><strong>Note:</strong> Windows scans all connected drives, prioritizing removable media.</p>
+<hr>
+<h2 id="4-integrating-language-packs">4. Integrating Language Packs</h2>
+<ol>
+<li>Download <code>.cab</code> packages:
+<ul>
+<li><code>Microsoft-Windows-Client-Language-Pack_x64_&lt;lang&gt;.cab</code></li>
+<li><code>Microsoft-Windows-LanguageFeatures-Basic-&lt;lang&gt;-Package.cab</code></li>
+</ul>
+</li>
+<li>Inject with DISM:
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dism</span> <span class="p">/</span><span class="nb">Mount-Wim</span> <span class="p">/</span><span class="n">WimFile</span><span class="err">:</span><span class="n">install</span><span class="p">.</span><span class="py">wim</span> <span class="p">/</span><span class="n">Index</span><span class="err">:</span><span class="mf">1</span> <span class="p">/</span><span class="n">MountDir</span><span class="err">:</span><span class="nb">mount
+</span></span></span><span class="line"><span class="cl"><span class="nb"></span><span class="n">dism</span> <span class="p">/</span><span class="n">Image</span><span class="err">:</span><span class="nb">mount </span><span class="p">/</span><span class="nb">Add-Package</span> <span class="p">/</span><span class="n">PackagePath</span><span class="err">:</span><span class="n">lp</span><span class="p">.</span><span class="py">cab</span>
+</span></span><span class="line"><span class="cl"><span class="n">dism</span> <span class="p">/</span><span class="nb">Unmount-Wim</span> <span class="p">/</span><span class="n">MountDir</span><span class="err">:</span><span class="nb">mount </span><span class="p">/</span><span class="n">Commit</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>Update <code>Autounattend.xml</code> <code>&lt;UILanguage&gt;</code>, <code>&lt;SystemLocale&gt;</code>, <code>&lt;InputLocale&gt;</code></li>
+</ol>
+<p><em>Tip: If you use UUP dump and select the desired language during build, you can skip manual integration.</em></p>
+<hr>
+<h2 id="5-using-uup-dump">5. Using UUP dump</h2>
+<p><a href="https://uupdump.net" target="_blank" rel="noopener noreffer "><strong>UUP dump</strong></a> — a tool to download official Microsoft Windows builds from UUP servers with custom options.</p>
+<h3 id="overview">Overview</h3>
+<ul>
+<li>Any Windows version (11, 10, Server)</li>
+<li>Edition &amp; language selection</li>
+<li>Language packs &amp; Features on Demand</li>
+<li>Always latest builds from Microsoft CDN</li>
+</ul>
+<h3 id="converter-scripts">Converter Scripts</h3>
+<ul>
+<li><code>convert-UUP.cmd</code> (Windows)</li>
+<li><code>convert.sh</code> (Linux/macOS)</li>
+</ul>
+<p><strong>Functions:</strong></p>
+<ul>
+<li>Assemble ISO from UUP files</li>
+<li>Integrate updates, drivers, language packs</li>
+</ul>
+<p>Example (Linux):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt install aria2 cabextract wimtools chntpw genisoimage
+</span></span><span class="line"><span class="cl">./convert.sh wim
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="6-automated-workflow-example">6. Automated Workflow Example</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">UUP dump → ISO Build → Add Autounattend.xml → (Optional) Add Language Packs → Deploy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li><strong>UUP dump</strong> — Select build, edition, language → Download script</li>
+<li><strong>Convert</strong> — Run <code>convert.sh</code> or <code>convert-UUP.cmd</code> to get ISO</li>
+<li><strong>Integrate XML</strong> — Place in root of ISO or separate ISO</li>
+<li><strong>Optional:</strong> Inject language packs</li>
+<li><strong>Deploy</strong> — Boot and enjoy unattended setup</li>
+</ol>
+<p>Example Linux one-liner:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./uup_download_linux.sh <span class="o">&amp;&amp;</span> cp Autounattend.xml iso-root/ <span class="o">&amp;&amp;</span> mkisofs -o Win11-Auto.iso iso-root/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="7-troubleshooting-common-errors">7. Troubleshooting Common Errors</h2>
+<h3 id="xml-parse-error">XML Parse Error</h3>
+<ul>
+<li>Validate in Windows SIM</li>
+<li>Check for unsupported elements</li>
+</ul>
+<h3 id="file-not-found">File Not Found</h3>
+<ul>
+<li>Ensure exact filename <code>Autounattend.xml</code></li>
+<li>Place in root of media</li>
+</ul>
+<h3 id="driver-missing">Driver Missing</h3>
+<ul>
+<li>Inject via DISM before install</li>
+</ul>
+<h3 id="language-not-applied">Language Not Applied</h3>
+<ul>
+<li>Match <code>&lt;UILanguage&gt;</code>, <code>&lt;UserLocale&gt;</code>, <code>&lt;SystemLocale&gt;</code> with installed pack</li>
+</ul>
+<h3 id="tpmsecure-boot-block">TPM/Secure Boot Block</h3>
+<ul>
+<li>Add registry bypass in <code>windowsPE</code></li>
+</ul>
+<h3 id="endless-reboot">Endless Reboot</h3>
+<ul>
+<li>Simplify XML</li>
+<li>Match partition layout to boot mode</li>
+</ul>
+<p><strong>Logs:</strong></p>
+<ul>
+<li><code>X:\Windows\Panther\setuperr.log</code></li>
+<li><code>X:\Windows\Panther\setupact.log</code></li>
+</ul>
+<hr>
+<h2 id="8-why-use-this">8. Why Use This</h2>
+<p>Combining <code>Autounattend.xml</code> + UUP dump lets you:</p>
+<ul>
+<li>Build <strong>fully automated</strong> ISOs</li>
+<li>Preconfigure language, edition, updates</li>
+<li>Save time in repetitive installations</li>
+<li>Maintain consistent environments for VMs, labs, and bare-metal deployments</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2025-08-15</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/win-autoinstall/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-title="Automating Windows Installation with Autounattend.xml and UUP dump" data-hashtags="Windows,Automation,Deployment,UUP dump,Autounattend,Windows unattended install"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-hashtag="Windows"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://blog.topli.ch/posts/win-autoinstall/"><i class="fab fa-linkedin fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-title="Automating Windows Installation with Autounattend.xml and UUP dump" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Hacker News" data-sharer="hackernews" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-title="Automating Windows Installation with Autounattend.xml and UUP dump"><i class="fab fa-hacker-news fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-title="Automating Windows Installation with Autounattend.xml and UUP dump"><i data-svg-src="https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.topli.ch/posts/win-autoinstall/" data-title="Automating Windows Installation with Autounattend.xml and UUP dump" data-image="/images/windows-automation.png"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/windows/">Windows</a>,&nbsp;<a href="/tags/automation/">Automation</a>,&nbsp;<a href="/tags/deployment/">Deployment</a>,&nbsp;<a href="/tags/uup-dump/">UUP Dump</a>,&nbsp;<a href="/tags/autounattend/">Autounattend</a>,&nbsp;<a href="/tags/windows-unattended-install/">Windows Unattended Install</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/website/" class="prev" rel="prev" title="Build a Modern Hugo Website with GitHub, Cloudflare, and Resend"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Build a Modern Hugo Website with GitHub, Cloudflare, and Resend</a></div>
+</div>
+<div id="comments"><div id="giscus" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://giscus.app">Giscus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.148.1">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.3.0"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2022 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">xxxx</a></span>&nbsp;|&nbsp;<span class="license">CC BY-NC-SA 4.0</span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"giscus":{"category":"Announcements","categoryId":"DIC_kwDOOwZw484Cqszo","darkTheme":"dark","emitMetadata":"0","inputPosition":"bottom","lang":"en","lazyLoading":false,"lightTheme":"light","mapping":"pathname","reactionsEnabled":"1","repo":"toplich/toplich.github.io","repoId":"R_kgDOOwZw4w"}},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
